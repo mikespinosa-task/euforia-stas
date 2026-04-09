@@ -261,7 +261,7 @@ footer strong{color:rgba(255,255,255,0.55)}
   </div>
 </main>
 
-<footer>EUFORIA OPEN &nbsp;·&nbsp; <strong>Temporada 2026</strong> &nbsp;·&nbsp; Dashboard generado por Mike Espinosa</footer>
+<footer>EUFORIA OPEN &nbsp;·&nbsp; <strong>Bogotá 2026</strong> &nbsp;·&nbsp; Dashboard generado por Mike Espinosa</footer>
 
 <script>
 // ══════════════════════════════════════════════════
@@ -594,7 +594,22 @@ function renderGameDetail(){
   if(!partido){ document.getElementById('game-content').innerHTML='<div class="error-wrap">Partido no encontrado.</div>'; return; }
 
   const isWin = partido.resultado==='W';
-  const topStats = [...stats].sort((a,b)=>n(b.goles)+n(b.asistencias)-n(a.goles)-n(a.asistencias)).slice(0,8);
+  const topStats = [...stats].sort((a,b)=>n(b.goles)+n(b.asistencias)-n(a.goles)-n(a.asistencias));
+
+  // ── Calcular métricas del partido ──
+  const ptsO      = puntos.filter(p=>p.line_type==='O');
+  const ptsD      = puntos.filter(p=>p.line_type==='D');
+  const oConv     = ptsO.filter(p=>p.goleador).length;
+  const dConv     = ptsD.filter(p=>p.goleador).length; // quiebres = D-line que anota
+  const turnovers = stats.reduce((s,x)=>s+n(x.throwaways)+n(x.drops),0);
+  const totalPts  = puntos.length;
+
+  const oPct = ptsO.length ? Math.round(oConv/ptsO.length*100) : 0;
+  const dPct = ptsD.length ? Math.round(dConv/ptsD.length*100) : 0;
+
+  // ── Evolución del marcador (acumulado por punto) ──
+  const evol = puntos.map(p=>({ ours: n(p.score_nuestros), theirs: n(p.score_suyos), num: n(p.punto_num) }))
+    .sort((a,b)=>a.num-b.num);
 
   document.getElementById('game-content').innerHTML=`
     <div class="ghdr">
@@ -605,6 +620,49 @@ function renderGameDetail(){
       <div class="gscore ${isWin?'win':'loss'}">${partido.nuestros} – ${partido.suyos}</div>
       <span class="rb ${isWin?'rb-win':'rb-loss'}">${isWin?'VICTORIA':'DERROTA'}</span>
     </div>
+
+    <!-- CARDS -->
+    <div class="mc-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:20px">
+      <div class="mc" style="border-top-color:${RC}">
+        <div class="mc-val cv-red">${oConv}/${ptsO.length}</div>
+        <div class="mc-lbl">Línea Ofensiva</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${oPct}% conv.</div>
+      </div>
+      <div class="mc" style="border-top-color:${BC}">
+        <div class="mc-val cv-blue">${dConv}/${ptsD.length}</div>
+        <div class="mc-lbl">Quiebres</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${dPct}% conv.</div>
+      </div>
+      <div class="mc" style="border-top-color:${GLC}">
+        <div class="mc-val cv-gold">${turnovers}</div>
+        <div class="mc-lbl">Turnovers</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${stats.reduce((s,x)=>s+n(x.throwaways),0)} TA · ${stats.reduce((s,x)=>s+n(x.drops),0)} D</div>
+      </div>
+      <div class="mc">
+        <div class="mc-val">${totalPts}</div>
+        <div class="mc-lbl">Puntos</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:3px">Jugados</div>
+      </div>
+      <div class="mc" style="border-top-color:${isWin?GC:RC}">
+        <div class="mc-val ${isWin?'cv-green':'cv-red'}">${partido.nuestros}–${partido.suyos}</div>
+        <div class="mc-lbl">Marcador</div>
+        <div style="font-size:0.7rem;color:${isWin?GC:RC};margin-top:3px;font-weight:700">${isWin?'Victoria':'Derrota'}</div>
+      </div>
+    </div>
+
+    <!-- GRÁFICAS -->
+    <div class="cg2" style="margin-bottom:20px">
+      <div class="cc">
+        <div class="cc-title">Evolución del Marcador</div>
+        <canvas id="chart-game-evol" height="100"></canvas>
+      </div>
+      <div class="cc">
+        <div class="cc-title">Eficiencia O-Line vs D-Line</div>
+        <canvas id="chart-game-eff" height="100"></canvas>
+      </div>
+    </div>
+
+    <!-- TABLAS -->
     <div class="cg2">
       <div>
         <div class="sh"><h2>Punto a Punto</h2><div class="sh-line"></div></div>
@@ -618,9 +676,9 @@ function renderGameDetail(){
               ${puntos.map(p=>`<tr>
                 <td class="c" style="color:var(--muted);font-size:0.78rem">${p.punto_num}</td>
                 <td class="c"><span style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;padding:2px 7px;border-radius:3px;background:${p.line_type==='O'?'var(--red-m)':'var(--blue-m)'};color:${p.line_type==='O'?RC:BC}">${p.line_type}</span></td>
-                <td style="font-size:0.78rem;color:var(--muted)">${homologLine(p.linea)}</td>
-                <td style="font-weight:600">${homolog(p.goleador)||'—'}</td>
-                <td style="color:var(--muted)">${homolog(p.asistente)||'—'}</td>
+                <td style="font-size:0.75rem;color:var(--muted)">${homologLine(p.linea)}</td>
+                <td style="font-weight:600;font-size:0.84rem">${homolog(p.goleador)||'—'}</td>
+                <td style="color:var(--muted);font-size:0.84rem">${homolog(p.asistente)||'—'}</td>
                 <td class="c" style="font-family:'Barlow Condensed',sans-serif;font-weight:700">${p.score_nuestros} – ${p.score_suyos}</td>
               </tr>`).join('')}
             </tbody>
@@ -633,7 +691,7 @@ function renderGameDetail(){
           <table class="tbl">
             <thead><tr>
               <th>Jugador</th><th class="c">G</th><th class="c">A</th>
-              <th class="c">D</th><th class="c">+/-</th><th class="c">Comp%</th>
+              <th class="c">D</th><th class="c">TA</th><th class="c">+/-</th><th class="c">Comp%</th>
             </tr></thead>
             <tbody>
               ${topStats.map(s=>`<tr>
@@ -641,6 +699,7 @@ function renderGameDetail(){
                 <td class="c" style="color:${RC};font-weight:700">${s.goles||0}</td>
                 <td class="c" style="color:${GC};font-weight:700">${s.asistencias||0}</td>
                 <td class="c" style="color:${BC};font-weight:700">${s.defensas||0}</td>
+                <td class="c" style="color:${n(s.throwaways)>0?RC:'var(--muted)'}">${s.throwaways||0}</td>
                 <td class="c" style="font-weight:700;color:${n(s.plus_minus)>=0?GC:RC}">${n(s.plus_minus)>=0?'+':''}${s.plus_minus||0}</td>
                 <td class="c">${s.completion_pct?s.completion_pct+'%':'—'}</td>
               </tr>`).join('')}
@@ -649,6 +708,60 @@ function renderGameDetail(){
         </div>
       </div>
     </div>`;
+
+  setTimeout(()=>buildGameCharts(evol, oConv, ptsO.length, dConv, ptsD.length, partido.rival), 50);
+}
+
+function buildGameCharts(evol, oConv, oTotal, dConv, dTotal, rival){
+  // Destruir gráficas anteriores del partido
+  ['gameEvol','gameEff'].forEach(k=>{ if(charts[k]){ try{charts[k].destroy()}catch(e){} } });
+
+  // ── Evolución del marcador ──
+  const ctxE = document.getElementById('chart-game-evol');
+  if(ctxE){
+    charts.gameEvol = new Chart(ctxE,{ type:'line', data:{
+      labels: evol.map(p=>p.num),
+      datasets:[
+        {label:'Euforia', data:evol.map(p=>p.ours),
+         borderColor:RC, backgroundColor:'rgba(192,39,45,0.08)',
+         tension:0.2, fill:true, borderWidth:2.5, pointRadius:3, pointBackgroundColor:RC},
+        {label:rival, data:evol.map(p=>p.theirs),
+         borderColor:'#aaa', backgroundColor:'rgba(180,180,180,0.06)',
+         tension:0.2, fill:true, borderWidth:1.5, pointRadius:2, pointBackgroundColor:'#aaa',
+         borderDash:[4,3]},
+      ]},
+      options:{responsive:true,
+        interaction:{mode:'index',intersect:false},
+        scales:{
+          x:{title:{display:true,text:'Punto #',font:{size:8}},ticks:{font:{size:8}}},
+          y:{ticks:{font:{size:8},stepSize:1}}
+        },
+        plugins:{legend:{position:'top',labels:{font:{size:9},padding:10}}}}
+    });
+  }
+
+  // ── Eficiencia O-line vs D-line ──
+  const ctxF = document.getElementById('chart-game-eff');
+  if(ctxF){
+    charts.gameEff = new Chart(ctxF,{ type:'bar', data:{
+      labels:['O Conv.','O No conv.','D Quiebres','D No conv.'],
+      datasets:[{
+        data:[oConv, oTotal-oConv, dConv, dTotal-dConv],
+        backgroundColor:[
+          'rgba(192,39,45,0.65)',
+          'rgba(192,39,45,0.15)',
+          'rgba(26,95,160,0.65)',
+          'rgba(26,95,160,0.15)',
+        ],
+        borderColor:[RC,RC,BC,BC],
+        borderWidth:1,
+      }]},
+      options:{responsive:true,
+        plugins:{legend:{display:false},
+          tooltip:{callbacks:{label:(ctx)=>`${ctx.parsed.y} puntos`}}},
+        scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9},stepSize:1}}}}
+    });
+  }
 }
 
 // ══════════════════════════════════════════════════
