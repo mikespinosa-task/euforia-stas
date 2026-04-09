@@ -21,8 +21,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-
 
 /* HEADER */
 header{background:var(--black);height:60px;padding:0 28px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.35)}
-.hdr-logo{font-family:'Barlow Condensed',sans-serif;font-size:1.35rem;font-weight:800;letter-spacing:2px;color:#fff}
-.hdr-logo span{color:var(--red)}
+.hdr-logo img{height:28px;object-fit:contain;display:block}
 .hdr-sep{flex:1}
 .hdr-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:3px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);white-space:nowrap}
 .btn-refresh{background:var(--red);border:none;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;padding:6px 14px;border-radius:5px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.15s}
@@ -179,8 +178,8 @@ footer strong{color:rgba(255,255,255,0.55)}
 <body>
 
 <header>
-  <div class="hdr-logo">EUFO<span>RIA</span></div>
-  <div class="hdr-badge" id="hdr-season">Temporada —</div>
+  <div class="hdr-logo"><img src="data:image/webp;base64,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" alt="Euforia"></div>
+  <div class="hdr-badge">Temporada 2026</div>
   <div class="hdr-sep"></div>
   <button class="btn-refresh" onclick="loadAll()">
     <svg id="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -262,7 +261,7 @@ footer strong{color:rgba(255,255,255,0.55)}
   </div>
 </main>
 
-<footer>EUFORIA OPEN &nbsp;·&nbsp; <strong>Bogotá Open 2026</strong> &nbsp;·&nbsp; Dashboard generado por Adcom</footer>
+<footer>EUFORIA OPEN &nbsp;·&nbsp; <strong>Temporada 2026</strong> &nbsp;·&nbsp; Dashboard generado por Mike Espinosa</footer>
 
 <script>
 // ══════════════════════════════════════════════════
@@ -350,9 +349,7 @@ async function loadAll(){
       if(j.apodo && j.nombre) D.homolog[j.apodo.trim()] = j.nombre.trim();
     });
 
-    // Update season badge
-    const torneos = [...new Set(partidos.map(p=>p.torneo).filter(Boolean))];
-    document.getElementById('hdr-season').textContent = torneos.length ? torneos[0] : 'Temporada 2026';
+    // Season badge is static now
 
     destroyCharts();
     renderResumen();
@@ -375,7 +372,16 @@ function destroyCharts(){
   charts={};
 }
 
-function homolog(name){ return D.homolog[name] || name; }
+function homolog(name){
+  if(!name) return '';
+  const trimmed = (name+'').trim();
+  return D.homolog[trimmed] || trimmed;
+}
+
+function homologLine(lineStr){
+  if(!lineStr) return '—';
+  return lineStr.split(',').map(x=>homolog(x.trim())).join(', ');
+}
 
 // ══════════════════════════════════════════════════
 // NAVIGATION
@@ -612,7 +618,7 @@ function renderGameDetail(){
               ${puntos.map(p=>`<tr>
                 <td class="c" style="color:var(--muted);font-size:0.78rem">${p.punto_num}</td>
                 <td class="c"><span style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;padding:2px 7px;border-radius:3px;background:${p.line_type==='O'?'var(--red-m)':'var(--blue-m)'};color:${p.line_type==='O'?RC:BC}">${p.line_type}</span></td>
-                <td style="font-size:0.78rem;color:var(--muted)">${(p.linea||'').split(',').map(x=>homolog(x.trim())).join(', ')}</td>
+                <td style="font-size:0.78rem;color:var(--muted)">${homologLine(p.linea)}</td>
                 <td style="font-weight:600">${homolog(p.goleador)||'—'}</td>
                 <td style="color:var(--muted)">${homolog(p.asistente)||'—'}</td>
                 <td class="c" style="font-family:'Barlow Condensed',sans-serif;font-weight:700">${p.score_nuestros} – ${p.score_suyos}</td>
@@ -688,20 +694,35 @@ function renderPlayerProfile(){
     <div class="tbl-wrap">
       <table class="tbl">
         <thead><tr>
-          <th>Rival</th><th>Fecha</th><th class="c">G</th><th class="c">A</th>
-          <th class="c">D</th><th class="c">+/-</th><th class="c">Comp%</th><th class="c">PP</th>
+          <th>Rival</th><th>Fecha</th>
+          <th class="c">PP</th><th class="c">G</th><th class="c">A</th><th class="c">D</th>
+          <th class="c">REC</th><th class="c">TA</th><th class="c">DROP</th>
+          <th class="c">COMP%</th><th class="c">TOTAL</th>
         </tr></thead>
         <tbody>
-          ${byGame.map(s=>`<tr>
-            <td>vs ${s.rival}</td>
-            <td style="color:var(--muted);font-size:0.8rem">${s.fecha||'—'}</td>
-            <td class="c" style="color:${RC};font-weight:700">${s.goles||0}</td>
-            <td class="c" style="color:${GC};font-weight:700">${s.asistencias||0}</td>
-            <td class="c" style="color:${BC};font-weight:700">${s.defensas||0}</td>
-            <td class="c" style="font-weight:700;color:${n(s.plus_minus)>=0?GC:RC}">${n(s.plus_minus)>=0?'+':''}${s.plus_minus||0}</td>
-            <td class="c">${s.completion_pct?s.completion_pct+'%':'—'}</td>
-            <td class="c" style="color:var(--muted)">${s.puntos_jugados||0}</td>
-          </tr>`).join('')}
+          ${byGame.map(s=>{
+            const total = n(s.goles)+n(s.asistencias)+n(s.defensas);
+            const pct = n(s.completion_pct);
+            const pctColor = pct>=90?GC:pct>=75?GLC:RC;
+            return `<tr>
+              <td><strong>vs ${s.rival}</strong></td>
+              <td style="color:var(--muted);font-size:0.8rem">${s.fecha||'—'}</td>
+              <td class="c" style="color:var(--muted)">${s.puntos_jugados||0}</td>
+              <td class="c" style="color:${RC};font-weight:700">${s.goles||0}</td>
+              <td class="c" style="color:${GC};font-weight:700">${s.asistencias||0}</td>
+              <td class="c" style="color:${BC};font-weight:700">${s.defensas||0}</td>
+              <td class="c">${s.catches||0}</td>
+              <td class="c" style="color:${n(s.throwaways)>0?RC:'var(--muted)'}">${s.throwaways||0}</td>
+              <td class="c" style="color:${n(s.drops)>0?RC:'var(--muted)'}">${s.drops||0}</td>
+              <td class="c">
+                <div class="cb-wrap">
+                  <span class="cb-pct" style="color:${pctColor}">${pct?pct+'%':'—'}</span>
+                  <div class="cb-bar" style="min-width:40px"><div class="cb-fill" style="width:${pct}%;background:${pctColor}"></div></div>
+                </div>
+              </td>
+              <td class="c"><span style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--gold)">${total}</span></td>
+            </tr>`;
+          }).join('')}
         </tbody>
       </table>
     </div>`;
@@ -715,14 +736,20 @@ function buildPlayerChart(byGame){
   if(charts.playerProg) { try{charts.playerProg.destroy()}catch(e){} }
 
   const labels = byGame.map(s=>'vs '+s.rival);
-
   let datasets = [];
+
   if(activeMetric==='eficiencia'){
-    datasets=[{label:'Completion %',data:byGame.map(s=>n(s.completion_pct)),borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,0.1)',tension:0.3,fill:true,borderWidth:2.5,pointRadius:4}];
+    datasets=[
+      {label:'Completion %',data:byGame.map(s=>n(s.completion_pct)),borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,0.1)',tension:0.3,fill:true,borderWidth:2.5,pointRadius:4},
+      {label:'D\'s',data:byGame.map(s=>n(s.defensas)),borderColor:BC,backgroundColor:'transparent',tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[4,3],yAxisID:'y2'},
+      {label:'Throwaways',data:byGame.map(s=>n(s.throwaways)),borderColor:'#f97316',backgroundColor:'transparent',tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[2,3],yAxisID:'y2'},
+    ];
   } else if(activeMetric==='produccion'){
     datasets=[
-      {label:'Goles',data:byGame.map(s=>n(s.goles)),borderColor:RC,backgroundColor:'rgba(192,39,45,0.08)',tension:0.3,fill:false,borderWidth:2,pointRadius:4},
-      {label:'Asistencias',data:byGame.map(s=>n(s.asistencias)),borderColor:GC,backgroundColor:'rgba(29,107,62,0.08)',tension:0.3,fill:false,borderWidth:2,pointRadius:4},
+      {label:'Goles',data:byGame.map(s=>n(s.goles)),borderColor:RC,backgroundColor:'rgba(192,39,45,0.08)',tension:0.3,fill:false,borderWidth:2.5,pointRadius:4},
+      {label:'Asistencias',data:byGame.map(s=>n(s.asistencias)),borderColor:GC,backgroundColor:'rgba(29,107,62,0.08)',tension:0.3,fill:false,borderWidth:2.5,pointRadius:4},
+      {label:'D\'s',data:byGame.map(s=>n(s.defensas)),borderColor:BC,backgroundColor:'transparent',tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[4,3]},
+      {label:'Throwaways',data:byGame.map(s=>n(s.throwaways)),borderColor:'#f97316',backgroundColor:'transparent',tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[2,3]},
     ];
   } else if(activeMetric==='impacto'){
     datasets=[{label:'+/-',data:byGame.map(s=>n(s.plus_minus)),borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,0.1)',tension:0.3,fill:true,borderWidth:2.5,pointRadius:4}];
@@ -730,19 +757,29 @@ function buildPlayerChart(byGame){
     datasets=[
       {label:'Comp% / 10',data:byGame.map(s=>n(s.completion_pct)/10),borderColor:'#c084fc',tension:0.3,fill:false,borderWidth:3,pointRadius:5,yAxisID:'y'},
       {label:'Goles',data:byGame.map(s=>n(s.goles)),borderColor:RC,tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[4,3],yAxisID:'y2'},
+      {label:'Asist.',data:byGame.map(s=>n(s.asistencias)),borderColor:GC,tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[4,3],yAxisID:'y2'},
       {label:'+/-',data:byGame.map(s=>n(s.plus_minus)),borderColor:'#fbbf24',tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[2,3],yAxisID:'y2'},
+      {label:'D\'s',data:byGame.map(s=>n(s.defensas)),borderColor:BC,tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[2,3],yAxisID:'y2'},
     ];
   }
 
-  const scales = activeMetric==='todo'
-    ? {y:{position:'left',ticks:{font:{size:9}},title:{display:true,text:'Comp%/10',font:{size:8}}},
-       y2:{position:'right',ticks:{font:{size:9}},grid:{drawOnChartArea:false}}}
+  const isMultiAxis = activeMetric==='eficiencia' || activeMetric==='todo';
+  const scales = isMultiAxis
+    ? {y:{position:'left',ticks:{font:{size:9}},title:{display:true,text:activeMetric==='eficiencia'?'Comp%':'Comp%/10',font:{size:8}}},
+       y2:{position:'right',ticks:{font:{size:9}},grid:{drawOnChartArea:false},title:{display:true,text:'Conteo',font:{size:8}}}}
     : {y:{ticks:{font:{size:9}}}};
+
+  // Assign yAxisID for eficiencia datasets
+  if(activeMetric==='eficiencia'){
+    datasets[0].yAxisID='y';
+    datasets[1].yAxisID='y2';
+    datasets[2].yAxisID='y2';
+  }
 
   charts.playerProg = new Chart(ctx,{
     type:'line', data:{labels, datasets},
     options:{responsive:true,interaction:{mode:'index',intersect:false},
-      scales, plugins:{legend:{position:'top',labels:{font:{size:9}}}}}
+      scales, plugins:{legend:{position:'top',labels:{font:{size:9},padding:10}}}}
   });
 }
 
