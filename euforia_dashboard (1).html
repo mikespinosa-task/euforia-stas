@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Euforia — Dashboard Temporada</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#c0272d;--red2:#e03035;--red-l:#fef2f2;--red-m:rgba(192,39,45,0.12);
+  --green:#1d6b3e;--green-l:#f0fdf4;--green-m:rgba(29,107,62,0.12);
+  --blue:#1a5fa0;--blue-l:#eff6ff;--blue-m:rgba(26,95,160,0.12);
+  --gold:#a07800;--gold-l:#fefce8;
+  --black:#0f0f0f;--black2:#1a1a1a;
+  --bg:#f4f4f6;--surface:#fff;--border:#e4e4e8;
+  --text:#111;--muted:#666;--muted2:#aaa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh}
+
+/* HEADER */
+header{background:var(--black);height:60px;padding:0 28px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.35)}
+.hdr-logo{font-family:'Barlow Condensed',sans-serif;font-size:1.35rem;font-weight:800;letter-spacing:2px;color:#fff}
+.hdr-logo span{color:var(--red)}
+.hdr-sep{flex:1}
+.hdr-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:3px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);white-space:nowrap}
+.btn-refresh{background:var(--red);border:none;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;padding:6px 14px;border-radius:5px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.15s}
+.btn-refresh:hover{background:var(--red2)}
+.btn-refresh svg{width:13px;height:13px}
+.spin{animation:spin 1s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* NAV */
+nav{background:var(--black2);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;padding:0 28px;overflow-x:auto;gap:0;-webkit-overflow-scrolling:touch}
+nav::-webkit-scrollbar{height:2px}
+nav::-webkit-scrollbar-track{background:transparent}
+nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}
+.nav-btn{padding:13px 18px;background:none;border:none;border-bottom:2.5px solid transparent;color:rgba(255,255,255,0.38);font-family:'Barlow Condensed',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.nav-btn:hover{color:rgba(255,255,255,0.72)}
+.nav-btn.active{color:#fff;border-bottom-color:var(--red)}
+
+/* MAIN */
+main{max-width:1300px;margin:0 auto;padding:24px 28px}
+.section{display:none}.section.active{display:block;animation:fadeUp 0.2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* LOADING / ERROR */
+.loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:14px}
+.loading-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite}
+.loading-text{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.error-wrap{background:var(--red-l);border:1px solid #fecaca;border-radius:8px;padding:20px 24px;margin:20px 0;color:var(--red);font-size:0.9rem}
+
+/* SEC HDR */
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sh h2{font-family:'Barlow Condensed',sans-serif;font-size:0.88rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--text);white-space:nowrap}
+.sh-line{flex:1;height:1px;background:var(--border)}
+
+/* METRIC CARDS */
+.mc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px}
+.mc{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--red);border-radius:8px;padding:14px 10px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.mc-val{font-family:'Barlow Condensed',sans-serif;font-size:1.9rem;font-weight:800;line-height:1}
+.mc-lbl{font-size:0.56rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:4px;font-weight:600}
+.cv-green{color:var(--green)}.cv-red{color:var(--red)}.cv-blue{color:var(--blue)}.cv-gold{color:var(--gold)}
+
+/* TABLES */
+.tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04);overflow-x:auto;margin-bottom:20px}
+table.tbl{width:100%;border-collapse:collapse;min-width:480px}
+table.tbl th{padding:9px 13px;font-size:0.58rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--border);font-weight:700;text-align:left;white-space:nowrap;cursor:pointer;user-select:none}
+table.tbl th:hover{color:var(--text)}
+table.tbl th.sorted{color:var(--red)}
+table.tbl td{padding:9px 13px;border-bottom:1px solid var(--border);font-size:0.85rem;vertical-align:middle}
+table.tbl tr:last-child td{border-bottom:none}
+table.tbl tr:hover td{background:#fafafa}
+th.c,td.c{text-align:center}
+
+/* BADGES */
+.rb{display:inline-block;padding:2px 9px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:0.66rem;font-weight:700;letter-spacing:1px}
+.rb-win{background:var(--green-l);color:var(--green);border:1px solid #bbf7d0}
+.rb-loss{background:var(--red-l);color:var(--red);border:1px solid #fecaca}
+.score-big{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800}
+.sb-win{color:var(--green)}.sb-loss{color:var(--red)}
+
+/* TORNEO GROUP */
+.torneo-group{margin-bottom:24px}
+.torneo-label{font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-left:2px}
+
+/* CHARTS */
+.cg2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.cg3{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:14px;margin-bottom:18px}
+.cc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.cc-title{font-family:'Barlow Condensed',sans-serif;font-size:0.66rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:700}
+
+/* CONTROLS */
+.ctrl{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.ctrl-lbl{font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.sel{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:7px 11px;border-radius:6px;font-family:'Barlow',sans-serif;font-size:0.85rem;cursor:pointer}
+.sel:focus{outline:none;border-color:var(--red)}
+.toggle-group{display:flex;gap:4px;flex-wrap:wrap}
+.tog{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:1px;padding:5px 12px;border-radius:5px;cursor:pointer;transition:all 0.15s;text-transform:uppercase}
+.tog.active{background:var(--red);border-color:var(--red);color:#fff}
+
+/* PLAYER HEADER */
+.phdr{background:var(--black);border-radius:10px;padding:20px 24px;margin-bottom:16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.p-avatar{width:46px;height:46px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;flex-shrink:0}
+.p-info{flex:1;min-width:140px}
+.p-name{font-family:'Barlow Condensed',sans-serif;font-size:1.7rem;font-weight:800;color:#fff;line-height:1}
+.p-sub{font-size:0.62rem;letter-spacing:2px;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-top:3px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:7px 12px;text-align:center;min-width:52px}
+.pill-v{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;line-height:1}
+.pill-v.g{color:#f87171}.pill-v.a{color:#4ade80}.pill-v.d{color:#60a5fa}.pill-v.pm{color:#fbbf24}.pill-v.eff{color:#c084fc}
+.pill-l{font-size:0.53rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:2px}
+
+/* COMP BAR */
+.cb-wrap{display:flex;align-items:center;gap:6px}
+.cb-pct{font-size:0.78rem;font-weight:700;min-width:36px;text-align:right}
+.cb-bar{flex:1;height:4px;border-radius:2px;background:#eee;overflow:hidden}
+.cb-fill{height:100%;border-radius:2px;background:var(--green)}
+
+/* LINES TAB */
+.line-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.line-players{font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;font-weight:700;letter-spacing:0.5px;color:var(--text);margin-bottom:8px}
+.line-meta{display:flex;gap:14px;flex-wrap:wrap}
+.line-stat{font-size:0.75rem;color:var(--muted)}
+.line-stat strong{color:var(--text)}
+.line-pct-bar{height:5px;border-radius:3px;background:#eee;overflow:hidden;margin-top:6px}
+.line-pct-fill{height:100%;border-radius:3px}
+
+/* GAME DETAIL */
+.ghdr{background:var(--black);border-radius:10px;padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.gopp{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;flex:1;min-width:140px}
+.gphase{font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.gscore{font-family:'Barlow Condensed',sans-serif;font-size:2.6rem;font-weight:800;line-height:1}
+.gscore.win{color:#4ade80}.gscore.loss{color:#f87171}
+
+/* COMPARE */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.cmp-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.cmp-hdr{background:var(--black);padding:14px 18px}
+.cmp-name{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;color:#fff}
+.cmp-row{display:flex;justify-content:space-between;align-items:center;padding:9px 18px;border-bottom:1px solid var(--border);font-size:0.84rem}
+.cmp-row:last-child{border-bottom:none}
+.cmp-label{color:var(--muted);font-size:0.7rem;letter-spacing:1px;text-transform:uppercase}
+.cmp-val{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800}
+.cmp-best{color:var(--green)}
+
+/* FOOTER */
+footer{background:var(--black);color:rgba(255,255,255,0.28);text-align:center;padding:14px;font-size:0.65rem;letter-spacing:1px;margin-top:32px}
+footer strong{color:rgba(255,255,255,0.55)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  header{padding:0 14px;height:54px}
+  .hdr-logo{font-size:1.1rem}
+  .hdr-badge{display:none}
+  nav{padding:0 10px}
+  .nav-btn{padding:11px 12px;font-size:0.72rem;letter-spacing:1px}
+  main{padding:14px}
+  .mc-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .mc-val{font-size:1.5rem}
+  .cg2,.cg3{grid-template-columns:1fr}
+  .phdr{padding:14px 16px;gap:12px}
+  .p-name{font-size:1.35rem}
+  .pills{gap:6px}
+  .pill{padding:5px 9px;min-width:44px}
+  .pill-v{font-size:1.1rem}
+  .cmp-grid{grid-template-columns:1fr}
+  .ghdr{padding:14px 16px}
+  .gscore{font-size:2rem}
+  .ctrl{gap:8px}
+}
+@media(max-width:480px){
+  .mc-grid{grid-template-columns:repeat(2,1fr)}
+  .toggle-group .tog{font-size:0.65rem;padding:4px 9px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-logo">EUFO<span>RIA</span></div>
+  <div class="hdr-badge" id="hdr-season">Temporada —</div>
+  <div class="hdr-sep"></div>
+  <button class="btn-refresh" onclick="loadAll()">
+    <svg id="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M23 4v6h-6"/><path d="M1 20v-6h6"/>
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+    </svg>
+    ACTUALIZAR
+  </button>
+</header>
+
+<nav>
+  <button class="nav-btn active" onclick="showTab('resumen',this)">Resumen</button>
+  <button class="nav-btn" onclick="showTab('partidos',this)">Partidos</button>
+  <button class="nav-btn" onclick="showTab('jugador',this)">Jugador</button>
+  <button class="nav-btn" onclick="showTab('comparar',this)">Comparar</button>
+  <button class="nav-btn" onclick="showTab('lineas',this)">Líneas</button>
+</nav>
+
+<main>
+  <!-- RESUMEN -->
+  <div id="tab-resumen" class="section active">
+    <div id="resumen-content"><div class="loading-wrap"><div class="loading-spinner"></div><div class="loading-text">Cargando datos…</div></div></div>
+  </div>
+
+  <!-- PARTIDOS -->
+  <div id="tab-partidos" class="section">
+    <div class="ctrl">
+      <span class="ctrl-lbl">Partido</span>
+      <select class="sel" id="game-sel" onchange="renderGameDetail()"></select>
+    </div>
+    <div id="game-content"><div class="loading-wrap"><div class="loading-spinner"></div><div class="loading-text">Cargando…</div></div></div>
+  </div>
+
+  <!-- JUGADOR -->
+  <div id="tab-jugador" class="section">
+    <div class="ctrl">
+      <span class="ctrl-lbl">Jugador</span>
+      <select class="sel" id="player-sel" onchange="renderPlayerProfile()"></select>
+      <span class="ctrl-lbl" style="margin-left:8px">Métrica</span>
+      <div class="toggle-group" id="metric-tog">
+        <button class="tog active" onclick="setMetric('eficiencia',this)">Eficiencia</button>
+        <button class="tog" onclick="setMetric('produccion',this)">Producción</button>
+        <button class="tog" onclick="setMetric('impacto',this)">Impacto</button>
+        <button class="tog" onclick="setMetric('todo',this)">Todo</button>
+      </div>
+    </div>
+    <div id="player-content"></div>
+  </div>
+
+  <!-- COMPARAR -->
+  <div id="tab-comparar" class="section">
+    <div class="ctrl">
+      <span class="ctrl-lbl">Jugador A</span>
+      <select class="sel" id="cmp-a" onchange="renderCompare()"></select>
+      <span class="ctrl-lbl">vs</span>
+      <select class="sel" id="cmp-b" onchange="renderCompare()"></select>
+    </div>
+    <div id="compare-content"></div>
+  </div>
+
+  <!-- LINEAS -->
+  <div id="tab-lineas" class="section">
+    <div class="ctrl">
+      <span class="ctrl-lbl">Tipo</span>
+      <div class="toggle-group">
+        <button class="tog active" onclick="setLineFilter('all',this)">Todas</button>
+        <button class="tog" onclick="setLineFilter('O',this)">Ofensivas</button>
+        <button class="tog" onclick="setLineFilter('D',this)">Defensivas</button>
+      </div>
+      <span class="ctrl-lbl" style="margin-left:8px">Mín. puntos juntos</span>
+      <select class="sel" id="min-pts" onchange="renderLines()">
+        <option value="1">1+</option>
+        <option value="2" selected>2+</option>
+        <option value="3">3+</option>
+        <option value="5">5+</option>
+      </select>
+    </div>
+    <div id="lines-content"></div>
+  </div>
+</main>
+
+<footer>EUFORIA OPEN &nbsp;·&nbsp; <strong>Bogotá Open 2026</strong> &nbsp;·&nbsp; Dashboard generado por Adcom</footer>
+
+<script>
+// ══════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════
+const SHEET_ID = '1fgCeC_OlKUiK_T9i1F-R8OU_aLSqIdjySkVwmkunbwM';
+const TABS = { partidos:'partidos', puntos:'puntos', stats:'estadisticas', statsXP:'stats_x_partido', jugadores:'jugadores' };
+const GC='#1d6b3e', RC='#c0272d', BC='#1a5fa0', GLC='#a07800';
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let D = { partidos:[], puntos:[], stats:[], statsXP:[], jugadores:[], homolog:{} };
+let activeMetric = 'eficiencia';
+let lineFilter = 'all';
+let charts = {};
+
+// ══════════════════════════════════════════════════
+// FETCH SHEETS
+// ══════════════════════════════════════════════════
+function sheetUrl(tab){
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}&t=${Date.now()}`;
+}
+
+async function fetchCSV(tab){
+  const r = await fetch(sheetUrl(tab));
+  if(!r.ok) throw new Error(`Error cargando ${tab}`);
+  const txt = await r.text();
+  return parseCSV(txt);
+}
+
+function parseCSV(txt){
+  const lines = txt.trim().split('\n');
+  if(lines.length < 2) return [];
+  const headers = splitCSVLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = splitCSVLine(line);
+    const obj = {};
+    headers.forEach((h,i) => { obj[h.trim().replace(/^"|"$/g,'')] = (vals[i]||'').trim().replace(/^"|"$/g,''); });
+    return obj;
+  });
+}
+
+function splitCSVLine(line){
+  const res=[]; let cur=''; let inQ=false;
+  for(let i=0;i<line.length;i++){
+    if(line[i]==='"'){ inQ=!inQ; }
+    else if(line[i]===','&&!inQ){ res.push(cur); cur=''; }
+    else cur+=line[i];
+  }
+  res.push(cur);
+  return res;
+}
+
+function n(v){ return parseFloat(v)||0; }
+
+// ══════════════════════════════════════════════════
+// LOAD ALL
+// ══════════════════════════════════════════════════
+async function loadAll(){
+  const icon = document.getElementById('refresh-icon');
+  icon.classList.add('spin');
+
+  // Show loading in active tab
+  document.querySelectorAll('.section.active [id$="-content"]').forEach(el=>{
+    el.innerHTML = '<div class="loading-wrap"><div class="loading-spinner"></div><div class="loading-text">Cargando datos…</div></div>';
+  });
+
+  try {
+    const [partidos, puntos, stats, statsXP, jugadores] = await Promise.all([
+      fetchCSV(TABS.partidos), fetchCSV(TABS.puntos),
+      fetchCSV(TABS.stats), fetchCSV(TABS.statsXP),
+      fetchCSV(TABS.jugadores)
+    ]);
+
+    D.partidos = partidos;
+    D.puntos   = puntos;
+    D.stats    = stats;
+    D.statsXP  = statsXP;
+    D.jugadores = jugadores;
+
+    // Build homologation map apodo→nombre
+    D.homolog = {};
+    jugadores.forEach(j => {
+      if(j.apodo && j.nombre) D.homolog[j.apodo.trim()] = j.nombre.trim();
+    });
+
+    // Update season badge
+    const torneos = [...new Set(partidos.map(p=>p.torneo).filter(Boolean))];
+    document.getElementById('hdr-season').textContent = torneos.length ? torneos[0] : 'Temporada 2026';
+
+    destroyCharts();
+    renderResumen();
+    populateSelects();
+    renderGameDetail();
+    renderPlayerProfile();
+    renderCompare();
+    renderLines();
+
+  } catch(e) {
+    document.getElementById('resumen-content').innerHTML =
+      `<div class="error-wrap">❌ Error cargando datos: ${e.message}<br><small>Verifica que el Sheet sea público (cualquier persona con el enlace → Lector)</small></div>`;
+  }
+
+  icon.classList.remove('spin');
+}
+
+function destroyCharts(){
+  Object.values(charts).forEach(c=>{ try{c.destroy()}catch(e){} });
+  charts={};
+}
+
+function homolog(name){ return D.homolog[name] || name; }
+
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+function showTab(tab, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════════════
+// TAB 1 — RESUMEN
+// ══════════════════════════════════════════════════
+function renderResumen(){
+  const p = D.partidos;
+  if(!p.length){ document.getElementById('resumen-content').innerHTML='<div class="error-wrap">Sin datos de partidos aún.</div>'; return; }
+
+  const wins   = p.filter(x=>x.resultado==='W').length;
+  const losses = p.length - wins;
+  const gf     = p.reduce((s,x)=>s+n(x.nuestros),0);
+  const gc     = p.reduce((s,x)=>s+n(x.suyos),0);
+  const diff   = gf - gc;
+
+  // Group by torneo
+  const byTorneo = {};
+  p.forEach(x=>{ const t=x.torneo||'—'; if(!byTorneo[t]) byTorneo[t]=[]; byTorneo[t].push(x); });
+
+  const torneoHtml = Object.entries(byTorneo).map(([t,games])=>`
+    <div class="torneo-group">
+      <div class="torneo-label">${t}</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr>
+            <th>Partido</th><th>Fecha</th><th class="c">Resultado</th><th class="c">Marcador</th>
+          </tr></thead>
+          <tbody>
+            ${games.map(g=>`<tr>
+              <td><strong>Euforia vs ${g.rival}</strong></td>
+              <td>${g.fecha||'—'}</td>
+              <td class="c"><span class="rb ${g.resultado==='W'?'rb-win':'rb-loss'}">${g.resultado==='W'?'VICTORIA':'DERROTA'}</span></td>
+              <td class="c"><span class="score-big ${g.resultado==='W'?'sb-win':'sb-loss'}">${g.nuestros} – ${g.suyos}</span></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`).join('');
+
+  // Top stats
+  const statsS = [...D.stats].sort((a,b)=>n(b.goles)-n(a.goles)).slice(0,12);
+  const topNames = statsS.map(s=>homolog(s.jugador));
+  const maxG = Math.max(...statsS.map(s=>n(s.goles)),1);
+  const maxA = Math.max(...statsS.map(s=>n(s.asistencias)),1);
+  const maxD = Math.max(...statsS.map(s=>n(s.defensas)),1);
+
+  // Completion % (min 10 lanzamientos)
+  const compStats = D.stats.filter(s=>n(s.lanzamientos)>=10)
+    .sort((a,b)=>n(b.completion_pct)-n(a.completion_pct));
+
+  document.getElementById('resumen-content').innerHTML=`
+    <div class="sh"><h2>Resumen del Torneo</h2><div class="sh-line"></div></div>
+    <div class="mc-grid">
+      <div class="mc"><div class="mc-val">${p.length}</div><div class="mc-lbl">Partidos</div></div>
+      <div class="mc"><div class="mc-val cv-green">${wins}</div><div class="mc-lbl">Victorias</div></div>
+      <div class="mc"><div class="mc-val cv-red">${losses}</div><div class="mc-lbl">Derrotas</div></div>
+      <div class="mc"><div class="mc-val cv-blue">${gf}</div><div class="mc-lbl">Goles a Favor</div></div>
+      <div class="mc"><div class="mc-val cv-red">${gc}</div><div class="mc-lbl">En Contra</div></div>
+      <div class="mc"><div class="mc-val ${diff>=0?'cv-green':'cv-red'}">${diff>=0?'+':''}${diff}</div><div class="mc-lbl">Diferencia</div></div>
+    </div>
+    <div class="sh"><h2>Resultados</h2><div class="sh-line"></div></div>
+    ${torneoHtml}
+    <div class="sh"><h2>Top Jugadores — Acciones del Torneo</h2><div class="sh-line"></div></div>
+    <div class="cg3">
+      <div class="cc"><div class="cc-title">Top Jugadores — G / A / D</div><canvas id="chart-top"></canvas></div>
+      <div class="cc"><div class="cc-title">Distribución G / A / D</div><canvas id="chart-donut"></canvas></div>
+      <div class="cc"><div class="cc-title">Eficiencia O-Line por Partido</div><canvas id="chart-oline"></canvas></div>
+    </div>
+    <div class="cg2">
+      <div class="cc"><div class="cc-title">Top Conexiones Pase → Recepción</div><canvas id="chart-conn"></canvas></div>
+      <div class="cc">
+        <div class="cc-title">Completion % por Jugador (mín. 10 pases)</div>
+        <div id="comp-bars"></div>
+      </div>
+    </div>`;
+
+  setTimeout(()=>{
+    buildChartTop(statsS, topNames, maxG, maxA, maxD);
+    buildChartDonut();
+    buildChartOline();
+    buildChartConnections();
+    buildCompBars(compStats);
+  },50);
+}
+
+function buildChartTop(statsS, names, maxG, maxA, maxD){
+  const ctx = document.getElementById('chart-top');
+  if(!ctx) return;
+  charts.top = new Chart(ctx,{ type:'bar', data:{
+    labels: names,
+    datasets:[
+      {label:'G',data:statsS.map(s=>n(s.goles)),backgroundColor:'rgba(192,39,45,0.6)',borderColor:RC,borderWidth:1},
+      {label:'A',data:statsS.map(s=>n(s.asistencias)),backgroundColor:'rgba(29,107,62,0.6)',borderColor:GC,borderWidth:1},
+      {label:'D',data:statsS.map(s=>n(s.defensas)),backgroundColor:'rgba(26,95,160,0.5)',borderColor:BC,borderWidth:1},
+    ]},
+    options:{responsive:true,plugins:{legend:{position:'top',labels:{font:{size:9},padding:8}}},
+      scales:{x:{ticks:{font:{size:8},maxRotation:45}},y:{ticks:{font:{size:8}}}}}
+  });
+}
+
+function buildChartDonut(){
+  const ctx = document.getElementById('chart-donut');
+  if(!ctx) return;
+  const tG = D.stats.reduce((s,x)=>s+n(x.goles),0);
+  const tA = D.stats.reduce((s,x)=>s+n(x.asistencias),0);
+  const tD = D.stats.reduce((s,x)=>s+n(x.defensas),0);
+  charts.donut = new Chart(ctx,{ type:'doughnut', data:{
+    labels:['Goles','Asistencias','Defensas'],
+    datasets:[{data:[tG,tA,tD],backgroundColor:[RC,GC,BC],borderWidth:2}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9}}}}}
+  });
+}
+
+function buildChartOline(){
+  const ctx = document.getElementById('chart-oline');
+  if(!ctx) return;
+  // O-line efficiency per game: scored O-points / total O-points
+  const gameMap = {};
+  D.puntos.forEach(p=>{
+    if(p.line_type!=='O') return;
+    const k = p.rival||p.game_id;
+    if(!gameMap[k]) gameMap[k]={scored:0,total:0};
+    gameMap[k].total++;
+    if(p.goleador) gameMap[k].scored++;
+  });
+  const labels = Object.keys(gameMap).map(k=>'vs '+k);
+  const conv   = Object.values(gameMap).map(v=>v.scored);
+  const noConv = Object.values(gameMap).map(v=>v.total-v.scored);
+  charts.oline = new Chart(ctx,{ type:'bar', data:{
+    labels, datasets:[
+      {label:'Conv.',data:conv,backgroundColor:'rgba(192,39,45,0.65)',borderColor:RC,borderWidth:1},
+      {label:'No conv.',data:noConv,backgroundColor:'rgba(200,200,200,0.4)',borderColor:'#ccc',borderWidth:1},
+    ]},
+    options:{responsive:true,scales:{x:{stacked:true,ticks:{font:{size:8}}},y:{stacked:true,ticks:{font:{size:8}}}},
+      plugins:{legend:{position:'top',labels:{font:{size:9}}}}}
+  });
+}
+
+function buildChartConnections(){
+  const ctx = document.getElementById('chart-conn');
+  if(!ctx) return;
+  const connMap = {};
+  D.puntos.forEach(p=>{
+    // We use eventos tab indirectly; here use goleador+asistente from puntos
+    if(p.asistente && p.goleador && p.asistente!=='Anonymous' && p.goleador!=='Anonymous'){
+      const k = `${homolog(p.asistente)} → ${homolog(p.goleador)}`;
+      connMap[k]=(connMap[k]||0)+1;
+    }
+  });
+  const sorted = Object.entries(connMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  charts.conn = new Chart(ctx,{ type:'bar', data:{
+    labels:sorted.map(x=>x[0]),
+    datasets:[{data:sorted.map(x=>x[1]),backgroundColor:'rgba(29,107,62,0.55)',borderColor:GC,borderWidth:1}]},
+    options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{size:8}}},y:{ticks:{font:{size:8}}}}}
+  });
+}
+
+function buildCompBars(compStats){
+  const el = document.getElementById('comp-bars');
+  if(!el) return;
+  el.innerHTML = compStats.map(s=>`
+    <div style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px">
+        <span>${homolog(s.jugador)}</span>
+        <span style="font-weight:700;color:var(--green)">${n(s.completion_pct)}%</span>
+      </div>
+      <div class="cb-bar"><div class="cb-fill" style="width:${n(s.completion_pct)}%"></div></div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// TAB 2 — PARTIDOS
+// ══════════════════════════════════════════════════
+function populateSelects(){
+  const gameSel = document.getElementById('game-sel');
+  gameSel.innerHTML = D.partidos.map((p,i)=>
+    `<option value="${p.game_id}">${p.fecha||'—'} · vs ${p.rival} (${p.nuestros}-${p.suyos})</option>`
+  ).join('');
+
+  const playerNames = D.stats.map(s=>({apodo:s.jugador,nombre:homolog(s.jugador)}))
+    .sort((a,b)=>a.nombre.localeCompare(b.nombre));
+
+  ['player-sel','cmp-a','cmp-b'].forEach(id=>{
+    const sel = document.getElementById(id);
+    if(!sel) return;
+    sel.innerHTML = playerNames.map(p=>`<option value="${p.apodo}">${p.nombre}</option>`).join('');
+  });
+  if(document.getElementById('cmp-b') && playerNames.length>1)
+    document.getElementById('cmp-b').selectedIndex=1;
+}
+
+function renderGameDetail(){
+  const sel = document.getElementById('game-sel');
+  if(!sel || !sel.value) return;
+  const gid = sel.value;
+  const partido = D.partidos.find(p=>p.game_id===gid);
+  const puntos  = D.puntos.filter(p=>p.game_id===gid);
+  const stats   = D.statsXP.filter(s=>s.game_id===gid);
+
+  if(!partido){ document.getElementById('game-content').innerHTML='<div class="error-wrap">Partido no encontrado.</div>'; return; }
+
+  const isWin = partido.resultado==='W';
+  const topStats = [...stats].sort((a,b)=>n(b.goles)+n(b.asistencias)-n(a.goles)-n(a.asistencias)).slice(0,8);
+
+  document.getElementById('game-content').innerHTML=`
+    <div class="ghdr">
+      <div>
+        <div class="gopp">Euforia vs ${partido.rival}</div>
+        <div class="gphase">${partido.torneo||'—'} · ${partido.fecha||'—'}</div>
+      </div>
+      <div class="gscore ${isWin?'win':'loss'}">${partido.nuestros} – ${partido.suyos}</div>
+      <span class="rb ${isWin?'rb-win':'rb-loss'}">${isWin?'VICTORIA':'DERROTA'}</span>
+    </div>
+    <div class="cg2">
+      <div>
+        <div class="sh"><h2>Punto a Punto</h2><div class="sh-line"></div></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr>
+              <th class="c">#</th><th class="c">Tipo</th><th>Línea</th>
+              <th>Gol</th><th>Asistencia</th><th class="c">Parcial</th>
+            </tr></thead>
+            <tbody>
+              ${puntos.map(p=>`<tr>
+                <td class="c" style="color:var(--muted);font-size:0.78rem">${p.punto_num}</td>
+                <td class="c"><span style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;padding:2px 7px;border-radius:3px;background:${p.line_type==='O'?'var(--red-m)':'var(--blue-m)'};color:${p.line_type==='O'?RC:BC}">${p.line_type}</span></td>
+                <td style="font-size:0.78rem;color:var(--muted)">${(p.linea||'').split(',').map(x=>homolog(x.trim())).join(', ')}</td>
+                <td style="font-weight:600">${homolog(p.goleador)||'—'}</td>
+                <td style="color:var(--muted)">${homolog(p.asistente)||'—'}</td>
+                <td class="c" style="font-family:'Barlow Condensed',sans-serif;font-weight:700">${p.score_nuestros} – ${p.score_suyos}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="sh"><h2>Stats del Partido</h2><div class="sh-line"></div></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr>
+              <th>Jugador</th><th class="c">G</th><th class="c">A</th>
+              <th class="c">D</th><th class="c">+/-</th><th class="c">Comp%</th>
+            </tr></thead>
+            <tbody>
+              ${topStats.map(s=>`<tr>
+                <td>${homolog(s.jugador)}</td>
+                <td class="c" style="color:${RC};font-weight:700">${s.goles||0}</td>
+                <td class="c" style="color:${GC};font-weight:700">${s.asistencias||0}</td>
+                <td class="c" style="color:${BC};font-weight:700">${s.defensas||0}</td>
+                <td class="c" style="font-weight:700;color:${n(s.plus_minus)>=0?GC:RC}">${n(s.plus_minus)>=0?'+':''}${s.plus_minus||0}</td>
+                <td class="c">${s.completion_pct?s.completion_pct+'%':'—'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// TAB 3 — JUGADOR
+// ══════════════════════════════════════════════════
+function setMetric(m, btn){
+  activeMetric = m;
+  document.querySelectorAll('#metric-tog .tog').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPlayerProfile();
+}
+
+function renderPlayerProfile(){
+  const apodo = document.getElementById('player-sel').value;
+  if(!apodo) return;
+  const nombre = homolog(apodo);
+  const total  = D.stats.find(s=>s.jugador===apodo)||{};
+  const byGame = D.statsXP.filter(s=>s.jugador===apodo)
+    .sort((a,b)=>a.fecha>b.fecha?1:-1);
+
+  const pm = n(total.plus_minus);
+
+  document.getElementById('player-content').innerHTML=`
+    <div class="phdr">
+      <div class="p-avatar">${nombre.charAt(0).toUpperCase()}</div>
+      <div class="p-info">
+        <div class="p-name">${nombre}</div>
+        <div class="p-sub">${total.puntos_jugados||0} puntos jugados · Temporada 2026</div>
+      </div>
+      <div class="pills">
+        <div class="pill"><div class="pill-v g">${total.goles||0}</div><div class="pill-l">Goles</div></div>
+        <div class="pill"><div class="pill-v a">${total.asistencias||0}</div><div class="pill-l">Asist.</div></div>
+        <div class="pill"><div class="pill-v d">${total.defensas||0}</div><div class="pill-l">D's</div></div>
+        <div class="pill"><div class="pill-v pm">${pm>=0?'+':''}${pm}</div><div class="pill-l">+/-</div></div>
+        <div class="pill"><div class="pill-v eff">${total.completion_pct||0}%</div><div class="pill-l">Comp.</div></div>
+      </div>
+    </div>
+    <div class="cc" style="margin-bottom:18px">
+      <div class="cc-title">Progresión por Partido — ${activeMetric.toUpperCase()}</div>
+      <canvas id="chart-player-prog" height="90"></canvas>
+    </div>
+    <div class="sh"><h2>Detalle por Partido</h2><div class="sh-line"></div></div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr>
+          <th>Rival</th><th>Fecha</th><th class="c">G</th><th class="c">A</th>
+          <th class="c">D</th><th class="c">+/-</th><th class="c">Comp%</th><th class="c">PP</th>
+        </tr></thead>
+        <tbody>
+          ${byGame.map(s=>`<tr>
+            <td>vs ${s.rival}</td>
+            <td style="color:var(--muted);font-size:0.8rem">${s.fecha||'—'}</td>
+            <td class="c" style="color:${RC};font-weight:700">${s.goles||0}</td>
+            <td class="c" style="color:${GC};font-weight:700">${s.asistencias||0}</td>
+            <td class="c" style="color:${BC};font-weight:700">${s.defensas||0}</td>
+            <td class="c" style="font-weight:700;color:${n(s.plus_minus)>=0?GC:RC}">${n(s.plus_minus)>=0?'+':''}${s.plus_minus||0}</td>
+            <td class="c">${s.completion_pct?s.completion_pct+'%':'—'}</td>
+            <td class="c" style="color:var(--muted)">${s.puntos_jugados||0}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+
+  setTimeout(()=>buildPlayerChart(byGame), 50);
+}
+
+function buildPlayerChart(byGame){
+  const ctx = document.getElementById('chart-player-prog');
+  if(!ctx) return;
+  if(charts.playerProg) { try{charts.playerProg.destroy()}catch(e){} }
+
+  const labels = byGame.map(s=>'vs '+s.rival);
+
+  let datasets = [];
+  if(activeMetric==='eficiencia'){
+    datasets=[{label:'Completion %',data:byGame.map(s=>n(s.completion_pct)),borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,0.1)',tension:0.3,fill:true,borderWidth:2.5,pointRadius:4}];
+  } else if(activeMetric==='produccion'){
+    datasets=[
+      {label:'Goles',data:byGame.map(s=>n(s.goles)),borderColor:RC,backgroundColor:'rgba(192,39,45,0.08)',tension:0.3,fill:false,borderWidth:2,pointRadius:4},
+      {label:'Asistencias',data:byGame.map(s=>n(s.asistencias)),borderColor:GC,backgroundColor:'rgba(29,107,62,0.08)',tension:0.3,fill:false,borderWidth:2,pointRadius:4},
+    ];
+  } else if(activeMetric==='impacto'){
+    datasets=[{label:'+/-',data:byGame.map(s=>n(s.plus_minus)),borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,0.1)',tension:0.3,fill:true,borderWidth:2.5,pointRadius:4}];
+  } else { // todo
+    datasets=[
+      {label:'Comp% / 10',data:byGame.map(s=>n(s.completion_pct)/10),borderColor:'#c084fc',tension:0.3,fill:false,borderWidth:3,pointRadius:5,yAxisID:'y'},
+      {label:'Goles',data:byGame.map(s=>n(s.goles)),borderColor:RC,tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[4,3],yAxisID:'y2'},
+      {label:'+/-',data:byGame.map(s=>n(s.plus_minus)),borderColor:'#fbbf24',tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[2,3],yAxisID:'y2'},
+    ];
+  }
+
+  const scales = activeMetric==='todo'
+    ? {y:{position:'left',ticks:{font:{size:9}},title:{display:true,text:'Comp%/10',font:{size:8}}},
+       y2:{position:'right',ticks:{font:{size:9}},grid:{drawOnChartArea:false}}}
+    : {y:{ticks:{font:{size:9}}}};
+
+  charts.playerProg = new Chart(ctx,{
+    type:'line', data:{labels, datasets},
+    options:{responsive:true,interaction:{mode:'index',intersect:false},
+      scales, plugins:{legend:{position:'top',labels:{font:{size:9}}}}}
+  });
+}
+
+// ══════════════════════════════════════════════════
+// TAB 4 — COMPARAR
+// ══════════════════════════════════════════════════
+function renderCompare(){
+  const apo_a = document.getElementById('cmp-a').value;
+  const apo_b = document.getElementById('cmp-b').value;
+  if(!apo_a || !apo_b) return;
+
+  const sA = D.stats.find(s=>s.jugador===apo_a)||{};
+  const sB = D.stats.find(s=>s.jugador===apo_b)||{};
+
+  const metrics = [
+    {label:'Goles',      ka:'goles',          kb:'goles'},
+    {label:'Asistencias',ka:'asistencias',     kb:'asistencias'},
+    {label:'Defensas',   ka:'defensas',        kb:'defensas'},
+    {label:'+/-',        ka:'plus_minus',      kb:'plus_minus'},
+    {label:'Comp %',     ka:'completion_pct',  kb:'completion_pct', suffix:'%'},
+    {label:'Lanzamientos',ka:'lanzamientos',   kb:'lanzamientos'},
+    {label:'Puntos Jugados',ka:'puntos_jugados',kb:'puntos_jugados'},
+  ];
+
+  function cardHtml(s, name, opp){
+    return `<div class="cmp-card">
+      <div class="cmp-hdr"><div class="cmp-name">${name}</div></div>
+      ${metrics.map(m=>{
+        const val = n(s[m.ka]);
+        const oppVal = n(opp[m.ka]);
+        const best = val > oppVal;
+        return `<div class="cmp-row">
+          <span class="cmp-label">${m.label}</span>
+          <span class="cmp-val ${best?'cmp-best':''}">${val}${m.suffix||''}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  document.getElementById('compare-content').innerHTML=`
+    <div class="cmp-grid">
+      ${cardHtml(sA, homolog(apo_a), sB)}
+      ${cardHtml(sB, homolog(apo_b), sA)}
+    </div>
+    <div class="cc">
+      <div class="cc-title">Comparativa Visual</div>
+      <canvas id="chart-radar-cmp" height="80"></canvas>
+    </div>`;
+
+  setTimeout(()=>{
+    const ctx = document.getElementById('chart-radar-cmp');
+    if(!ctx) return;
+    if(charts.radar) { try{charts.radar.destroy()}catch(e){} }
+    const labels=['Goles','Asistencias','Defensas','+/-','Comp%/10','PP'];
+    const normalize=(s)=>[n(s.goles),n(s.asistencias),n(s.defensas),n(s.plus_minus),n(s.completion_pct)/10,n(s.puntos_jugados)/5];
+    charts.radar = new Chart(ctx,{type:'radar',data:{
+      labels,
+      datasets:[
+        {label:homolog(apo_a),data:normalize(sA),borderColor:RC,backgroundColor:'rgba(192,39,45,0.15)',pointBackgroundColor:RC,borderWidth:2,pointRadius:4},
+        {label:homolog(apo_b),data:normalize(sB),borderColor:BC,backgroundColor:'rgba(26,95,160,0.15)',pointBackgroundColor:BC,borderWidth:2,pointRadius:4},
+      ]},
+      options:{responsive:true,scales:{r:{min:0,ticks:{font:{size:8}},pointLabels:{font:{size:9}}}},
+        plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}
+    });
+  },50);
+}
+
+// ══════════════════════════════════════════════════
+// TAB 5 — LÍNEAS
+// ══════════════════════════════════════════════════
+function setLineFilter(f, btn){
+  lineFilter = f;
+  document.querySelectorAll('.tog').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLines();
+}
+
+function renderLines(){
+  const minPts = parseInt(document.getElementById('min-pts').value)||2;
+  const pts = D.puntos.filter(p=> lineFilter==='all' || p.line_type===lineFilter);
+
+  // Build line combinations
+  const lineMap = {};
+  pts.forEach(p=>{
+    if(!p.linea) return;
+    const jugadores = p.linea.split(',').map(x=>x.trim()).filter(Boolean).sort();
+    if(jugadores.length < 4) return; // skip incomplete lines
+    const key = jugadores.join('|');
+    if(!lineMap[key]){
+      lineMap[key]={ jugadores, pts:0, scored:0, lineType:p.line_type, games:new Set() };
+    }
+    lineMap[key].pts++;
+    lineMap[key].games.add(p.game_id||p.rival);
+    if(p.goleador) lineMap[key].scored++;
+  });
+
+  const lines = Object.values(lineMap)
+    .filter(l=>l.pts>=minPts)
+    .sort((a,b)=>b.pts-a.pts);
+
+  if(!lines.length){
+    document.getElementById('lines-content').innerHTML='<div class="error-wrap">Sin combinaciones con ese filtro.</div>';
+    return;
+  }
+
+  // Top cards
+  document.getElementById('lines-content').innerHTML=`
+    <div class="sh"><h2>${lines.length} Combinaciones Encontradas</h2><div class="sh-line"></div></div>
+    ${lines.slice(0,30).map(l=>{
+      const pct = l.pts>0 ? Math.round(l.scored/l.pts*100) : 0;
+      const color = pct>=70?GC:pct>=50?GLC:RC;
+      const names = l.jugadores.map(x=>homolog(x)).join(', ');
+      return `<div class="line-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+          <div class="line-players">${names}</div>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.66rem;font-weight:700;padding:2px 8px;border-radius:3px;background:${l.lineType==='O'?'var(--red-m)':'var(--blue-m)'};color:${l.lineType==='O'?RC:BC};white-space:nowrap">${l.lineType||'—'}</span>
+        </div>
+        <div class="line-meta">
+          <span class="line-stat"><strong>${l.pts}</strong> puntos juntos</span>
+          <span class="line-stat"><strong>${l.scored}</strong> anotados</span>
+          <span class="line-stat" style="color:${color}"><strong>${pct}%</strong> conversión</span>
+          <span class="line-stat"><strong>${l.games.size}</strong> ${l.games.size===1?'partido':'partidos'}</span>
+        </div>
+        <div class="line-pct-bar"><div class="line-pct-fill" style="width:${pct}%;background:${color}"></div></div>
+      </div>`;
+    }).join('')}`;
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+loadAll();
+</script>
+</body>
+</html>
