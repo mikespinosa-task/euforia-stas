@@ -569,38 +569,52 @@ async function downloadPDF(playerId, playerName) {
   btn.disabled = true;
   btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Generando...`;
 
-  // Hide button temporarily so it doesn't appear in the PDF
-  btn.style.visibility = 'hidden';
+  // Hide elements that shouldn't appear in PDF
+  const header = document.querySelector('header');
+  const nav = document.querySelector('.player-nav');
+  const footer = document.querySelector('footer');
+  btn.style.display = 'none';
+  header.style.display = 'none';
+  nav.style.display = 'none';
+  if (footer) footer.style.display = 'none';
+
+  // Remove sticky positioning so nothing overlaps
+  header.style.position = 'static';
 
   try {
     const { jsPDF } = window.jspdf;
-    const pageW = 794; // A4 width in px at 96dpi
     const scale = 2;
 
     const canvas = await html2canvas(section, {
       scale: scale,
       useCORS: true,
       backgroundColor: '#f2f2f4',
-      width: pageW,
-      windowWidth: pageW,
-      scrollX: 0,
-      scrollY: 0,
-      logging: false
+      scrollX: -window.scrollX,
+      scrollY: -window.scrollY,
+      windowWidth: section.scrollWidth,
+      logging: false,
+      onclone: (doc) => {
+        // In clone: make sure section is fully visible and no sticky elements interfere
+        doc.querySelector('header').style.display = 'none';
+        doc.querySelector('.player-nav').style.display = 'none';
+        const ft = doc.querySelector('footer');
+        if (ft) ft.style.display = 'none';
+        doc.querySelector('#s-' + playerId).style.display = 'block';
+      }
     });
 
-    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const imgData = canvas.toDataURL('image/jpeg', 0.93);
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pdfW = pdf.internal.pageSize.getWidth();
     const pdfH = pdf.internal.pageSize.getHeight();
-    const imgW = canvas.width;
-    const imgH = canvas.height;
-    const ratio = pdfW / (imgW / scale);
-    const totalPdfH = (imgH / scale) * ratio;
+    // Scale image to fit A4 width
+    const imgWmm = pdfW;
+    const imgHmm = (canvas.height / canvas.width) * pdfW;
     let posY = 0;
 
-    while (posY < totalPdfH) {
+    while (posY < imgHmm) {
       if (posY > 0) pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, -posY, pdfW, totalPdfH);
+      pdf.addImage(imgData, 'JPEG', 0, -posY, imgWmm, imgHmm);
       posY += pdfH;
     }
 
@@ -610,7 +624,12 @@ async function downloadPDF(playerId, playerName) {
     alert('Error generando PDF. Intentá de nuevo.');
     console.error(e);
   } finally {
-    btn.style.visibility = 'visible';
+    // Restore everything
+    header.style.display = '';
+    header.style.position = '';
+    nav.style.display = '';
+    if (footer) footer.style.display = '';
+    btn.style.display = '';
     btn.disabled = false;
     btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Descargar ficha`;
   }
