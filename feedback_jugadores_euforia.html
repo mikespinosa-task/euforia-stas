@@ -766,51 +766,148 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 async function downloadPDF(key, fname) {
-  const btn = document.getElementById('btn-' + key);
   const section = document.getElementById('s-' + key);
-  if (!btn || !section) return;
-  btn.style.visibility = 'hidden';
-  try {
-    const canvas = await html2canvas(section, {
-      scale: 3,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: '#f2f2f4',
-      logging: false,
-      width: section.offsetWidth,
-      height: section.scrollHeight,
-      windowWidth: section.offsetWidth,
-      scrollX: 0,
-      scrollY: -window.scrollY
-    });
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pageW = pdf.internal.pageSize.getWidth();
-    const pageH = pdf.internal.pageSize.getHeight();
-    const margin = 6;
-    const imgW = pageW - margin * 2;
-    const totalImgH = (canvas.height * imgW) / canvas.width;
-    if (totalImgH <= pageH - margin * 2) {
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, margin, imgW, totalImgH, '', 'FAST');
-    } else {
-      const pxPerPage = Math.floor((pageH - margin * 2) * canvas.width / imgW);
-      let yPx = 0;
-      while (yPx < canvas.height) {
-        const sliceH = Math.min(pxPerPage, canvas.height - yPx);
-        const tmp = document.createElement('canvas');
-        tmp.width = canvas.width; tmp.height = sliceH;
-        tmp.getContext('2d').drawImage(canvas, 0, -yPx);
-        const sliceMmH = (sliceH * imgW) / canvas.width;
-        pdf.addImage(tmp.toDataURL('image/png'), 'PNG', margin, margin, imgW, sliceMmH, '', 'FAST');
-        yPx += sliceH;
-        if (yPx < canvas.height) pdf.addPage();
-      }
-    }
-    pdf.save('Feedback_' + fname + '_Euforia2026.pdf');
-  } catch(e) { alert('Error: ' + e.message); }
-  btn.style.visibility = 'visible';
+  const btn = document.getElementById('btn-' + key);
+  if (!section) return;
+
+  // 1. Capture all Chart.js canvases as PNG data URLs BEFORE opening popup
+  const chartImages = {};
+  section.querySelectorAll('canvas').forEach(cv => {
+    chartImages[cv.id] = cv.toDataURL('image/png');
+  });
+
+  // 2. Clone section HTML and replace <canvas> with <img>
+  const clone = section.cloneNode(true);
+  clone.removeAttribute('style');
+  clone.querySelectorAll('canvas').forEach(cv => {
+    const img = document.createElement('img');
+    img.src = chartImages[cv.id] || '';
+    img.style.cssText = 'width:100%;height:auto;display:block;';
+    cv.parentNode.replaceChild(img, cv);
+  });
+  // Remove the download button from clone
+  clone.querySelectorAll('.btn-pdf').forEach(b => b.remove());
+
+  // 3. Open popup with clean HTML
+  const popup = window.open('', '_blank');
+  popup.document.write(`<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f2f2f4;font-family:'Barlow',sans-serif;padding:16px}
+` + \`
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#c0272d;--red2:#e03035;--red-l:rgba(192,39,45,0.08);--black:#0f0f0f;--black2:#1a1a1a;--bg:#f2f2f4;--surface:#fff;--border:#e2e2e6;--text:#111;--muted:#666;--muted2:#aaa}
+body{background:var(--bg);font-family:'Barlow',sans-serif;min-height:100vh;color:var(--text)}
+
+/* HEADER */
+header{background:var(--black);height:58px;padding:0 28px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.4)}
+.hdr-title{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:2px;text-transform:uppercase}
+.hdr-sub{font-size:0.62rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase;margin-left:4px}
+.hdr-sep{flex:1}
+.hdr-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:3px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.45)}
+
+/* PLAYER SELECTOR */
+.player-nav{background:var(--black2);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;padding:0 28px;overflow-x:auto;gap:0;-webkit-overflow-scrolling:touch}
+.player-nav::-webkit-scrollbar{height:2px}
+.player-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15)}
+.p-btn{padding:13px 20px;background:none;border:none;border-bottom:2.5px solid transparent;color:rgba(255,255,255,0.38);font-family:'Barlow Condensed',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.p-btn:hover{color:rgba(255,255,255,0.7)}
+.p-btn.active{color:#fff;border-bottom-color:var(--red)}
+
+/* MAIN */
+main{max-width:1200px;margin:0 auto;padding:24px 28px}
+.player-section{display:none}.player-section.active{display:block;animation:fadeUp 0.2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* PLAYER HEADER CARD */
+.phdr{background:var(--black);border-radius:12px;padding:22px 26px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.p-avatar{width:52px;height:52px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;flex-shrink:0}
+.p-info{flex:1;min-width:160px}
+.p-name{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:800;color:#fff;line-height:1}
+.p-role{font-size:0.62rem;letter-spacing:2px;color:rgba(255,255,255,0.38);text-transform:uppercase;margin-top:4px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 13px;text-align:center;min-width:58px}
+.pill-v{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;line-height:1}
+.pill-v.g{color:#f87171}.pill-v.a{color:#4ade80}.pill-v.d{color:#60a5fa}.pill-v.pm{color:#fbbf24}.pill-v.comp{color:#c084fc}
+.pill-l{font-size:0.52rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:2px}
+
+/* GRID LAYOUTS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.g1{margin-bottom:16px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+
+/* ASPECT BLOCKS */
+.aspect-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.aspect{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.aspect-hdr{background:var(--red);padding:8px 14px}
+.aspect-hdr-title{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff}
+.aspect-body{padding:13px 14px;font-size:0.84rem;line-height:1.6;color:#333}
+.aspect.full{grid-column:1/-1}
+
+/* STATS TABLE */
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.84rem}
+.stat-row:last-child{border-bottom:none}
+.stat-label{color:var(--muted);font-size:0.68rem;letter-spacing:1px;text-transform:uppercase}
+.stat-val{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800}
+.red{color:var(--red)}.green{color:#1d6b3e}.blue{color:#1a5fa0}.gold{color:#a07800}.purple{color:#7c3aed}
+.warn{color:#d97706}
+
+/* SECTION HEADER */
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:12px;margin-top:4px}
+.sh h2{font-family:'Barlow Condensed',sans-serif;font-size:0.82rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--text);white-space:nowrap}
+.sh-line{flex:1;height:1px;background:var(--border)}
+
+/* FOOTER */
+footer{background:var(--black);color:rgba(255,255,255,0.25);text-align:center;padding:14px;font-size:0.62rem;letter-spacing:1px;margin-top:32px}
+footer strong{color:rgba(255,255,255,0.5)}
+
+
+/* METODOLOGIA */
+.metod-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.metod-item{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--red);border-radius:8px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.metod-num{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;color:rgba(192,39,45,0.18);line-height:1;margin-bottom:4px}
+.metod-name{font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:800;letter-spacing:0.5px;color:var(--text);margin-bottom:3px}
+.metod-desc{font-size:0.72rem;color:var(--muted);line-height:1.4}
+@media(max-width:768px){.metod-grid{grid-template-columns:1fr 1fr}.metod-item:last-child{grid-column:1/-1}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  header{padding:0 14px}.p-name{font-size:1.5rem}
+  .player-nav{padding:0 10px}.p-btn{padding:11px 12px;font-size:0.72rem}
+  main{padding:14px}.g2,.g3,.aspect-grid{grid-template-columns:1fr}
+  .aspect.full{grid-column:1}
 }
 
+.btn-pdf{background:var(--red);border:none;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;padding:7px 16px;border-radius:5px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:background 0.15s;white-space:nowrap;margin-left:auto}
+.btn-pdf:hover{background:var(--red2)}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+` + `
+@media print{
+  @page{margin:8mm;size:A4 portrait}
+  body{padding:0;background:#f2f2f4}
+  .card,.aspect,.metod-item{box-shadow:none!important}
+  .g2,.g3{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+` + clone.outerHTML + `
+<script>
+  document.fonts.ready.then(function(){
+    setTimeout(function(){ window.print(); }, 400);
+  });
+<\/script>
+</body></html>`);
+  popup.document.close();
+}
 </script>
 </body>
 </html>
