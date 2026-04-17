@@ -34,16 +34,16 @@ main{max-width:1200px;margin:0 auto;padding:24px 28px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* PLAYER HEADER CARD */
-.phdr{background:var(--black);border-radius:12px;padding:22px 26px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.phdr{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:12px;padding:22px 26px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
 .p-avatar{width:52px;height:52px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;flex-shrink:0}
 .p-info{flex:1;min-width:160px}
-.p-name{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:800;color:#fff;line-height:1}
-.p-role{font-size:0.62rem;letter-spacing:2px;color:rgba(255,255,255,0.38);text-transform:uppercase;margin-top:4px}
+.p-name{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:800;color:var(--black);line-height:1}
+.p-role{font-size:0.62rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:4px}
 .pills{display:flex;gap:8px;flex-wrap:wrap}
-.pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 13px;text-align:center;min-width:58px}
+.pill{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 13px;text-align:center;min-width:58px}
 .pill-v{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;line-height:1}
-.pill-v.g{color:#f87171}.pill-v.a{color:#4ade80}.pill-v.d{color:#60a5fa}.pill-v.pm{color:#fbbf24}.pill-v.comp{color:#c084fc}
-.pill-l{font-size:0.52rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:2px}
+.pill-v.g{color:var(--red)}.pill-v.a{color:#1d6b3e}.pill-v.d{color:#1a5fa0}.pill-v.pm{color:#92400e}.pill-v.comp{color:#6d28d9}
+.pill-l{font-size:0.52rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-top:2px}
 
 /* GRID LAYOUTS */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
@@ -303,7 +303,7 @@ footer strong{color:rgba(255,255,255,0.5)}
       <div class="pill"><div class="pill-v g">2</div><div class="pill-l">Goles</div></div>
       <div class="pill"><div class="pill-v a">3</div><div class="pill-l">Asist.</div></div>
       <div class="pill"><div class="pill-v d">3</div><div class="pill-l">D's</div></div>
-      <div class="pill"><div class="pill-v pm" style="color:#f87171">-3</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v pm" -3</div>>-3</div><div class="pill-l">+/-</div></div>
       <div class="pill"><div class="pill-v comp">94%</div><div class="pill-l">Comp.</div></div>
     <button class="btn-pdf" onclick="downloadPDF('diego','Diego_Sanabria')" id="btn-diego">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -389,8 +389,8 @@ footer strong{color:rgba(255,255,255,0.5)}
       <div class="pill"><div class="pill-v g">1</div><div class="pill-l">Goles</div></div>
       <div class="pill"><div class="pill-v a">2</div><div class="pill-l">Asist.</div></div>
       <div class="pill"><div class="pill-v d">0</div><div class="pill-l">D's</div></div>
-      <div class="pill"><div class="pill-v pm" style="color:#f87171">-19</div><div class="pill-l">+/-</div></div>
-      <div class="pill"><div class="pill-v comp" style="color:#f97316">77%</div><div class="pill-l">Comp.</div></div>
+      <div class="pill"><div class="pill-v pm" -3</div>>-19</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v comp">77%</div><div class="pill-l">Comp.</div></div>
     <button class="btn-pdf" onclick="downloadPDF('juan','Juan_Perez')" id="btn-juan">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       DESCARGAR PDF
@@ -777,11 +777,17 @@ async function downloadPDF(key, fname) {
 
   try {
     const canvas = await html2canvas(section, {
-      scale: 2,
+      scale: 3,
       useCORS: true,
       backgroundColor: '#f2f2f4',
       logging: false,
-      windowWidth: 1200
+      windowWidth: section.scrollWidth,
+      width: section.scrollWidth,
+      height: section.scrollHeight,
+      x: 0,
+      y: 0,
+      scrollX: 0,
+      scrollY: 0
     });
 
     const { jsPDF } = window.jspdf;
