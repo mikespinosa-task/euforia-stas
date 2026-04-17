@@ -569,53 +569,67 @@ async function downloadPDF(playerId, playerName) {
   btn.disabled = true;
   btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Generando...`;
 
-  // Hide elements that shouldn't appear in PDF
-  const header = document.querySelector('header');
-  const nav = document.querySelector('.player-nav');
-  const footer = document.querySelector('footer');
-  btn.style.display = 'none';
-  header.style.display = 'none';
-  nav.style.display = 'none';
-  if (footer) footer.style.display = 'none';
-
-  // Remove sticky positioning so nothing overlaps
-  header.style.position = 'static';
-
   try {
     const { jsPDF } = window.jspdf;
-    const scale = 2;
 
     const canvas = await html2canvas(section, {
-      scale: scale,
+      scale: 2,
       useCORS: true,
       backgroundColor: '#f2f2f4',
-      scrollX: -window.scrollX,
-      scrollY: -window.scrollY,
-      windowWidth: section.scrollWidth,
       logging: false,
-      onclone: (doc) => {
-        // In clone: make sure section is fully visible and no sticky elements interfere
-        doc.querySelector('header').style.display = 'none';
-        doc.querySelector('.player-nav').style.display = 'none';
-        const ft = doc.querySelector('footer');
-        if (ft) ft.style.display = 'none';
-        doc.querySelector('#s-' + playerId).style.display = 'block';
+      onclone: (cloneDoc) => {
+        // Nuke header and nav completely in the clone
+        ['header', '.player-nav', 'footer'].forEach(sel => {
+          const el = cloneDoc.querySelector(sel);
+          if (el) el.remove();
+        });
+        // Hide download button in clone
+        const cloneBtn = cloneDoc.querySelector(`#s-${playerId} .btn-dl`);
+        if (cloneBtn) cloneBtn.remove();
+        // Make sure only this player's section is visible and takes full width
+        const cloneSection = cloneDoc.getElementById('s-' + playerId);
+        cloneSection.style.display = 'block';
+        cloneSection.style.padding = '24px 28px';
+        // Reset body top padding
+        cloneDoc.body.style.paddingTop = '0';
+        cloneDoc.body.style.marginTop = '0';
       }
     });
 
-    const imgData = canvas.toDataURL('image/jpeg', 0.93);
+    // A4 portrait with 10mm margins
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const margin = 10;
     const pdfW = pdf.internal.pageSize.getWidth();
     const pdfH = pdf.internal.pageSize.getHeight();
-    // Scale image to fit A4 width
-    const imgWmm = pdfW;
-    const imgHmm = (canvas.height / canvas.width) * pdfW;
-    let posY = 0;
+    const usableW = pdfW - margin * 2;
+    const usableH = pdfH - margin * 2;
 
-    while (posY < imgHmm) {
-      if (posY > 0) pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, -posY, imgWmm, imgHmm);
-      posY += pdfH;
+    // Image dimensions in mm
+    const imgWmm = usableW;
+    const imgHmm = (canvas.height / canvas.width) * usableW;
+
+    // Multi-page: slice canvas into page-sized chunks
+    const pxPerMm = canvas.width / usableW;
+    const pageHeightPx = usableH * pxPerMm;
+    let offsetPx = 0;
+    let pageNum = 0;
+
+    while (offsetPx < canvas.height) {
+      if (pageNum > 0) pdf.addPage();
+
+      const sliceH = Math.min(pageHeightPx, canvas.height - offsetPx);
+      const sliceCanvas = document.createElement('canvas');
+      sliceCanvas.width = canvas.width;
+      sliceCanvas.height = sliceH;
+      const ctx = sliceCanvas.getContext('2d');
+      ctx.drawImage(canvas, 0, offsetPx, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+
+      const sliceData = sliceCanvas.toDataURL('image/jpeg', 0.93);
+      const sliceHmm = (sliceH / canvas.width) * usableW;
+      pdf.addImage(sliceData, 'JPEG', margin, margin, usableW, sliceHmm);
+
+      offsetPx += pageHeightPx;
+      pageNum++;
     }
 
     const safeName = playerName.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
@@ -624,12 +638,6 @@ async function downloadPDF(playerId, playerName) {
     alert('Error generando PDF. Intentá de nuevo.');
     console.error(e);
   } finally {
-    // Restore everything
-    header.style.display = '';
-    header.style.position = '';
-    nav.style.display = '';
-    if (footer) footer.style.display = '';
-    btn.style.display = '';
     btn.disabled = false;
     btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Descargar ficha`;
   }
