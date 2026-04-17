@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Euforia — Feedback Jugadores 2026</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -73,7 +75,12 @@ main{max-width:1200px;margin:0 auto;padding:24px 28px}
 .sh h2{font-family:'Barlow Condensed',sans-serif;font-size:0.82rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--text);white-space:nowrap}
 .sh-line{flex:1;height:1px;background:var(--border)}
 
-/* FOOTER */
+/* DOWNLOAD BUTTON */
+.btn-dl{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;border:none;border-radius:7px;padding:9px 18px;font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:background 0.15s;flex-shrink:0}
+.btn-dl:hover{background:var(--red2)}
+.btn-dl:disabled{background:#888;cursor:not-allowed}
+.btn-dl svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
 footer{background:var(--black);color:rgba(255,255,255,0.25);text-align:center;padding:14px;font-size:0.62rem;letter-spacing:1px;margin-top:32px}
 footer strong{color:rgba(255,255,255,0.5)}
 
@@ -121,6 +128,10 @@ footer strong{color:rgba(255,255,255,0.5)}
       <div class="p-name">Pablo Daza</div>
       <div class="p-role">Cutter · Línea Defensiva</div>
     </div>
+    <button class="btn-dl" onclick="downloadPDF('pablo','Pablo Daza')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
     <div class="pills">
       <div class="pill"><div class="pill-v g">3</div><div class="pill-l">Goles</div></div>
       <div class="pill"><div class="pill-v a">0</div><div class="pill-l">Asist.</div></div>
@@ -204,6 +215,10 @@ footer strong{color:rgba(255,255,255,0.5)}
       <div class="p-name">Michael-Angelo Humn</div>
       <div class="p-role">Cutter · Línea Defensiva</div>
     </div>
+    <button class="btn-dl" onclick="downloadPDF('michael','Michael-Angelo Humn')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
     <div class="pills">
       <div class="pill"><div class="pill-v g">11</div><div class="pill-l">Goles</div></div>
       <div class="pill"><div class="pill-v a">1</div><div class="pill-l">Asist.</div></div>
@@ -287,6 +302,10 @@ footer strong{color:rgba(255,255,255,0.5)}
       <div class="p-name">Diego Sanabria</div>
       <div class="p-role">Handler · Línea Defensiva</div>
     </div>
+    <button class="btn-dl" onclick="downloadPDF('diego','Diego Sanabria')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
     <div class="pills">
       <div class="pill"><div class="pill-v g">2</div><div class="pill-l">Goles</div></div>
       <div class="pill"><div class="pill-v a">3</div><div class="pill-l">Asist.</div></div>
@@ -370,6 +389,10 @@ footer strong{color:rgba(255,255,255,0.5)}
       <div class="p-name">Juan Pérez</div>
       <div class="p-role">Cutter / Handler · Línea Defensiva</div>
     </div>
+    <button class="btn-dl" onclick="downloadPDF('juan','Juan Pérez')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
     <div class="pills">
       <div class="pill"><div class="pill-v g">1</div><div class="pill-l">Goles</div></div>
       <div class="pill"><div class="pill-v a">2</div><div class="pill-l">Asist.</div></div>
@@ -453,6 +476,10 @@ footer strong{color:rgba(255,255,255,0.5)}
       <div class="p-name">Andrés Higuera</div>
       <div class="p-role">Cutter · Línea Defensiva</div>
     </div>
+    <button class="btn-dl" onclick="downloadPDF('andres','Andrés Higuera')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
     <div class="pills">
       <div class="pill"><div class="pill-v g">5</div><div class="pill-l">Goles</div></div>
       <div class="pill"><div class="pill-v a">1</div><div class="pill-l">Asist.</div></div>
@@ -533,6 +560,89 @@ footer strong{color:rgba(255,255,255,0.5)}
 <footer>EUFORIA OPEN &nbsp;·&nbsp; <strong>Feedback WUCC 2026</strong> &nbsp;·&nbsp; Generado por Adcom</footer>
 
 <script>
+// ── PDF DOWNLOAD ──────────────────────────────────────
+async function downloadPDF(playerId, playerName) {
+  const btn = document.querySelector(`#s-${playerId} .btn-dl`);
+  const section = document.getElementById('s-' + playerId);
+  if (!section || !btn) return;
+
+  btn.disabled = true;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Generando...`;
+
+  try {
+    const { jsPDF } = window.jspdf;
+
+    const canvas = await html2canvas(section, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#f2f2f4',
+      logging: false,
+      onclone: (cloneDoc) => {
+        // Nuke header and nav completely in the clone
+        ['header', '.player-nav', 'footer'].forEach(sel => {
+          const el = cloneDoc.querySelector(sel);
+          if (el) el.remove();
+        });
+        // Hide download button in clone
+        const cloneBtn = cloneDoc.querySelector(`#s-${playerId} .btn-dl`);
+        if (cloneBtn) cloneBtn.remove();
+        // Make sure only this player's section is visible and takes full width
+        const cloneSection = cloneDoc.getElementById('s-' + playerId);
+        cloneSection.style.display = 'block';
+        cloneSection.style.padding = '24px 28px';
+        // Reset body top padding
+        cloneDoc.body.style.paddingTop = '0';
+        cloneDoc.body.style.marginTop = '0';
+      }
+    });
+
+    // A4 portrait with 10mm margins
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const margin = 10;
+    const pdfW = pdf.internal.pageSize.getWidth();
+    const pdfH = pdf.internal.pageSize.getHeight();
+    const usableW = pdfW - margin * 2;
+    const usableH = pdfH - margin * 2;
+
+    // Image dimensions in mm
+    const imgWmm = usableW;
+    const imgHmm = (canvas.height / canvas.width) * usableW;
+
+    // Multi-page: slice canvas into page-sized chunks
+    const pxPerMm = canvas.width / usableW;
+    const pageHeightPx = usableH * pxPerMm;
+    let offsetPx = 0;
+    let pageNum = 0;
+
+    while (offsetPx < canvas.height) {
+      if (pageNum > 0) pdf.addPage();
+
+      const sliceH = Math.min(pageHeightPx, canvas.height - offsetPx);
+      const sliceCanvas = document.createElement('canvas');
+      sliceCanvas.width = canvas.width;
+      sliceCanvas.height = sliceH;
+      const ctx = sliceCanvas.getContext('2d');
+      ctx.drawImage(canvas, 0, offsetPx, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+
+      const sliceData = sliceCanvas.toDataURL('image/jpeg', 0.93);
+      const sliceHmm = (sliceH / canvas.width) * usableW;
+      pdf.addImage(sliceData, 'JPEG', margin, margin, usableW, sliceHmm);
+
+      offsetPx += pageHeightPx;
+      pageNum++;
+    }
+
+    const safeName = playerName.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_');
+    pdf.save(`Euforia_Feedback_${safeName}_WUCC2026.pdf`);
+  } catch (e) {
+    alert('Error generando PDF. Intentá de nuevo.');
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Descargar ficha`;
+  }
+}
+
 // ── NAVIGATION ────────────────────────────────────────
 function show(id, btn) {
   document.querySelectorAll('.player-section').forEach(s => s.classList.remove('active'));
