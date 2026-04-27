@@ -20,12 +20,15 @@ header{background:var(--black);height:58px;padding:0 28px;display:flex;align-ite
 .hdr-sep{flex:1}
 .hdr-badge{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:3px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.45)}
 
-/* PLAYER SELECTOR */
-.player-nav{background:var(--black2);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;padding:0 8px;overflow-x:auto;gap:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.player-nav::-webkit-scrollbar{display:none}
-.p-btn{padding:13px 20px;background:none;border:none;border-bottom:2.5px solid transparent;color:rgba(255,255,255,0.38);font-family:'Barlow Condensed',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.15s;white-space:nowrap}
-.p-btn:hover{color:rgba(255,255,255,0.7)}
-.p-btn.active{color:#fff;border-bottom-color:var(--red)}
+/* PLAYER SELECTOR DROPDOWN */
+.player-nav{background:var(--black2);border-bottom:1px solid rgba(255,255,255,0.06);padding:10px 20px;display:flex;align-items:center;gap:14px}
+.player-nav-label{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);white-space:nowrap}
+.player-select-wrap{position:relative;flex:1;max-width:340px}
+.player-select-wrap::after{content:'▾';position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--red);font-size:1rem;pointer-events:none}
+.player-select{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:0.95rem;font-weight:700;letter-spacing:1px;padding:10px 36px 10px 14px;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color 0.15s,background 0.15s}
+.player-select:focus{outline:none;border-color:var(--red);background:rgba(192,39,45,0.08)}
+.player-select option{background:#1a1a1a;color:#fff;font-weight:600}
+.player-count{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:1.5px;color:rgba(255,255,255,0.25);white-space:nowrap}
 
 /* MAIN */
 main{max-width:1200px;margin:0 auto;padding:14px}
@@ -106,7 +109,7 @@ footer strong{color:rgba(255,255,255,0.5)}
 /* RESPONSIVE */
 @media(max-width:768px){
   header{padding:0 14px}.p-name{font-size:1.5rem}
-  .player-nav{padding:0 10px}.p-btn{padding:11px 12px;font-size:0.72rem}
+  .player-nav{padding:8px 14px}.player-select{font-size:0.85rem}
   main{padding:14px}.g2,.g3,.aspect-grid{grid-template-columns:1fr}
   .aspect.full{grid-column:1}
 }
@@ -121,15 +124,25 @@ footer strong{color:rgba(255,255,255,0.5)}
 </header>
 
 <nav class="player-nav">
-  <button class="p-btn active" onclick="show('pablo',this)">Pablo Daza</button>
-  <button class="p-btn" onclick="show('michael',this)">Michael Humn</button>
-  <button class="p-btn" onclick="show('diego',this)">Diego Sanabria</button>
-  <button class="p-btn" onclick="show('juan',this)">Juan Pérez</button>
-  <button class="p-btn" onclick="show('andres',this)">Andrés Higuera</button>
-  <button class="p-btn" onclick="show('german',this)">Germán Quiroga</button>
-  <button class="p-btn" onclick="show('felipe',this)">Felipe Ramírez</button>
-  <button class="p-btn" onclick="show('brandon',this)">Brandon Bohorquez</button>
-  <button class="p-btn" onclick="show('rafa',this)">Rafa Reyes</button>
+  <span class="player-nav-label">Jugador</span>
+  <div class="player-select-wrap">
+    <select class="player-select" onchange="showFromSelect(this)">
+      <option value="pablo">Pablo Daza</option>
+      <option value="michael">Michael Humn</option>
+      <option value="diego">Diego Sanabria</option>
+      <option value="juan">Juan Pérez</option>
+      <option value="andres">Andrés Higuera</option>
+      <option value="german">Germán Quiroga</option>
+      <option value="felipe">Felipe Ramírez</option>
+      <option value="brandon">Brandon Bohorquez</option>
+      <option value="rafa">Rafa Reyes</option>
+      <option value="hector">Héctor Ordoñez</option>
+      <option value="sergio">Sergio Castañeda</option>
+      <option value="esteban">Esteban García</option>
+      <option value="oscar">Óscar Soler</option>
+    </select>
+  </div>
+  <span class="player-count">13 jugadores</span>
 </nav>
 
 <main>
@@ -918,6 +931,355 @@ footer strong{color:rgba(255,255,255,0.5)}
   </div>
 </div>
 
+
+<!-- ═══════════════ HÉCTOR ORDOÑEZ ═══════════════ -->
+<div id="s-hector" class="player-section">
+  <div class="phdr">
+    <div class="p-avatar">HO</div>
+    <div class="p-info">
+      <div class="p-name">Héctor Ordoñez</div>
+      <div class="p-role">Cutter · Línea Ofensiva · Máster</div>
+    </div>
+    <button class="btn-dl" onclick="downloadPDF('hector','Héctor Ordoñez')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
+    <div class="pills">
+      <div class="pill"><div class="pill-v g">17</div><div class="pill-l">Goles</div></div>
+      <div class="pill"><div class="pill-v a">1</div><div class="pill-l">Asist.</div></div>
+      <div class="pill"><div class="pill-v d">3</div><div class="pill-l">D's</div></div>
+      <div class="pill"><div class="pill-v pm">+26</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v comp">92%</div><div class="pill-l">Comp.</div></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Resumen estadístico</h2><div class="sh-line"></div></div>
+      <div class="card">
+        <div class="stat-row"><span class="stat-label">Puntos jugados</span><span class="stat-val">84</span></div>
+        <div class="stat-row"><span class="stat-label">Goles</span><span class="stat-val red">17</span></div>
+        <div class="stat-row"><span class="stat-label">Asistencias</span><span class="stat-val green">1</span></div>
+        <div class="stat-row"><span class="stat-label">Defensas</span><span class="stat-val blue">3</span></div>
+        <div class="stat-row"><span class="stat-label">Throwaways</span><span class="stat-val warn">5</span></div>
+        <div class="stat-row"><span class="stat-label">Drops</span><span class="stat-val">1</span></div>
+        <div class="stat-row"><span class="stat-label">+/-</span><span class="stat-val green">+26</span></div>
+        <div class="stat-row"><span class="stat-label">Completion %</span><span class="stat-val purple">92.3%</span></div>
+        <div class="stat-row"><span class="stat-label">Partidos jugados</span><span class="stat-val">12 de 12</span></div>
+        <div class="stat-row"><span class="stat-label">Línea principal</span><span class="stat-val">Ofensiva</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="sh"><h2>Perfil vs promedio</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="radar-hector" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Progresión por partido</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="prog-hector" height="160"></canvas></div>
+    </div>
+    <div>
+      <div class="sh"><h2>Completion % vs Throwaways</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="scatter-hector" height="160"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Metodología de evaluación</h2><div class="sh-line"></div></div>
+  <div class="metod-grid">
+    <div class="metod-item"><div class="metod-num">01</div><div class="metod-info"><div class="metod-name">Clásicos</div><div class="metod-desc">Asistencia, evidencias físicas y pagos</div></div></div>
+    <div class="metod-item"><div class="metod-num">02</div><div class="metod-info"><div class="metod-name">Básicos</div><div class="metod-desc">Estado físico, técnica y táctica</div></div></div>
+    <div class="metod-item"><div class="metod-num">03</div><div class="metod-info"><div class="metod-name">Estadísticos</div><div class="metod-desc">Estadísticas del año en competencia</div></div></div>
+    <div class="metod-item"><div class="metod-num">04</div><div class="metod-info"><div class="metod-name">Actitudinales</div><div class="metod-desc">Euforia (Fuerza para resistir) y Espíritu de fuego</div></div></div>
+    <div class="metod-item"><div class="metod-num">05</div><div class="metod-info"><div class="metod-name">Situacionales</div><div class="metod-desc">Proyección / Trayectoria</div></div></div>
+  </div>
+  <div class="sh"><h2>Feedback por aspecto</h2><div class="sh-line"></div></div>
+  <div class="aspect-grid">
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Clásicos</div></div>
+      <div class="aspect-body">Consenso de los 6 líderes: pagos con demoras recurrentes aunque se viene poniendo al día; llegadas tarde constantes. El equipo entiende su situación laboral y familiar, pero es el aspecto que más lo penaliza en ritmo con su línea. Asistencia general aceptable, evidencias físicas en orden.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Básicos</div></div>
+      <div class="aspect-body">Físicamente potente, fuerte, difícil de tumbar y rápido al largo. Todos los líderes destacan que tiene las rutas más claras y ordenadas del equipo ofensivo — es el cortador con el mapa de cancha más juicioso. Su limitante principal son los lanzamientos: no es un lanzador de poder y necesita más herramientas (pivots, pases de 15m planos, forehand). Su saltabilidad puede mejorar.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Estadísticos</div></div>
+      <div class="aspect-body">Top 2 en goles de la temporada (17) — su consistencia ofensiva es reconocida por todos. Ha traído defensas jugando en línea ofensiva, lo cual suma. El punto crítico es el error no forzado con el disco al avanzar: sus throwaways son por falta de técnica en situaciones de presión. Completion% bueno pero con margen de mejora claro para un mundial de este nivel.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Actitudinales</div></div>
+      <div class="aspect-body">Evolución muy positiva respecto a temporadas anteriores: más maduro, más actitud ganadora, más conexión con el equipo. Ir a Windmill fue un punto de inflexión reconocido por varios líderes. Es autocrítico, apoya a sus compañeros y se une bien al grupo. El reto es que su garra y fuego, que tiene por dentro, aflorejugando: necesita ser más vocal y determinante en los momentos de presión.</div>
+    </div>
+    <div class="aspect full">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Situacionales</div></div>
+      <div class="aspect-body">Jugador máster joven con trayectoria importante y varios años por delante en categoría Open. Este puede ser uno de sus mejores mundiales: está bien físicamente, con experiencia internacional y en un momento clave de su carrera. El equipo y el cuerpo técnico lo proyectan como goleador top en el WUCC 2026 y le darán oportunidades en líneas universales. El reto es dar el paso de ser un goleador más a ser un goleador indispensable.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SERGIO CASTAÑEDA ═══════════════ -->
+<div id="s-sergio" class="player-section">
+  <div class="phdr">
+    <div class="p-avatar">SC</div>
+    <div class="p-info">
+      <div class="p-name">Sergio Castañeda</div>
+      <div class="p-role">Handler · Línea O y D · "Calvo"</div>
+    </div>
+    <button class="btn-dl" onclick="downloadPDF('sergio','Sergio Castañeda')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
+    <div class="pills">
+      <div class="pill"><div class="pill-v g">4</div><div class="pill-l">Goles</div></div>
+      <div class="pill"><div class="pill-v a">14</div><div class="pill-l">Asist.</div></div>
+      <div class="pill"><div class="pill-v d">2</div><div class="pill-l">D's</div></div>
+      <div class="pill"><div class="pill-v pm" style="color:#fbbf24">+17</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v comp">91%</div><div class="pill-l">Comp.</div></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Resumen estadístico</h2><div class="sh-line"></div></div>
+      <div class="card">
+        <div class="stat-row"><span class="stat-label">Puntos jugados</span><span class="stat-val">83</span></div>
+        <div class="stat-row"><span class="stat-label">Goles</span><span class="stat-val red">4</span></div>
+        <div class="stat-row"><span class="stat-label">Asistencias</span><span class="stat-val green">14</span></div>
+        <div class="stat-row"><span class="stat-label">Defensas</span><span class="stat-val blue">2</span></div>
+        <div class="stat-row"><span class="stat-label">Throwaways</span><span class="stat-val warn">13</span></div>
+        <div class="stat-row"><span class="stat-label">Drops</span><span class="stat-val">0</span></div>
+        <div class="stat-row"><span class="stat-label">+/-</span><span class="stat-val green">+17</span></div>
+        <div class="stat-row"><span class="stat-label">Completion %</span><span class="stat-val purple">90.9%</span></div>
+        <div class="stat-row"><span class="stat-label">Partidos jugados</span><span class="stat-val">12 de 12</span></div>
+        <div class="stat-row"><span class="stat-label">Línea principal</span><span class="stat-val">O y D (Handler)</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="sh"><h2>Perfil vs promedio</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="radar-sergio" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Progresión por partido</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="prog-sergio" height="160"></canvas></div>
+    </div>
+    <div>
+      <div class="sh"><h2>Completion % vs Throwaways</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="scatter-sergio" height="160"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Metodología de evaluación</h2><div class="sh-line"></div></div>
+  <div class="metod-grid">
+    <div class="metod-item"><div class="metod-num">01</div><div class="metod-info"><div class="metod-name">Clásicos</div><div class="metod-desc">Asistencia, evidencias físicas y pagos</div></div></div>
+    <div class="metod-item"><div class="metod-num">02</div><div class="metod-info"><div class="metod-name">Básicos</div><div class="metod-desc">Estado físico, técnica y táctica</div></div></div>
+    <div class="metod-item"><div class="metod-num">03</div><div class="metod-info"><div class="metod-name">Estadísticos</div><div class="metod-desc">Estadísticas del año en competencia</div></div></div>
+    <div class="metod-item"><div class="metod-num">04</div><div class="metod-info"><div class="metod-name">Actitudinales</div><div class="metod-desc">Euforia (Fuerza para resistir) y Espíritu de fuego</div></div></div>
+    <div class="metod-item"><div class="metod-num">05</div><div class="metod-info"><div class="metod-name">Situacionales</div><div class="metod-desc">Proyección / Trayectoria</div></div></div>
+  </div>
+  <div class="sh"><h2>Feedback por aspecto</h2><div class="sh-line"></div></div>
+  <div class="aspect-grid">
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Clásicos</div></div>
+      <div class="aspect-body">Pagos fuera de fechas estipuladas en la mayoría de los casos, aunque cumple con acuerdos extraordinarios. Asistencia general alta — casi todos los entrenos, por sus evidencias físicas; y es juicioso. La situación económica personal es reconocida por los líderes como factor, pero no exime la demora reiterada.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Básicos</div></div>
+      <div class="aspect-body">Técnicamente es uno de los mejores manejadores del equipo — top en recursos con el disco, forehand potente, muchos recursos. Sin embargo, todos los líderes señalan que su calidad bajó respecto al año pasado: se le ve más lento, su marca por delante es débil y a veces sale del sistema buscando resolver solo. Su ansiedad por matar jugadas lo lleva a tomar decisiones equivocadas cuando podría ser dominante.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Estadísticos</div></div>
+      <div class="aspect-body">13 throwaways — el máximo del equipo — y la razón principal de su salida de la ofensiva. Sus asistencias (14) son el reflejo de su potencial real como distribuidor, pero la inconsistencia genera picos muy altos y muy bajos. El error no forzado, especialmente en los largos tardíos con afán, es la deuda que más le cobran los líderes.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Actitudinales</div></div>
+      <div class="aspect-body">Su energía es el arma de doble filo más mencionada: cuando está positivo arrastra al equipo; cuando se va negativo lo contamina. Los líderes coinciden en que no gestiona bien la presión: no acepta bien las correcciones, se frustra con el error propio y a veces carga al equipo con esa energía. El reto está en encontrar la versión serena y divertida que lo hace brillar.</div>
+    </div>
+    <div class="aspect full">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Situacionales</div></div>
+      <div class="aspect-body">Jugador joven con trayectoria amplia y aún muchos años en el club. El cuerpo técnico lo proyecta como el tirador defensivo estrella en el mundial y, en el largo plazo, como el manejador principal que da la directriz y la seguridad al equipo. Para ganarse ese rol de nuevo, la prioridad urgente es reducir los errores no forzados. Si logra controlar su ansiedad en cancha, tiene todo para ser determinante en el WUCC 2026.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ESTEBAN GARCÍA ═══════════════ -->
+<div id="s-esteban" class="player-section">
+  <div class="phdr">
+    <div class="p-avatar">EG</div>
+    <div class="p-info">
+      <div class="p-name">Esteban García</div>
+      <div class="p-role">Cutter · Línea Defensiva · "Stettt"</div>
+    </div>
+    <button class="btn-dl" onclick="downloadPDF('esteban','Esteban García')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
+    <div class="pills">
+      <div class="pill"><div class="pill-v g">2</div><div class="pill-l">Goles</div></div>
+      <div class="pill"><div class="pill-v a">1</div><div class="pill-l">Asist.</div></div>
+      <div class="pill"><div class="pill-v d">1</div><div class="pill-l">D's</div></div>
+      <div class="pill"><div class="pill-v pm" style="color:#f87171">-13</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v comp">89%</div><div class="pill-l">Comp.</div></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Resumen estadístico</h2><div class="sh-line"></div></div>
+      <div class="card">
+        <div class="stat-row"><span class="stat-label">Puntos jugados</span><span class="stat-val">59</span></div>
+        <div class="stat-row"><span class="stat-label">Goles</span><span class="stat-val red">2</span></div>
+        <div class="stat-row"><span class="stat-label">Asistencias</span><span class="stat-val green">1</span></div>
+        <div class="stat-row"><span class="stat-label">Defensas</span><span class="stat-val blue">1</span></div>
+        <div class="stat-row"><span class="stat-label">Throwaways</span><span class="stat-val warn">4</span></div>
+        <div class="stat-row"><span class="stat-label">Drops</span><span class="stat-val">0</span></div>
+        <div class="stat-row"><span class="stat-label">+/-</span><span class="stat-val red">-13</span></div>
+        <div class="stat-row"><span class="stat-label">Completion %</span><span class="stat-val purple">88.9%</span></div>
+        <div class="stat-row"><span class="stat-label">Partidos jugados</span><span class="stat-val">10 de 12</span></div>
+        <div class="stat-row"><span class="stat-label">Línea principal</span><span class="stat-val">Defensiva</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="sh"><h2>Perfil vs promedio</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="radar-esteban" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Progresión por partido</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="prog-esteban" height="160"></canvas></div>
+    </div>
+    <div>
+      <div class="sh"><h2>Completion % vs Throwaways</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="scatter-esteban" height="160"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Metodología de evaluación</h2><div class="sh-line"></div></div>
+  <div class="metod-grid">
+    <div class="metod-item"><div class="metod-num">01</div><div class="metod-info"><div class="metod-name">Clásicos</div><div class="metod-desc">Asistencia, evidencias físicas y pagos</div></div></div>
+    <div class="metod-item"><div class="metod-num">02</div><div class="metod-info"><div class="metod-name">Básicos</div><div class="metod-desc">Estado físico, técnica y táctica</div></div></div>
+    <div class="metod-item"><div class="metod-num">03</div><div class="metod-info"><div class="metod-name">Estadísticos</div><div class="metod-desc">Estadísticas del año en competencia</div></div></div>
+    <div class="metod-item"><div class="metod-num">04</div><div class="metod-info"><div class="metod-name">Actitudinales</div><div class="metod-desc">Euforia (Fuerza para resistir) y Espíritu de fuego</div></div></div>
+    <div class="metod-item"><div class="metod-num">05</div><div class="metod-info"><div class="metod-name">Situacionales</div><div class="metod-desc">Proyección / Trayectoria</div></div></div>
+  </div>
+  <div class="sh"><h2>Feedback por aspecto</h2><div class="sh-line"></div></div>
+  <div class="aspect-grid">
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Clásicos</div></div>
+      <div class="aspect-body">Pagos tardíos reiterados y evidencias físicas muy pobres: no asiste al gimnasio y las evidencias que sube son para habilitarse, no para mejorar. Asistencia a entrenos aceptable. El consenso es que debe comprometer más su preparación física si quiere ser relevante en el mundial.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Básicos</div></div>
+      <div class="aspect-body">Veloz, con destellos técnicos buenos (lanzamientos varios, dumps y arounds), pero inconsistente: los destellos no se sostienen. Se ve indeciso cuando el instinto debe primar. Es rígido ante las variaciones del juego, va poco al largo y recibe demasiado cerca del disco sin generar avance real. No sigue la táctica con consistencia: sus cortes no siempre están en el playbook. Puede ampliar mucho sus recursos como cortador.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Estadísticos</div></div>
+      <div class="aspect-body">Estadísticas muy bajas para un jugador en línea defensiva: 2 goles, 1 asistencia, 1 defensa y +/- de -13. No está trayendo las defensas que se esperan de su línea. Sus recepciones son por presión, no por trabajo de corte, lo que limita su impacto en los quiebres. El equipo necesita más de él precisamente en los partidos clave del mundial.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Actitudinales</div></div>
+      <div class="aspect-body">El aspecto más crítico y señalado por todos los líderes sin excepción. No controla el temperamento ni la frustración: cuando algo sale mal — un error propio, un compañero fallando, el entrenador sin meterlo — se desconecta y carga negativamente al equipo. Da feedback a otros en vez de concentrarse en sí mismo. Ha tenido intención de mejorar y se nota, pero las emociones le siguen ganando en el juego vivo. La actitud es un virus — necesita cambiarlo urgente.</div>
+    </div>
+    <div class="aspect full">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Situacionales</div></div>
+      <div class="aspect-body">Jugador joven con larga trayectoria — su generación está llamada a tomar las llaves del equipo. Aún no ha llegado a su prime y tiene todo para hacerlo. En este momento está abajo en el listado. Si logra el salto actitudinal y define su rol (cortador primario letal, no conector pasivo), puede ser mucho más dominante. El mundial es una gran oportunidad — ojalá pueda disfrutarlo y aportar al equipo desde un fuego controlado.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ÓSCAR SOLER ═══════════════ -->
+<div id="s-oscar" class="player-section">
+  <div class="phdr">
+    <div class="p-avatar">OS</div>
+    <div class="p-info">
+      <div class="p-name">Óscar Soler</div>
+      <div class="p-role">Cutter · Línea Ofensiva / Defensiva · Coach Sub-24</div>
+    </div>
+    <button class="btn-dl" onclick="downloadPDF('oscar','Óscar Soler')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
+    <div class="pills">
+      <div class="pill"><div class="pill-v g">2</div><div class="pill-l">Goles</div></div>
+      <div class="pill"><div class="pill-v a">0</div><div class="pill-l">Asist.</div></div>
+      <div class="pill"><div class="pill-v d">4</div><div class="pill-l">D's</div></div>
+      <div class="pill"><div class="pill-v pm">+5</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v comp">94%</div><div class="pill-l">Comp.</div></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Resumen estadístico</h2><div class="sh-line"></div></div>
+      <div class="card">
+        <div class="stat-row"><span class="stat-label">Puntos jugados</span><span class="stat-val">21</span></div>
+        <div class="stat-row"><span class="stat-label">Goles</span><span class="stat-val red">2</span></div>
+        <div class="stat-row"><span class="stat-label">Asistencias</span><span class="stat-val green">0</span></div>
+        <div class="stat-row"><span class="stat-label">Defensas</span><span class="stat-val blue">4</span></div>
+        <div class="stat-row"><span class="stat-label">Throwaways</span><span class="stat-val warn">1</span></div>
+        <div class="stat-row"><span class="stat-label">Drops</span><span class="stat-val">0</span></div>
+        <div class="stat-row"><span class="stat-label">+/-</span><span class="stat-val green">+5</span></div>
+        <div class="stat-row"><span class="stat-label">Completion %</span><span class="stat-val purple">94.4%</span></div>
+        <div class="stat-row"><span class="stat-label">Partidos jugados</span><span class="stat-val">4 de 12</span></div>
+        <div class="stat-row"><span class="stat-label">Nota</span><span class="stat-val warn">Poca data</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="sh"><h2>Perfil vs promedio</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="radar-oscar" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Progresión por partido</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="prog-oscar" height="160"></canvas></div>
+    </div>
+    <div>
+      <div class="sh"><h2>Completion % vs Throwaways</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="scatter-oscar" height="160"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Metodología de evaluación</h2><div class="sh-line"></div></div>
+  <div class="metod-grid">
+    <div class="metod-item"><div class="metod-num">01</div><div class="metod-info"><div class="metod-name">Clásicos</div><div class="metod-desc">Asistencia, evidencias físicas y pagos</div></div></div>
+    <div class="metod-item"><div class="metod-num">02</div><div class="metod-info"><div class="metod-name">Básicos</div><div class="metod-desc">Estado físico, técnica y táctica</div></div></div>
+    <div class="metod-item"><div class="metod-num">03</div><div class="metod-info"><div class="metod-name">Estadísticos</div><div class="metod-desc">Estadísticas del año en competencia</div></div></div>
+    <div class="metod-item"><div class="metod-num">04</div><div class="metod-info"><div class="metod-name">Actitudinales</div><div class="metod-desc">Euforia (Fuerza para resistir) y Espíritu de fuego</div></div></div>
+    <div class="metod-item"><div class="metod-num">05</div><div class="metod-info"><div class="metod-name">Situacionales</div><div class="metod-desc">Proyección / Trayectoria</div></div></div>
+  </div>
+  <div class="sh"><h2>Feedback por aspecto</h2><div class="sh-line"></div></div>
+  <div class="aspect-grid">
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Clásicos</div></div>
+      <div class="aspect-body">Pagos atrasados pero cumple con sus acuerdos. Asistencia a entrenos buena aunque tiene ausencias por compromisos laborales (domingos) y del Sub-24. Evidencias físicas ok en general. No hay observaciones críticas — cumple con lo básico para entrenar sin banderas rojas.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Básicos</div></div>
+      <div class="aspect-body">Jugador muy inteligente: ve muy bien la cancha, entiende la táctica y los sistemas con profundidad de coach. Trae defensas siendo uno de los pocos cortadores que avanza metros con sus pases. Sus limitantes son físicos (se le ve cansado, capacidad cardiovascular) y de lanzamiento (no los mejores, pero siempre sale de aprietos). Puede y debe ir más al largo — la mejora física de aquí al mundial sería clave.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Estadísticos</div></div>
+      <div class="aspect-body">Poca data por baja participación (4 partidos) — su ausencia está justificada por su rol como entrenador del Sub-24. Los números disponibles son positivos: 4 defensas y +5. El dato más revelador llegó en el TEP contra USA All Stars: una recepción y un throwaway que expone una debilidad bajo presión máxima. Ya es momento de competir más con el equipo principal y acumular data relevante.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Actitudinales</div></div>
+      <div class="aspect-body">Uno de los puntos más positivos del grupo. Actitud de soldado: siempre aporta cosas positivas, cohesiona la línea, es obrero sin protagonismo innecesario. Su inteligencia emocional se nota — se acerca al coach a dar perspectivas tácticas y eso lo distingue. Gran espíritu de juego. El equipo lo valora como referente de actitud y como puente entre liderazgo y jugadores.</div>
+    </div>
+    <div class="aspect full">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Situacionales</div></div>
+      <div class="aspect-body">Jugador máster con buena trayectoria en el club y un legado importante en el Sub-24. Su proyección competitiva no es muy larga, pero este mundial es una gran oportunidad de destacarse si sigue el camino correcto. La clave antes del WUCC 2026 es definir su rol con claridad: ofensivo o defensivo, corredor al largo o corte de avance. Sin ese enfoque, su aporte será limitado. Si lo define y mejora físicamente, puede ser un jugador muy valioso en líneas universales.</div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <footer>EUFORIA OPEN &nbsp;·&nbsp; <strong>Feedback WUCC 2026</strong> &nbsp;·&nbsp; Generado por Mike Espinosa</footer>
@@ -1018,12 +1380,18 @@ async function downloadPDF(playerId, playerName) {
 }
 
 // ── NAVIGATION ────────────────────────────────────────
-function show(id, btn) {
+function showFromSelect(sel) {
+  showId(sel.value);
+}
+function show(id) {
+  showId(id);
+  const sel = document.querySelector('.player-select');
+  if (sel) sel.value = id;
+}
+function showId(id) {
   document.querySelectorAll('.player-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('s-' + id).classList.add('active');
-  btn.classList.add('active');
-  btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  const sec = document.getElementById('s-' + id);
+  if (sec) sec.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1162,6 +1530,66 @@ const PLAYERS = {
       { rival:'USA',       pp:4,  g:0, a:0, d:0, pm:-4, comp:50.0 },
     ]
   },
+  hector: {
+    total: { pp:84, g:17, a:1, d:3, ta:5, comp:92.3, pm:26 },
+    games: [
+      { rival:'Discountry',pp:0,  g:0, a:0, d:0, pm:0,  comp:0    },
+      { rival:'Evolution', pp:12, g:3, a:0, d:0, pm:4,  comp:88.9 },
+      { rival:'Fenix',     pp:8,  g:3, a:0, d:1, pm:6,  comp:100  },
+      { rival:'Instinto',  pp:8,  g:1, a:0, d:0, pm:2,  comp:90.0 },
+      { rival:'Kie',       pp:7,  g:2, a:0, d:0, pm:3,  comp:100  },
+      { rival:'Makawa',    pp:7,  g:1, a:0, d:0, pm:1,  comp:87.5 },
+      { rival:'Monteria',  pp:7,  g:2, a:0, d:1, pm:3,  comp:100  },
+      { rival:'Raza',      pp:8,  g:1, a:0, d:0, pm:2,  comp:100  },
+      { rival:'Red Tide',  pp:7,  g:0, a:0, d:0, pm:1,  comp:100  },
+      { rival:'Sabaneros', pp:8,  g:2, a:1, d:0, pm:2,  comp:88.9 },
+      { rival:'USA AllSt', pp:6,  g:0, a:0, d:1, pm:1,  comp:100  },
+      { rival:'USA',       pp:6,  g:2, a:0, d:0, pm:1,  comp:100  },
+    ]
+  },
+  sergio: {
+    total: { pp:83, g:4, a:14, d:2, ta:13, comp:90.9, pm:17 },
+    games: [
+      { rival:'Discountry',pp:8,  g:0, a:3, d:0, pm:2,  comp:100  },
+      { rival:'Evolution', pp:6,  g:0, a:0, d:1, pm:-4, comp:75.0 },
+      { rival:'Fenix',     pp:8,  g:1, a:1, d:0, pm:5,  comp:90.9 },
+      { rival:'Instinto',  pp:6,  g:0, a:1, d:0, pm:2,  comp:100  },
+      { rival:'Kie',       pp:7,  g:1, a:1, d:0, pm:3,  comp:80.0 },
+      { rival:'Makawa',    pp:7,  g:0, a:2, d:0, pm:1,  comp:88.9 },
+      { rival:'Monteria',  pp:7,  g:1, a:1, d:0, pm:3,  comp:100  },
+      { rival:'Raza',      pp:8,  g:0, a:2, d:0, pm:4,  comp:93.8 },
+      { rival:'Red Tide',  pp:7,  g:0, a:1, d:0, pm:-3, comp:75.0 },
+      { rival:'Sabaneros', pp:6,  g:0, a:1, d:0, pm:2,  comp:100  },
+      { rival:'USA AllSt', pp:7,  g:0, a:1, d:0, pm:1,  comp:90.0 },
+      { rival:'USA',       pp:7,  g:1, a:0, d:1, pm:1,  comp:84.6 },
+    ]
+  },
+  esteban: {
+    total: { pp:59, g:2, a:1, d:1, ta:4, comp:88.9, pm:-13 },
+    games: [
+      { rival:'Discountry',pp:5,  g:0, a:1, d:0, pm:3,  comp:83.3 },
+      { rival:'Evolution', pp:6,  g:0, a:0, d:0, pm:-4, comp:80.0 },
+      { rival:'Fenix',     pp:0,  g:0, a:0, d:0, pm:0,  comp:0    },
+      { rival:'Instinto',  pp:4,  g:0, a:0, d:0, pm:-2, comp:100  },
+      { rival:'Kie',       pp:5,  g:0, a:0, d:1, pm:-3, comp:100  },
+      { rival:'Makawa',    pp:6,  g:0, a:0, d:0, pm:-1, comp:75.0 },
+      { rival:'Monteria',  pp:5,  g:1, a:0, d:0, pm:0,  comp:100  },
+      { rival:'Raza',      pp:7,  g:0, a:0, d:0, pm:0,  comp:100  },
+      { rival:'Red Tide',  pp:6,  g:0, a:0, d:0, pm:-3, comp:90.0 },
+      { rival:'Sabaneros', pp:7,  g:1, a:0, d:0, pm:1,  comp:80.0 },
+      { rival:'USA AllSt', pp:4,  g:0, a:0, d:0, pm:-1, comp:100  },
+      { rival:'USA',       pp:4,  g:0, a:0, d:0, pm:-3, comp:100  },
+    ]
+  },
+  oscar: {
+    total: { pp:21, g:2, a:0, d:4, ta:1, comp:94.4, pm:5 },
+    games: [
+      { rival:'Fenix',     pp:6,  g:1, a:0, d:1, pm:3,  comp:100  },
+      { rival:'Raza',      pp:6,  g:0, a:0, d:1, pm:2,  comp:100  },
+      { rival:'Sabaneros', pp:5,  g:1, a:0, d:1, pm:1,  comp:80.0 },
+      { rival:'USA AllSt', pp:4,  g:0, a:0, d:1, pm:-1, comp:100  },
+    ]
+  },
   rafa: {
     total: { pp:54, g:4, a:1, d:4, ta:2, comp:89.5, pm:-16 },
     games: [
@@ -1249,8 +1677,8 @@ function buildProg(id, data) {
 
 function buildScatter(id, currentKey) {
   const ctx = document.getElementById(id); if (!ctx) return;
-  const keys = ['pablo', 'michael', 'diego', 'juan', 'andres', 'german', 'felipe', 'brandon', 'rafa'];
-  const names = { pablo:'P. Daza', michael:'M. Humn', diego:'D. Sanabria', juan:'J. Pérez', andres:'A. Higuera', german:'G. Quiroga', felipe:'F. Ramírez', brandon:'B. Bohorquez', rafa:'R. Reyes' };
+  const keys = ['pablo', 'michael', 'diego', 'juan', 'andres', 'german', 'felipe', 'brandon', 'rafa', 'hector', 'sergio', 'esteban', 'oscar'];
+  const names = { pablo:'P. Daza', michael:'M. Humn', diego:'D. Sanabria', juan:'J. Pérez', andres:'A. Higuera', german:'G. Quiroga', felipe:'F. Ramírez', brandon:'B. Bohorquez', rafa:'R. Reyes', hector:'H. Ordoñez', sergio:'S. Castañeda', esteban:'E. García', oscar:'O. Soler' };
   const allData = keys.map(k => ({
     x: PLAYERS[k].total.comp,
     y: PLAYERS[k].total.ta,
@@ -1301,7 +1729,7 @@ function buildScatter(id, currentKey) {
 
 // ── BUILD ALL CHARTS ON LOAD ──────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  const keys = ['pablo', 'michael', 'diego', 'juan', 'andres', 'german', 'felipe', 'brandon', 'rafa'];
+  const keys = ['pablo', 'michael', 'diego', 'juan', 'andres', 'german', 'felipe', 'brandon', 'rafa', 'hector', 'sergio', 'esteban', 'oscar'];
   keys.forEach(k => {
     buildRadar(`radar-${k}`, PLAYERS[k]);
     buildProg(`prog-${k}`, PLAYERS[k]);
