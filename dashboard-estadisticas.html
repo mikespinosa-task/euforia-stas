@@ -615,6 +615,13 @@ function renderPlayerProfile(){
   const wC=byGame.filter(s=>n(s.completion_pct)>0);
   const avgC=wC.length?(wC.reduce((s,x)=>s+n(x.completion_pct),0)/wC.length).toFixed(1):'—';
 
+  // O/D split metrics
+  const tPmO=n(total.pm_O), tPmD=n(total.pm_D);
+  const tHoldPct=n(total.hold_pct), tBreakPct=n(total.break_pct);
+  const tHolds=n(total.holds), tHoldsLost=n(total.holds_lost);
+  const tBreaks=n(total.breaks), tBreaksCon=n(total.breaks_conceded);
+  const tPtsO=n(total.puntos_O), tPtsD=n(total.puntos_D);
+
   document.getElementById('player-content').innerHTML=`
     <div class="phdr">
       <div class="p-avatar">${nombre.charAt(0).toUpperCase()}</div>
@@ -625,6 +632,46 @@ function renderPlayerProfile(){
         <div class="pill"><div class="pill-v d">${total.defensas||0}</div><div class="pill-l">D's</div></div>
         <div class="pill"><div class="pill-v pm">${pm(total)>=0?'+':''}${pm(total)}</div><div class="pill-l">+/-</div></div>
         <div class="pill"><div class="pill-v eff">${total.completion_pct||0}%</div><div class="pill-l">Comp.</div></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <div class="cc" style="padding:14px 16px">
+        <div class="cc-title" style="margin-bottom:8px">🔴 Línea Ofensiva — ${tPtsO} pts</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <div style="text-align:center">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;color:${tPmO>=0?GC:RC}">${tPmO>=0?'+':''}${tPmO}</div>
+            <div style="font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">pm Ofensivo</div>
+          </div>
+          <div style="flex:1;min-width:80px">
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:3px">
+              <span style="color:var(--muted)">Holds</span>
+              <span style="font-weight:700;color:${GC}">${tHoldPct}%</span>
+            </div>
+            <div style="height:5px;border-radius:3px;background:#eee;overflow:hidden">
+              <div style="height:100%;border-radius:3px;background:${GC};width:${Math.min(tHoldPct,100)}%"></div>
+            </div>
+            <div style="font-size:0.65rem;color:var(--muted);margin-top:4px">${tHolds} holds · ${tHoldsLost} perdidos</div>
+          </div>
+        </div>
+      </div>
+      <div class="cc" style="padding:14px 16px">
+        <div class="cc-title" style="margin-bottom:8px">🔵 Línea Defensiva — ${tPtsD} pts</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <div style="text-align:center">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;color:${tPmD>=0?GC:RC}">${tPmD>=0?'+':''}${tPmD}</div>
+            <div style="font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">pm Defensivo</div>
+          </div>
+          <div style="flex:1;min-width:80px">
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:3px">
+              <span style="color:var(--muted)">Breaks</span>
+              <span style="font-weight:700;color:${BC}">${tBreakPct}%</span>
+            </div>
+            <div style="height:5px;border-radius:3px;background:#eee;overflow:hidden">
+              <div style="height:100%;border-radius:3px;background:${BC};width:${Math.min(tBreakPct,100)}%"></div>
+            </div>
+            <div style="font-size:0.65rem;color:var(--muted);margin-top:4px">${tBreaks} breaks · ${tBreaksCon} concedidos</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="cc" style="margin-bottom:18px">
@@ -638,7 +685,7 @@ function renderPlayerProfile(){
         <th class="c">PP</th><th class="c" title="% puntos de ese partido">PP%</th>
         <th class="c">G</th><th class="c">A</th><th class="c">D</th>
         <th class="c">REC</th><th class="c">TA</th><th class="c">DROP</th>
-        <th class="c">+/-</th><th class="c">COMP%</th><th class="c">TOTAL</th>
+        <th class="c">+/-</th><th class="c" style="color:${RC}">pm_O</th><th class="c" style="color:${BC}">pm_D</th><th class="c">COMP%</th><th class="c">TOTAL</th>
       </tr></thead>
       <tbody>
         ${byGame.map(s=>{
@@ -661,6 +708,8 @@ function renderPlayerProfile(){
             <td class="c" data-sort="${ta}" style="color:${ta>0?RC:'var(--muted)'}">${ta}</td>
             <td class="c" data-sort="${drop}" style="color:${drop>0?RC:'var(--muted)'}">${drop}</td>
             <td class="c" data-sort="${pmRow}" style="font-weight:700;color:${pmRow>=0?GC:RC}">${pmRow>=0?'+':''}${pmRow}</td>
+            <td class="c" data-sort="${n(s.pm_O)}" style="font-weight:700;color:${n(s.pm_O)>=0?GC:RC}">${n(s.pm_O)>=0?'+':''}${n(s.pm_O)}</td>
+            <td class="c" data-sort="${n(s.pm_D)}" style="font-weight:700;color:${n(s.pm_D)>=0?GC:RC}">${n(s.pm_D)>=0?'+':''}${n(s.pm_D)}</td>
             <td class="c" data-sort="${pctComp}">
               <div class="cb-wrap"><span class="cb-pct" style="color:${pctColor}">${pctComp?pctComp+'%':'—'}</span>
               <div class="cb-bar" style="min-width:40px"><div class="cb-fill" style="width:${pctComp}%;background:${pctColor}"></div></div></div>
@@ -678,6 +727,8 @@ function renderPlayerProfile(){
           <td class="c" style="color:${RC}"><strong>${sTA}</strong></td>
           <td class="c" style="color:${RC}"><strong>${sDR}</strong></td>
           <td class="c" style="font-weight:700;color:${sPMval>=0?GC:RC}"><strong>${sPMval>=0?'+':''}${sPMval}</strong></td>
+          <td class="c" style="font-weight:700;color:${tPmO>=0?GC:RC}"><strong>${tPmO>=0?'+':''}${tPmO}</strong></td>
+          <td class="c" style="font-weight:700;color:${tPmD>=0?GC:RC}"><strong>${tPmD>=0?'+':''}${tPmD}</strong></td>
           <td class="c"><strong>${avgC}%</strong></td>
           <td class="c" style="color:var(--gold)"><strong>${sG+sA+sD}</strong></td>
         </tr>
@@ -705,7 +756,11 @@ function buildPlayerChart(byGame){
       {label:'Throwaways',data:byGame.map(s=>n(s.throwaways)),borderColor:'#f97316',tension:0.3,fill:false,borderWidth:1.5,pointRadius:3,borderDash:[2,3]},
     ];
   } else if(activeMetric==='impacto'){
-    datasets=[{label:'+/-',data:byGame.map(s=>pm(s)),borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,0.1)',tension:0.3,fill:true,borderWidth:2.5,pointRadius:4}];
+    datasets=[
+      {label:'+/- General',data:byGame.map(s=>pm(s)),borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,0.08)',tension:0.3,fill:true,borderWidth:2.5,pointRadius:4},
+      {label:'pm Ofensivo',data:byGame.map(s=>n(s.pm_O)),borderColor:RC,backgroundColor:'transparent',tension:0.3,fill:false,borderWidth:2,pointRadius:3,borderDash:[5,3]},
+      {label:'pm Defensivo',data:byGame.map(s=>n(s.pm_D)),borderColor:BC,backgroundColor:'transparent',tension:0.3,fill:false,borderWidth:2,pointRadius:3,borderDash:[5,3]},
+    ];
   } else {
     datasets=[
       {label:'Comp%/10',data:byGame.map(s=>n(s.completion_pct)/10),borderColor:'#c084fc',tension:0.3,fill:false,borderWidth:3,pointRadius:5,yAxisID:'y'},
