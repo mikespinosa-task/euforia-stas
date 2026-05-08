@@ -606,7 +606,7 @@ function renderPlayerProfile(){
     const fa=a.fecha||'', fb=b.fecha||'';
     return fa<fb?-1:fa>fb?1:0;
   });
-  const pm=n(total.plus_minus);
+  // pm() es la función global de plus_minus calculado
 
   const sG=byGame.reduce((s,x)=>s+n(x.goles),0), sA=byGame.reduce((s,x)=>s+n(x.asistencias),0);
   const sD=byGame.reduce((s,x)=>s+n(x.defensas),0), sREC=byGame.reduce((s,x)=>s+n(x.catches),0);
