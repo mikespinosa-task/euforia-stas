@@ -467,9 +467,15 @@ function buildCompBars(cs){
 
 // ── TAB 2: PARTIDOS ────────────────────────────────
 function populateSelects(){
+  // Después de homologación el Sheet tiene nombres reales — agrupar por nombre
+  const seen={};
+  const pn=D.stats
+    .map(s=>({apodo:s.jugador, nombre:homolog(s.jugador)}))
+    .filter(p=>{ if(seen[p.nombre]) return false; seen[p.nombre]=true; return true; })
+    .sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
   document.getElementById('game-sel').innerHTML=D.partidos.map(p=>`<option value="${p.game_id}">${p.fecha||'—'} · vs ${p.rival} (${p.nuestros}-${p.suyos})</option>`).join('');
-  const pn=D.stats.map(s=>({apodo:s.jugador,nombre:homolog(s.jugador)})).sort((a,b)=>a.nombre.localeCompare(b.nombre));
-  ['player-sel','cmp-a','cmp-b'].forEach(id=>{ const sel=document.getElementById(id); if(!sel) return; sel.innerHTML=pn.map(p=>`<option value="${p.apodo}">${p.nombre}</option>`).join(''); });
+  // Usar nombre como value (no apodo) porque el Sheet ya está homologado
+  ['player-sel','cmp-a','cmp-b'].forEach(id=>{ const sel=document.getElementById(id); if(!sel) return; sel.innerHTML=pn.map(p=>`<option value="${p.nombre}">${p.nombre}</option>`).join(''); });
   if(document.getElementById('cmp-b')&&pn.length>1) document.getElementById('cmp-b').selectedIndex=1;
 }
 
@@ -707,9 +713,10 @@ function setMetric(m,btn){ activeMetric=m; document.querySelectorAll('#metric-to
 
 function renderPlayerProfile(){
   const apodo=document.getElementById('player-sel').value; if(!apodo) return;
-  const nombre=homolog(apodo);
-  const total=D.stats.find(s=>s.jugador===apodo)||{};
-  const byGame=D.statsXP.filter(s=>s.jugador===apodo).sort((a,b)=>{
+  const nombre=apodo; // ya es el nombre real post-homologación
+  const total=D.stats.find(s=>homolog(s.jugador)===apodo)||{};
+  // Agrupar todas las filas del mismo jugador (puede tener múltiples apodos pre-homologación)
+  const byGame=D.statsXP.filter(s=>homolog(s.jugador)===apodo).sort((a,b)=>{
     const fa=a.fecha||'', fb=b.fecha||'';
     return fa<fb?-1:fa>fb?1:0;
   });
@@ -891,7 +898,7 @@ function buildPlayerChart(byGame){
 function renderCompare(){
   const apo_a=document.getElementById('cmp-a').value, apo_b=document.getElementById('cmp-b').value;
   if(!apo_a||!apo_b) return;
-  const sA=D.stats.find(s=>s.jugador===apo_a)||{}, sB=D.stats.find(s=>s.jugador===apo_b)||{};
+  const sA=D.stats.find(s=>homolog(s.jugador)===apo_a)||{}, sB=D.stats.find(s=>homolog(s.jugador)===apo_b)||{};
   const metrics=[
     {label:'Goles',ka:'goles'},{label:'Asistencias',ka:'asistencias'},{label:'Defensas',ka:'defensas'},
     {label:'+/-',ka:'_pm'},{label:'Comp %',ka:'completion_pct',suffix:'%'},
