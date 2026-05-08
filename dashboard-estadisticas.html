@@ -486,10 +486,20 @@ function renderGameDetail(){
   const oConv=ptsO.filter(p=>p.goleador).length, dConv=ptsD.filter(p=>p.goleador).length;
   const turnovers=stats.reduce((s,x)=>s+n(x.throwaways)+n(x.drops),0);
   const totalPtsPartido=puntos.length||1;
-  const oPct=ptsO.length?Math.round(oConv/ptsO.length*100):0, dPct=ptsD.length?Math.round(dConv/ptsD.length*100):0;
-  const evol=puntos.map(p=>({ours:n(p.score_nuestros),theirs:n(p.score_suyos),num:n(p.punto_num)})).sort((a,b)=>a.num-b.num);
+  const oPct=ptsO.length?Math.round(oConv/ptsO.length*100):0;
+  const dPct=ptsD.length?Math.round(dConv/ptsD.length*100):0;
+  const evol=puntos.map(p=>({ours:n(p.score_nuestros),theirs:n(p.score_suyos),num:n(p.punto_num),lt:p.line_type,res:p.resultado_punto,dur:n(p.duracion_seg)})).sort((a,b)=>a.num-b.num);
 
-  // totales stats partido
+  // Duración
+  const ptsConDur=puntos.filter(p=>n(p.duracion_seg)>0);
+  const durTotal=ptsConDur.reduce((s,p)=>s+n(p.duracion_seg),0);
+  const durMin=Math.floor(durTotal/60), durSec=durTotal%60;
+  const durProm=ptsConDur.length?Math.round(durTotal/ptsConDur.length):0;
+  const durO=ptsO.filter(p=>n(p.duracion_seg)>0), durD=ptsD.filter(p=>n(p.duracion_seg)>0);
+  const avgDurO=durO.length?Math.round(durO.reduce((s,p)=>s+n(p.duracion_seg),0)/durO.length):0;
+  const avgDurD=durD.length?Math.round(durD.reduce((s,p)=>s+n(p.duracion_seg),0)/durD.length):0;
+
+  // totales stats
   const sG=topStats.reduce((s,x)=>s+n(x.goles),0), sA=topStats.reduce((s,x)=>s+n(x.asistencias),0);
   const sD=topStats.reduce((s,x)=>s+n(x.defensas),0), sTA=topStats.reduce((s,x)=>s+n(x.throwaways),0);
   const sPM=topStats.reduce((s,x)=>s+pm(x),0), sPP=topStats.reduce((s,x)=>s+n(x.puntos_jugados),0);
@@ -502,39 +512,118 @@ function renderGameDetail(){
       <div class="gscore ${isWin?'win':'loss'}">${partido.nuestros} – ${partido.suyos}</div>
       <span class="rb ${isWin?'rb-win':'rb-loss'}">${isWin?'VICTORIA':'DERROTA'}</span>
     </div>
-    <div class="mc-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:20px">
-      <div class="mc" style="border-top-color:${RC}"><div class="mc-val cv-red">${oConv}/${ptsO.length}</div><div class="mc-lbl">Línea Ofensiva</div><div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${oPct}% conv.</div></div>
-      <div class="mc" style="border-top-color:${BC}"><div class="mc-val cv-blue">${dConv}/${ptsD.length}</div><div class="mc-lbl">Quiebres</div><div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${dPct}% conv.</div></div>
-      <div class="mc" style="border-top-color:${GLC}"><div class="mc-val cv-gold">${turnovers}</div><div class="mc-lbl">Turnovers</div><div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${stats.reduce((s,x)=>s+n(x.throwaways),0)} TA · ${stats.reduce((s,x)=>s+n(x.drops),0)} D</div></div>
-      <div class="mc"><div class="mc-val">${puntos.length}</div><div class="mc-lbl">Puntos Jugados</div></div>
-      <div class="mc" style="border-top-color:${isWin?GC:RC}"><div class="mc-val ${isWin?'cv-green':'cv-red'}">${partido.nuestros}–${partido.suyos}</div><div class="mc-lbl">Marcador</div><div style="font-size:0.7rem;color:${isWin?GC:RC};margin-top:3px;font-weight:700">${isWin?'Victoria':'Derrota'}</div></div>
+
+    <div class="mc-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px">
+      <div class="mc" style="border-top-color:${RC}">
+        <div class="mc-val cv-red">${oConv}/${ptsO.length}</div>
+        <div class="mc-lbl">Hold%</div>
+        <div style="font-size:0.7rem;font-weight:700;color:${oPct>=70?GC:oPct>=50?GLC:RC};margin-top:3px">${oPct}%</div>
+      </div>
+      <div class="mc" style="border-top-color:${BC}">
+        <div class="mc-val cv-blue">${dConv}/${ptsD.length}</div>
+        <div class="mc-lbl">Break%</div>
+        <div style="font-size:0.7rem;font-weight:700;color:${dPct>=40?GC:dPct>=20?GLC:RC};margin-top:3px">${dPct}%</div>
+      </div>
+      <div class="mc" style="border-top-color:${GLC}">
+        <div class="mc-val cv-gold">${turnovers}</div>
+        <div class="mc-lbl">Turnovers</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${stats.reduce((s,x)=>s+n(x.throwaways),0)} TA · ${stats.reduce((s,x)=>s+n(x.drops),0)} DR</div>
+      </div>
+      <div class="mc">
+        <div class="mc-val">${durMin}:${String(durSec).padStart(2,'0')}</div>
+        <div class="mc-lbl">Duración total</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:3px">~${durProm}s por punto</div>
+      </div>
     </div>
+
+    <div class="mc-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+      <div class="mc" style="border-top-color:${RC}">
+        <div class="mc-val" style="font-size:1.3rem">${avgDurO}s</div>
+        <div class="mc-lbl">Duración O-Line</div>
+      </div>
+      <div class="mc" style="border-top-color:${BC}">
+        <div class="mc-val" style="font-size:1.3rem">${avgDurD}s</div>
+        <div class="mc-lbl">Duración D-Line</div>
+      </div>
+      <div class="mc">
+        <div class="mc-val">${puntos.length}</div>
+        <div class="mc-lbl">Puntos Jugados</div>
+      </div>
+      <div class="mc" style="border-top-color:${isWin?GC:RC}">
+        <div class="mc-val ${isWin?'cv-green':'cv-red'}">${partido.nuestros}–${partido.suyos}</div>
+        <div class="mc-lbl">Marcador Final</div>
+        <div style="font-size:0.7rem;color:${isWin?GC:RC};margin-top:3px;font-weight:700">${isWin?'Victoria':'Derrota'}</div>
+      </div>
+    </div>
+
     <div class="cg2" style="margin-bottom:20px">
       <div class="cc"><div class="cc-title">Evolución del Marcador</div><canvas id="chart-game-evol" height="100"></canvas></div>
-      <div class="cc"><div class="cc-title">Eficiencia O-Line vs D-Line</div><canvas id="chart-game-eff" height="100"></canvas></div>
+      <div class="cc"><div class="cc-title">Duración por Punto (segundos)</div><canvas id="chart-game-dur" height="100"></canvas></div>
     </div>
+    <div class="cg2" style="margin-bottom:20px">
+      <div class="cc"><div class="cc-title">Eficiencia O-Line vs D-Line</div><canvas id="chart-game-eff" height="80"></canvas></div>
+      <div class="cc">
+        <div class="cc-title">Hold% vs Break%</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:4px">
+              <span style="color:var(--muted)">🔴 O-Line Hold%</span>
+              <span style="font-weight:700;color:${oPct>=70?GC:oPct>=50?GLC:RC}">${oPct}% (${oConv}/${ptsO.length})</span>
+            </div>
+            <div style="height:8px;border-radius:4px;background:#eee;overflow:hidden">
+              <div style="height:100%;border-radius:4px;background:${RC};width:${oPct}%"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:4px">
+              <span style="color:var(--muted)">🔵 D-Line Break%</span>
+              <span style="font-weight:700;color:${dPct>=40?GC:dPct>=20?GLC:RC}">${dPct}% (${dConv}/${ptsD.length})</span>
+            </div>
+            <div style="height:8px;border-radius:4px;background:#eee;overflow:hidden">
+              <div style="height:100%;border-radius:4px;background:${BC};width:${dPct}%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="cg2">
       <div>
         <div class="sh"><h2>Punto a Punto</h2><div class="sh-line"></div></div>
         <div class="tbl-wrap"><table class="tbl" id="tbl-puntos">
-          <thead><tr><th class="c">#</th><th class="c">Tipo</th><th>Línea</th><th>Gol</th><th>Asistencia</th><th class="c">Parcial</th></tr></thead>
-          <tbody>${puntos.map(p=>`<tr>
-            <td class="c" style="color:var(--muted);font-size:0.78rem" data-sort="${p.punto_num}">${p.punto_num}</td>
-            <td class="c"><span style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;padding:2px 7px;border-radius:3px;background:${p.line_type==='O'?'var(--red-m)':'var(--blue-m)'};color:${p.line_type==='O'?RC:BC}">${p.line_type}</span></td>
-            <td style="font-size:0.75rem;color:var(--muted)">${homologLine(p.linea)}</td>
-            <td style="font-weight:600;font-size:0.84rem">${homolog(p.goleador)||'—'}</td>
-            <td style="color:var(--muted);font-size:0.84rem">${homolog(p.asistente)||'—'}</td>
-            <td class="c" style="font-family:'Barlow Condensed',sans-serif;font-weight:700">${p.score_nuestros} – ${p.score_suyos}</td>
-          </tr>`).join('')}</tbody>
+          <thead><tr>
+            <th class="c">#</th><th class="c">Tipo</th><th class="c">Resultado</th>
+            <th>Línea</th><th>Gol</th><th>Asist.</th>
+            <th class="c">Parcial</th><th class="c">Dur.</th>
+          </tr></thead>
+          <tbody>${puntos.map(p=>{
+            const dur=n(p.duracion_seg);
+            const res=p.resultado_punto;
+            const resColor=res==='scored'?GC:res==='scored_D'?BC:RC;
+            const resLabel=res==='scored'?'Hold':res==='scored_D'?'Break':'X';
+            return `<tr>
+              <td class="c" style="color:var(--muted);font-size:0.78rem" data-sort="${p.punto_num}">${p.punto_num}</td>
+              <td class="c"><span style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;padding:2px 7px;border-radius:3px;background:${p.line_type==='O'?'var(--red-m)':'var(--blue-m)'};color:${p.line_type==='O'?RC:BC}">${p.line_type}</span></td>
+              <td class="c"><span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;color:${resColor}">${resLabel}</span></td>
+              <td style="font-size:0.75rem;color:var(--muted)">${homologLine(p.linea)}</td>
+              <td style="font-weight:600;font-size:0.84rem">${homolog(p.goleador)||'—'}</td>
+              <td style="color:var(--muted);font-size:0.84rem">${homolog(p.asistente)||'—'}</td>
+              <td class="c" style="font-family:'Barlow Condensed',sans-serif;font-weight:700">${p.score_nuestros} – ${p.score_suyos}</td>
+              <td class="c" style="font-size:0.78rem;color:var(--muted)">${dur?dur+'s':'—'}</td>
+            </tr>`;
+          }).join('')}</tbody>
         </table></div>
       </div>
       <div>
         <div class="sh"><h2>Stats del Partido</h2><div class="sh-line"></div></div>
         <div class="tbl-wrap"><table class="tbl" id="tbl-stats-partido">
           <thead><tr>
-            <th>Jugador</th><th class="c">PP</th><th class="c" title="% de puntos de este partido">PP%</th>
+            <th>Jugador</th><th class="c">PP</th><th class="c">PP%</th>
             <th class="c">G</th><th class="c">A</th><th class="c">D</th>
-            <th class="c">TA</th><th class="c">+/-</th><th class="c">COMP%</th><th class="c">TOTAL</th>
+            <th class="c">TA</th><th class="c">+/-</th>
+            <th class="c" style="color:${RC}" title="pm Ofensivo (holds/pts_O)">pm_O</th>
+            <th class="c" style="color:${BC}" title="pm Defensivo (breaks/pts_D)">pm_D</th>
+            <th class="c">COMP%</th><th class="c">TOT</th>
           </tr></thead>
           <tbody>
             ${topStats.map(s=>{
@@ -543,6 +632,11 @@ function renderGameDetail(){
               const pmG=pm(s), ta=n(s.throwaways), pctComp=n(s.completion_pct);
               const pctColor=pctComp>=90?GC:pctComp>=75?GLC:RC;
               const accion=n(s.goles)+n(s.asistencias)+n(s.defensas);
+              const sPmO=n(s.pm_O), sPmD=n(s.pm_D);
+              const sHolds=n(s.holds), sPtsO=n(s.puntos_O);
+              const sBreaks=n(s.breaks), sPtsD=n(s.puntos_D);
+              const pmOLabel=sPtsO>0?`${sPmO>=0?'+':''}${sPmO} <span style="font-size:0.65rem;opacity:0.7">(${sHolds}/${sPtsO})</span>`:`—`;
+              const pmDLabel=sPtsD>0?`${sPmD>=0?'+':''}${sPmD} <span style="font-size:0.65rem;opacity:0.7">(${sBreaks}/${sPtsD})</span>`:`—`;
               return `<tr>
                 <td>${homolog(s.jugador)}</td>
                 <td class="c" data-sort="${pp}">${pp}</td>
@@ -552,9 +646,11 @@ function renderGameDetail(){
                 <td class="c" data-sort="${n(s.defensas)}" style="color:${BC};font-weight:700">${s.defensas||0}</td>
                 <td class="c" data-sort="${ta}" style="color:${ta>0?RC:'var(--muted)'}">${ta}</td>
                 <td class="c" data-sort="${pmG}" style="font-weight:700;color:${pmG>=0?GC:RC}">${pmG>=0?'+':''}${pmG}</td>
+                <td class="c" data-sort="${sPmO}" style="font-weight:700;color:${sPmO>=0?GC:RC}">${pmOLabel}</td>
+                <td class="c" data-sort="${sPmD}" style="font-weight:700;color:${sPmD>=0?GC:RC}">${pmDLabel}</td>
                 <td class="c" data-sort="${pctComp}">
                   <div class="cb-wrap"><span class="cb-pct" style="color:${pctColor}">${pctComp?pctComp+'%':'—'}</span>
-                  <div class="cb-bar" style="min-width:32px"><div class="cb-fill" style="width:${pctComp}%;background:${pctColor}"></div></div></div>
+                  <div class="cb-bar" style="min-width:28px"><div class="cb-fill" style="width:${pctComp}%;background:${pctColor}"></div></div></div>
                 </td>
                 <td class="c" data-sort="${accion}" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--gold)">${accion}</td>
               </tr>`;
@@ -567,6 +663,7 @@ function renderGameDetail(){
               <td class="c" style="color:${BC}"><strong>${sD}</strong></td>
               <td class="c" style="color:${RC}"><strong>${sTA}</strong></td>
               <td class="c" style="color:${sPM>=0?GC:RC}"><strong>${sPM>=0?'+':''}${sPM}</strong></td>
+              <td class="c">—</td><td class="c">—</td>
               <td class="c"><strong>${avgC}%</strong></td>
               <td class="c" style="color:var(--gold)"><strong>${sG+sA+sD}</strong></td>
             </tr>
@@ -578,7 +675,7 @@ function renderGameDetail(){
 }
 
 function buildGameCharts(evol,oConv,oTotal,dConv,dTotal,rival){
-  ['gameEvol','gameEff'].forEach(k=>{if(charts[k]){try{charts[k].destroy()}catch(e){}}});
+  ['gameEvol','gameEff','gameDur'].forEach(k=>{if(charts[k]){try{charts[k].destroy()}catch(e){}}});
   const ctxE=document.getElementById('chart-game-evol');
   if(ctxE){ charts.gameEvol=new Chart(ctxE,{type:'line',data:{labels:evol.map(p=>p.num),datasets:[
     {label:'Euforia',data:evol.map(p=>p.ours),borderColor:RC,backgroundColor:'rgba(192,39,45,0.08)',tension:0.2,fill:true,borderWidth:2.5,pointRadius:3,pointBackgroundColor:RC},
@@ -586,8 +683,18 @@ function buildGameCharts(evol,oConv,oTotal,dConv,dTotal,rival){
   ]},options:{responsive:true,interaction:{mode:'index',intersect:false},
     scales:{x:{title:{display:true,text:'Punto #',font:{size:8}},ticks:{font:{size:8}}},y:{ticks:{font:{size:8},stepSize:1}}},
     plugins:{legend:{position:'top',labels:{font:{size:9},padding:10}}}}}); }
+
+  const ctxD=document.getElementById('chart-game-dur');
+  if(ctxD){
+    const durColors=evol.map(p=>p.res==='scored'?'rgba(29,107,62,0.7)':p.res==='scored_D'?'rgba(26,95,160,0.7)':'rgba(192,39,45,0.5)');
+    charts.gameDur=new Chart(ctxD,{type:'bar',data:{labels:evol.map(p=>p.num),
+      datasets:[{label:'Duración (s)',data:evol.map(p=>p.dur||0),backgroundColor:durColors,borderWidth:0}]},
+      options:{responsive:true,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:(ctx)=>{const p=evol[ctx.dataIndex]; return `${ctx.parsed.y}s · ${p.lt} · ${p.res==='scored'?'Hold':p.res==='scored_D'?'Break':'Concedido'}`;}}}},
+        scales:{x:{ticks:{font:{size:7}}},y:{ticks:{font:{size:8}},title:{display:true,text:'segundos',font:{size:8}}}}}}); }
+
   const ctxF=document.getElementById('chart-game-eff');
-  if(ctxF){ charts.gameEff=new Chart(ctxF,{type:'bar',data:{labels:['O Conv.','O No conv.','D Quiebres','D No conv.'],
+  if(ctxF){ charts.gameEff=new Chart(ctxF,{type:'bar',data:{labels:['O Hold','O Perdido','D Break','D Concedido'],
     datasets:[{data:[oConv,oTotal-oConv,dConv,dTotal-dConv],
       backgroundColor:['rgba(192,39,45,0.65)','rgba(192,39,45,0.15)','rgba(26,95,160,0.65)','rgba(26,95,160,0.15)'],
       borderColor:[RC,RC,BC,BC],borderWidth:1}]},
@@ -708,8 +815,8 @@ function renderPlayerProfile(){
             <td class="c" data-sort="${ta}" style="color:${ta>0?RC:'var(--muted)'}">${ta}</td>
             <td class="c" data-sort="${drop}" style="color:${drop>0?RC:'var(--muted)'}">${drop}</td>
             <td class="c" data-sort="${pmRow}" style="font-weight:700;color:${pmRow>=0?GC:RC}">${pmRow>=0?'+':''}${pmRow}</td>
-            <td class="c" data-sort="${n(s.pm_O)}" style="font-weight:700;color:${n(s.pm_O)>=0?GC:RC}">${n(s.pm_O)>=0?'+':''}${n(s.pm_O)}</td>
-            <td class="c" data-sort="${n(s.pm_D)}" style="font-weight:700;color:${n(s.pm_D)>=0?GC:RC}">${n(s.pm_D)>=0?'+':''}${n(s.pm_D)}</td>
+            <td class="c" data-sort="${n(s.pm_O)}" style="font-weight:700;color:${n(s.pm_O)>=0?GC:RC}">${n(s.pm_O)>=0?'+':''}${n(s.pm_O)} <span style="font-size:0.65rem;opacity:0.65">(${n(s.holds)}/${n(s.puntos_O)})</span></td>
+            <td class="c" data-sort="${n(s.pm_D)}" style="font-weight:700;color:${n(s.pm_D)>=0?GC:RC}">${n(s.pm_D)>=0?'+':''}${n(s.pm_D)} <span style="font-size:0.65rem;opacity:0.65">(${n(s.breaks)}/${n(s.puntos_D)})</span></td>
             <td class="c" data-sort="${pctComp}">
               <div class="cb-wrap"><span class="cb-pct" style="color:${pctColor}">${pctComp?pctComp+'%':'—'}</span>
               <div class="cb-bar" style="min-width:40px"><div class="cb-fill" style="width:${pctComp}%;background:${pctColor}"></div></div></div>
@@ -813,33 +920,116 @@ function renderCompare(){
 
 // ── TAB 5: LÍNEAS ──────────────────────────────────
 function setLineFilter(f,btn){ lineFilter=f; document.querySelectorAll('.tog').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderLines(); }
+
 function renderLines(){
   const minPts=parseInt(document.getElementById('min-pts').value)||2;
-  const pts=D.puntos.filter(p=>lineFilter==='all'||p.line_type===lineFilter);
+  const allPts=D.puntos;
   const lm={};
-  pts.forEach(p=>{ if(!p.linea) return; const jugs=p.linea.split(',').map(x=>x.trim()).filter(Boolean).sort(); if(jugs.length<4) return;
-    const key=jugs.join('|'); if(!lm[key]) lm[key]={jugadores:jugs,pts:0,scored:0,lineType:p.line_type,games:new Set()};
-    lm[key].pts++; lm[key].games.add(p.game_id||p.rival); if(p.goleador) lm[key].scored++; });
-  const lines=Object.values(lm).filter(l=>l.pts>=minPts).sort((a,b)=>b.pts-a.pts);
-  if(!lines.length){ document.getElementById('lines-content').innerHTML='<div class="error-wrap">Sin combinaciones con ese filtro.</div>'; return; }
+
+  allPts.forEach(p=>{
+    if(!p.linea) return;
+    const jugs=p.linea.split(',').map(x=>x.trim()).filter(Boolean).sort();
+    if(jugs.length<4) return;
+    if(lineFilter!=='all' && p.line_type!==lineFilter) return;
+    const key=jugs.join('|');
+    if(!lm[key]) lm[key]={jugadores:jugs,pts:0,scored:0,lineType:p.line_type,games:new Set(),durTotal:0,durCount:0};
+    lm[key].pts++;
+    lm[key].games.add(p.game_id||p.rival);
+    if(p.goleador) lm[key].scored++;
+    const dur=n(p.duracion_seg);
+    if(dur>0){ lm[key].durTotal+=dur; lm[key].durCount++; }
+  });
+
+  // Separar O y D
+  const todasLineas=Object.values(lm).filter(l=>l.pts>=minPts);
+  const lineasO=todasLineas.filter(l=>l.lineType==='O').sort((a,b)=>b.pts-a.pts);
+  const lineasD=todasLineas.filter(l=>l.lineType==='D').sort((a,b)=>(b.scored/b.pts)-(a.scored/a.pts));
+  const todasOrden=todasLineas.sort((a,b)=>b.pts-a.pts);
+
+  if(!todasOrden.length){ document.getElementById('lines-content').innerHTML='<div class="error-wrap">Sin combinaciones con ese filtro.</div>'; return; }
+
+  const lineCard=(l)=>{
+    const pct=l.pts>0?Math.round(l.scored/l.pts*100):0;
+    const color=l.lineType==='D'?(pct>=40?GC:pct>=20?GLC:RC):(pct>=70?GC:pct>=50?GLC:RC);
+    const avgDur=l.durCount>0?Math.round(l.durTotal/l.durCount):0;
+    const label=l.lineType==='D'?`Break%`:`Hold%`;
+    return `<div class="line-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px">
+        <div class="line-players">${l.jugadores.map(x=>homolog(x)).join(', ')}</div>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.66rem;font-weight:700;padding:2px 8px;border-radius:3px;background:${l.lineType==='O'?'var(--red-m)':'var(--blue-m)'};color:${l.lineType==='O'?RC:BC};white-space:nowrap">${l.lineType||'—'}</span>
+      </div>
+      <div class="line-meta">
+        <span class="line-stat"><strong>${l.pts}</strong> pts juntos</span>
+        <span class="line-stat"><strong>${l.scored}</strong> conv.</span>
+        <span class="line-stat" style="color:${color};font-weight:700">${label} <strong>${pct}%</strong></span>
+        <span class="line-stat"><strong>${l.games.size}</strong> partidos</span>
+        ${avgDur?`<span class="line-stat" style="color:var(--muted)">~<strong>${avgDur}s</strong>/punto</span>`:''}
+      </div>
+      <div class="line-pct-bar" style="margin-top:6px"><div class="line-pct-fill" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+  };
+
+  // Stats globales
+  const totalO=allPts.filter(p=>p.line_type==='O').length;
+  const totalD=allPts.filter(p=>p.line_type==='D').length;
+  const convO=allPts.filter(p=>p.line_type==='O'&&p.goleador).length;
+  const convD=allPts.filter(p=>p.line_type==='D'&&p.goleador).length;
+  const holdPctGlobal=totalO?Math.round(convO/totalO*100):0;
+  const breakPctGlobal=totalD?Math.round(convD/totalD*100):0;
+
   document.getElementById('lines-content').innerHTML=`
-    <div class="sh"><h2>${lines.length} Combinaciones Encontradas</h2><div class="sh-line"></div></div>
-    ${lines.slice(0,30).map(l=>{
-      const pct=l.pts>0?Math.round(l.scored/l.pts*100):0;
-      const color=pct>=70?GC:pct>=50?GLC:RC;
-      return `<div class="line-card">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
-          <div class="line-players">${l.jugadores.map(x=>homolog(x)).join(', ')}</div>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.66rem;font-weight:700;padding:2px 8px;border-radius:3px;background:${l.lineType==='O'?'var(--red-m)':'var(--blue-m)'};color:${l.lineType==='O'?RC:BC};white-space:nowrap">${l.lineType||'—'}</span>
-        </div>
-        <div class="line-meta">
-          <span class="line-stat"><strong>${l.pts}</strong> puntos juntos</span>
-          <span class="line-stat"><strong>${l.scored}</strong> anotados</span>
-          <span class="line-stat" style="color:${color}"><strong>${pct}%</strong> conversión</span>
-          <span class="line-stat"><strong>${l.games.size}</strong> ${l.games.size===1?'partido':'partidos'}</span>
-        </div>
-        <div class="line-pct-bar"><div class="line-pct-fill" style="width:${pct}%;background:${color}"></div></div>
-      </div>`; }).join('')}`;
+    <div class="mc-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+      <div class="mc" style="border-top-color:${RC}">
+        <div class="mc-val cv-red">${holdPctGlobal}%</div>
+        <div class="mc-lbl">Hold% Global</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${convO}/${totalO} puntos O</div>
+      </div>
+      <div class="mc" style="border-top-color:${BC}">
+        <div class="mc-val cv-blue">${breakPctGlobal}%</div>
+        <div class="mc-lbl">Break% Global</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:3px">${convD}/${totalD} puntos D</div>
+      </div>
+      <div class="mc">
+        <div class="mc-val">${lineasO.length}</div>
+        <div class="mc-lbl">Combinaciones O</div>
+      </div>
+      <div class="mc">
+        <div class="mc-val">${lineasD.length}</div>
+        <div class="mc-lbl">Combinaciones D</div>
+      </div>
+    </div>
+
+    <div class="cc" style="margin-bottom:18px">
+      <div class="cc-title">Volumen vs Conversión — Todas las Líneas</div>
+      <canvas id="chart-lines-scatter" height="70"></canvas>
+      <div style="font-size:0.62rem;color:var(--muted);margin-top:6px">🔴 O-Line &nbsp;·&nbsp; 🔵 D-Line &nbsp;·&nbsp; Eje X = puntos juntos &nbsp;·&nbsp; Eje Y = % conversión</div>
+    </div>
+
+    ${lineFilter!=='D'?`
+    <div class="sh"><h2>🔴 Líneas Ofensivas — Top Hold%</h2><div class="sh-line"></div></div>
+    <div style="margin-bottom:20px">${lineasO.slice(0,15).map(lineCard).join('')}</div>`:''}
+
+    ${lineFilter!=='O'?`
+    <div class="sh"><h2>🔵 Líneas Defensivas — Top Break%</h2><div class="sh-line"></div></div>
+    <div>${lineasD.slice(0,15).map(lineCard).join('')}</div>`:''}
+  `;
+
+  setTimeout(()=>{
+    const ctx=document.getElementById('chart-lines-scatter'); if(!ctx) return;
+    if(charts.linesScatter){try{charts.linesScatter.destroy()}catch(e){}}
+    const dataO=lineasO.map(l=>({x:l.pts,y:Math.round(l.scored/l.pts*100),label:l.jugadores.map(x=>homolog(x)).join(', ')}));
+    const dataD=lineasD.map(l=>({x:l.pts,y:Math.round(l.scored/l.pts*100),label:l.jugadores.map(x=>homolog(x)).join(', ')}));
+    charts.linesScatter=new Chart(ctx,{type:'scatter',data:{datasets:[
+      {label:'O-Line',data:dataO,backgroundColor:'rgba(192,39,45,0.6)',pointRadius:6,pointHoverRadius:8},
+      {label:'D-Line',data:dataD,backgroundColor:'rgba(26,95,160,0.6)',pointRadius:6,pointHoverRadius:8},
+    ]},options:{responsive:true,
+      plugins:{legend:{position:'top',labels:{font:{size:9}}},
+        tooltip:{callbacks:{label:(ctx)=>{const d=ctx.raw; return [`${d.label}`,`Puntos: ${d.x} · Conv: ${d.y}%`];}}}},
+      scales:{
+        x:{title:{display:true,text:'Puntos juntos',font:{size:8}},ticks:{font:{size:8}}},
+        y:{title:{display:true,text:'% Conversión',font:{size:8}},ticks:{font:{size:8}},min:0,max:100}
+      }}});
+  },50);
 }
 
 loadAll();
