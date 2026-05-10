@@ -144,9 +144,13 @@ footer strong{color:rgba(255,255,255,0.5)}
       <option value="nicolas">Nicolás Camacho</option>
       <option value="juanes">Juanes Montenegro</option>
       <option value="daniel">Daniel Chica</option>
+      <option value="felipediaz">Felipe Díaz</option>
+      <option value="luistapias">Luis Tapias</option>
+      <option value="federicob">Federico Bautista</option>
+      <option value="jhonquiroga">Jhon Quiroga</option>
     </select>
   </div>
-  <span class="player-count">17 jugadores</span>
+  <span class="player-count">21 jugadores</span>
 </nav>
 
 <main>
@@ -1616,6 +1620,355 @@ footer strong{color:rgba(255,255,255,0.5)}
   </div>
 </div>
 
+
+<!-- ═══════════════ FELIPE DÍAZ ═══════════════ -->
+<div id="s-felipediaz" class="player-section">
+  <div class="phdr">
+    <div class="p-avatar">FD</div>
+    <div class="p-info">
+      <div class="p-name">Juan Felipe Díaz</div>
+      <div class="p-role">Handler · Línea Defensiva</div>
+    </div>
+    <button class="btn-dl" onclick="downloadPDF('felipediaz','Juan Felipe Díaz')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
+    <div class="pills">
+      <div class="pill"><div class="pill-v g">5</div><div class="pill-l">Goles</div></div>
+      <div class="pill"><div class="pill-v a">11</div><div class="pill-l">Asist.</div></div>
+      <div class="pill"><div class="pill-v d">5</div><div class="pill-l">D's</div></div>
+      <div class="pill"><div class="pill-v pm">+1</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v comp">96.4%</div><div class="pill-l">Comp.</div></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Resumen estadístico</h2><div class="sh-line"></div></div>
+      <div class="card">
+        <div class="stat-row"><span class="stat-label">Puntos jugados</span><span class="stat-val">67</span></div>
+        <div class="stat-row"><span class="stat-label">Línea O / D</span><span class="stat-val">25 O · 42 D</span></div>
+        <div class="stat-row"><span class="stat-label">Goles</span><span class="stat-val red">5</span></div>
+        <div class="stat-row"><span class="stat-label">Asistencias</span><span class="stat-val green">11</span></div>
+        <div class="stat-row"><span class="stat-label">Defensas</span><span class="stat-val blue">5</span></div>
+        <div class="stat-row"><span class="stat-label">Throwaways</span><span class="stat-val warn">7</span></div>
+        <div class="stat-row"><span class="stat-label">Drops</span><span class="stat-val">0</span></div>
+        <div class="stat-row"><span class="stat-label">+/- total · O · D</span><span class="stat-val">+1 · +11 · −10</span></div>
+        <div class="stat-row"><span class="stat-label">Completion %</span><span class="stat-val purple">96.4%</span></div>
+        <div class="stat-row"><span class="stat-label">Breaks conseguidos</span><span class="stat-val green">16 de 42</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="sh"><h2>Perfil vs promedio</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="radar-felipediaz" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Progresión por partido</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="prog-felipediaz" height="160"></canvas></div>
+    </div>
+    <div>
+      <div class="sh"><h2>Completion % vs Throwaways</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="scatter-felipediaz" height="160"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Metodología de evaluación</h2><div class="sh-line"></div></div>
+  <div class="metod-grid">
+    <div class="metod-item"><div class="metod-num">01</div><div class="metod-info"><div class="metod-name">Clásicos</div><div class="metod-desc">Asistencia, evidencias físicas y pagos</div></div></div>
+    <div class="metod-item"><div class="metod-num">02</div><div class="metod-info"><div class="metod-name">Básicos</div><div class="metod-desc">Estado físico, técnica y táctica</div></div></div>
+    <div class="metod-item"><div class="metod-num">03</div><div class="metod-info"><div class="metod-name">Estadísticos</div><div class="metod-desc">Estadísticas del año en competencia</div></div></div>
+    <div class="metod-item"><div class="metod-num">04</div><div class="metod-info"><div class="metod-name">Actitudinales</div><div class="metod-desc">Euforia (Fuerza para resistir) y Espíritu de fuego</div></div></div>
+    <div class="metod-item"><div class="metod-num">05</div><div class="metod-info"><div class="metod-name">Situacionales</div><div class="metod-desc">Proyección / Trayectoria</div></div></div>
+  </div>
+  <div class="sh"><h2>Feedback por aspecto</h2><div class="sh-line"></div></div>
+  <div class="aspect-grid">
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Clásicos</div></div>
+      <div class="aspect-body">Cumple con todo: asistencia, pagos (incluso adelantados) y evidencias. Algunas ausencias por trabajo y lesión que lo desconectan puntualmente del equipo, pero en general es juicioso y responsable. Sin alertas en este aspecto.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Básicos</div></div>
+      <div class="aspect-body">Jugador polivalente con claridad táctica de alguien con mucha trayectoria. Es fuerte, veloz y tiene todos los tiros. La lesión (isquio) es el punto crítico: se necesita que llegue al mundial en óptimas condiciones. Como área de mejora: en D pide mucho el disco y colapsa el espacio de los manejadores; debe abrir más la cancha con sus cortes. También debe trabajar sus pases planos largos de forehand. En ofensiva, su aparición excesiva en momentos de presión genera desorden — debe ser más ordenado.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Estadísticos</div></div>
+      <div class="aspect-body">11 asistencias y 5 defensas siendo principalmente D-line son números sólidos. Su completion del 96.4% habla de consistencia. El +/- global es neutro (+1) pero hay una brecha clara: +11 en ofensiva y −10 en defensiva, lo que indica que sus líneas D no están quebrando con la frecuencia esperada. Con 7 throwaways tiene margen de mejora en la toma de decisión rápida.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Actitudinales</div></div>
+      <div class="aspect-body">Muy buen espíritu de juego y energía contagiosa. Tiene mente competitiva y ganadora. El consenso es que debe ser más proactivo en el liderazgo: con su conocimiento del deporte y visión de coach, podría aportar más a las discusiones tácticas, al feedback de entrenamientos y a guiar a los más jóvenes. Tiene influencia sobre el equipo — debe usarla conscientemente.</div>
+    </div>
+    <div class="aspect full">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Situacionales</div></div>
+      <div class="aspect-body">Jugador joven con trayectoria muy amplia: 3 mundiales con el club. Es una ficha clave para el WUCC 2026. Su recuperación es la prioridad número uno — si llega sano, es titular indiscutido. Le quedan muchas temporadas en categoría open y el cuerpo técnico quiere conocer su visión a futuro como jugador de Euforia. Enorme potencial de liderazgo sin explotar.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ LUIS TAPIAS ═══════════════ -->
+<div id="s-luistapias" class="player-section">
+  <div class="phdr">
+    <div class="p-avatar">LT</div>
+    <div class="p-info">
+      <div class="p-name">Luis Fernando Tapias</div>
+      <div class="p-role">Handler · Línea Ofensiva</div>
+    </div>
+    <button class="btn-dl" onclick="downloadPDF('luistapias','Luis Fernando Tapias')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
+    <div class="pills">
+      <div class="pill"><div class="pill-v g">4</div><div class="pill-l">Goles</div></div>
+      <div class="pill"><div class="pill-v a">14</div><div class="pill-l">Asist.</div></div>
+      <div class="pill"><div class="pill-v d">2</div><div class="pill-l">D's</div></div>
+      <div class="pill"><div class="pill-v pm">+40</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v comp">93.6%</div><div class="pill-l">Comp.</div></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Resumen estadístico</h2><div class="sh-line"></div></div>
+      <div class="card">
+        <div class="stat-row"><span class="stat-label">Puntos jugados</span><span class="stat-val">104</span></div>
+        <div class="stat-row"><span class="stat-label">Línea O / D</span><span class="stat-val">101 O · 3 D</span></div>
+        <div class="stat-row"><span class="stat-label">Goles</span><span class="stat-val red">4</span></div>
+        <div class="stat-row"><span class="stat-label">Asistencias</span><span class="stat-val green">14</span></div>
+        <div class="stat-row"><span class="stat-label">Defensas</span><span class="stat-val blue">2</span></div>
+        <div class="stat-row"><span class="stat-label">Throwaways</span><span class="stat-val warn">11</span></div>
+        <div class="stat-row"><span class="stat-label">Drops</span><span class="stat-val warn">2</span></div>
+        <div class="stat-row"><span class="stat-label">+/- total · O · D</span><span class="stat-val green">+40 · +41 · −1</span></div>
+        <div class="stat-row"><span class="stat-label">Completion %</span><span class="stat-val purple">93.6%</span></div>
+        <div class="stat-row"><span class="stat-label">Asistencia a entrenamientos</span><span class="stat-val warn">72%</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="sh"><h2>Perfil vs promedio</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="radar-luistapias" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Progresión por partido</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="prog-luistapias" height="160"></canvas></div>
+    </div>
+    <div>
+      <div class="sh"><h2>Completion % vs Throwaways</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="scatter-luistapias" height="160"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Metodología de evaluación</h2><div class="sh-line"></div></div>
+  <div class="metod-grid">
+    <div class="metod-item"><div class="metod-num">01</div><div class="metod-info"><div class="metod-name">Clásicos</div><div class="metod-desc">Asistencia, evidencias físicas y pagos</div></div></div>
+    <div class="metod-item"><div class="metod-num">02</div><div class="metod-info"><div class="metod-name">Básicos</div><div class="metod-desc">Estado físico, técnica y táctica</div></div></div>
+    <div class="metod-item"><div class="metod-num">03</div><div class="metod-info"><div class="metod-name">Estadísticos</div><div class="metod-desc">Estadísticas del año en competencia</div></div></div>
+    <div class="metod-item"><div class="metod-num">04</div><div class="metod-info"><div class="metod-name">Actitudinales</div><div class="metod-desc">Euforia (Fuerza para resistir) y Espíritu de fuego</div></div></div>
+    <div class="metod-item"><div class="metod-num">05</div><div class="metod-info"><div class="metod-name">Situacionales</div><div class="metod-desc">Proyección / Trayectoria</div></div></div>
+  </div>
+  <div class="sh"><h2>Feedback por aspecto</h2><div class="sh-line"></div></div>
+  <div class="aspect-grid">
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Clásicos</div></div>
+      <div class="aspect-body">Pagos cumplidos (con algunos retrasos pero siempre al día). La asistencia es la alerta: 72%, el porcentaje más bajo del plantel habilitado. Algunas ausencias por trabajo y molestias físicas lo desconectan del equipo. Debe estar más pendiente de este indicador — la preparación colectiva lo exige.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Básicos</div></div>
+      <div class="aspect-body">Físicamente más fuerte que la temporada pasada: se ve más sólido y menos pesado. Tiene todas las herramientas: cañón de back, buen roto, avanza bien con el disco. Como manejador ofensivo debe mejorar su consistencia táctica: en ocasiones se mete mucho al manejo cuando la línea ya está saturada de personalidades. Debe también afinar su forehand largo. Su condición cardiovascular es un área de trabajo para resistir el nivel del mundial.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Estadísticos</div></div>
+      <div class="aspect-body">14 asistencias y +40 de plus/minus ofensivo son los números más llamativos — lidera en impacto O-line. Sin embargo, 11 throwaways y 2 drops son la oportunidad de mejora: en partidos tipo A, los registros muestran más de 2 pases incompletos en puntos clave. La impecabilidad en los momentos decisivos es su asignatura pendiente. Su completión del 93.6% es correcta pero puede crecer.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Actitudinales</div></div>
+      <div class="aspect-body">Muy eufórico, competitivo y ganador. Ha mejorado notablemente su inteligencia emocional: se le ve más positivo y menos propenso a escalar situaciones. Sin embargo su energía sigue siendo de doble filo — cuando es positiva prende al equipo entero, pero cuando se revoluciona puede generar tensión. El reto es mantener ese fuego bajo control en los momentos de mayor presión en Irlanda.</div>
+    </div>
+    <div class="aspect full">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Situacionales</div></div>
+      <div class="aspect-body">Jugador máster con casi 20 años de trayectoria junto al cuerpo técnico. Va a su primer mundial con el club — el staff quiere que lo disfrute y brille. Le restan algunas temporadas en open. El desafío es llegar sin lesión y ser resiliente cuando las cosas no salgan. Si mantiene la evolución de esta temporada, tiene todo para dejar huella en el WUCC 2026. Salsita papi.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FEDERICO BAUTISTA ═══════════════ -->
+<div id="s-federicob" class="player-section">
+  <div class="phdr">
+    <div class="p-avatar">FB</div>
+    <div class="p-info">
+      <div class="p-name">Federico Bautista</div>
+      <div class="p-role">Handler · Línea Ofensiva</div>
+    </div>
+    <button class="btn-dl" onclick="downloadPDF('federicob','Federico Bautista')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
+    <div class="pills">
+      <div class="pill"><div class="pill-v g">2</div><div class="pill-l">Goles</div></div>
+      <div class="pill"><div class="pill-v a">20</div><div class="pill-l">Asist.</div></div>
+      <div class="pill"><div class="pill-v d">7</div><div class="pill-l">D's</div></div>
+      <div class="pill"><div class="pill-v pm">+51</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v comp">95.7%</div><div class="pill-l">Comp.</div></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Resumen estadístico</h2><div class="sh-line"></div></div>
+      <div class="card">
+        <div class="stat-row"><span class="stat-label">Puntos jugados</span><span class="stat-val">145</span></div>
+        <div class="stat-row"><span class="stat-label">Línea O / D</span><span class="stat-val">117 O · 28 D</span></div>
+        <div class="stat-row"><span class="stat-label">Goles</span><span class="stat-val red">2</span></div>
+        <div class="stat-row"><span class="stat-label">Asistencias</span><span class="stat-val green">20</span></div>
+        <div class="stat-row"><span class="stat-label">Defensas</span><span class="stat-val blue">7</span></div>
+        <div class="stat-row"><span class="stat-label">Throwaways</span><span class="stat-val warn">16</span></div>
+        <div class="stat-row"><span class="stat-label">Drops</span><span class="stat-val">1</span></div>
+        <div class="stat-row"><span class="stat-label">+/- total · O · D</span><span class="stat-val green">+51 · +53 · −2</span></div>
+        <div class="stat-row"><span class="stat-label">Completion %</span><span class="stat-val purple">95.7%</span></div>
+        <div class="stat-row"><span class="stat-label">Lanzamientos totales</span><span class="stat-val">371</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="sh"><h2>Perfil vs promedio</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="radar-federicob" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Progresión por partido</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="prog-federicob" height="160"></canvas></div>
+    </div>
+    <div>
+      <div class="sh"><h2>Completion % vs Throwaways</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="scatter-federicob" height="160"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Metodología de evaluación</h2><div class="sh-line"></div></div>
+  <div class="metod-grid">
+    <div class="metod-item"><div class="metod-num">01</div><div class="metod-info"><div class="metod-name">Clásicos</div><div class="metod-desc">Asistencia, evidencias físicas y pagos</div></div></div>
+    <div class="metod-item"><div class="metod-num">02</div><div class="metod-info"><div class="metod-name">Básicos</div><div class="metod-desc">Estado físico, técnica y táctica</div></div></div>
+    <div class="metod-item"><div class="metod-num">03</div><div class="metod-info"><div class="metod-name">Estadísticos</div><div class="metod-desc">Estadísticas del año en competencia</div></div></div>
+    <div class="metod-item"><div class="metod-num">04</div><div class="metod-info"><div class="metod-name">Actitudinales</div><div class="metod-desc">Euforia (Fuerza para resistir) y Espíritu de fuego</div></div></div>
+    <div class="metod-item"><div class="metod-num">05</div><div class="metod-info"><div class="metod-name">Situacionales</div><div class="metod-desc">Proyección / Trayectoria</div></div></div>
+  </div>
+  <div class="sh"><h2>Feedback por aspecto</h2><div class="sh-line"></div></div>
+  <div class="aspect-grid">
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Clásicos</div></div>
+      <div class="aspect-body">Pagos al día, asistencia alta — es de los que más va a entrenar. Sin embargo llega tarde o trasnochado en ocasiones, y sus evidencias físicas son pobres: casi nulo trabajo de gimnasio y fortalecimiento. Se reconoce su evolución financiera (de no poder entrenar por deudas a estar al corriente), pero el trabajo fuera de cancha debe mejorar para el nivel del mundial.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Básicos</div></div>
+      <div class="aspect-body">Rápido y ágil, con buenos recursos con el disco. Le falta masa muscular y potencia — debe suplementarse y hacer plan nutricional. Como manejador ofensivo tiene las herramientas pero debe mejorar el spacing: en ocasiones se acerca demasiado al disco y satura el espacio. Necesita coger más el pull, hacer salidas más amplias y ser más vocal para liderar la ofensa desde atrás. Sus largos son su mayor oportunidad de mejora técnica.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Estadísticos</div></div>
+      <div class="aspect-body">20 asistencias y +51 de plus/minus son los mejores números del plantel — su impacto ofensivo es innegable. Con 371 lanzamientos es el jugador que más toca el disco. Sin embargo, 16 throwaways (2° en el equipo) son la contradicción: muchos de esos errores vienen de deficiencias técnicas en sus largos y de momentos de desconexión. El 95.7% de completion es bueno pero con su volumen de lanzamientos la impecabilidad debe ser la consigna.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Actitudinales</div></div>
+      <div class="aspect-body">Muy eufórico, competitivo y coacheable. Quiere mejorar, pregunta, estudia los videos. El punto de desarrollo más importante: su relación con el error. Se da muy duro consigo mismo cuando se equivoca y eso le cuesta retomar el ritmo. Dejar de fumar ha tenido impacto positivo: se le ve más enfocado y menos ansioso. Debe ganar confianza — el equipo lo respalda.</div>
+    </div>
+    <div class="aspect full">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Situacionales</div></div>
+      <div class="aspect-body">Jugador joven en constante crecimiento, va a su primer mundial con Euforia. El cuerpo técnico le está dando la responsabilidad del reset ofensivo — es el momento de aprovecharla o quedarse en el mismo nivel. Si corrige sus desconexiones y afina sus largos, puede consolidarse como manejador titular en el mundial y en los nacionales. El futuro del liderazgo ofensivo del club está en jugadores como él.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ JHON QUIROGA ═══════════════ -->
+<div id="s-jhonquiroga" class="player-section">
+  <div class="phdr">
+    <div class="p-avatar">JQ</div>
+    <div class="p-info">
+      <div class="p-name">Jhon Jairo Quiroga</div>
+      <div class="p-role">Handler · Línea Defensiva</div>
+    </div>
+    <button class="btn-dl" onclick="downloadPDF('jhonquiroga','Jhon Jairo Quiroga')">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Descargar ficha
+    </button>
+    <div class="pills">
+      <div class="pill"><div class="pill-v g">2</div><div class="pill-l">Goles</div></div>
+      <div class="pill"><div class="pill-v a">7</div><div class="pill-l">Asist.</div></div>
+      <div class="pill"><div class="pill-v d">2</div><div class="pill-l">D's</div></div>
+      <div class="pill"><div class="pill-v pm">+9</div><div class="pill-l">+/-</div></div>
+      <div class="pill"><div class="pill-v comp">95.3%</div><div class="pill-l">Comp.</div></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Resumen estadístico</h2><div class="sh-line"></div></div>
+      <div class="card">
+        <div class="stat-row"><span class="stat-label">Puntos jugados</span><span class="stat-val">41</span></div>
+        <div class="stat-row"><span class="stat-label">Línea O / D</span><span class="stat-val">7 O · 34 D</span></div>
+        <div class="stat-row"><span class="stat-label">Goles</span><span class="stat-val red">2</span></div>
+        <div class="stat-row"><span class="stat-label">Asistencias</span><span class="stat-val green">7</span></div>
+        <div class="stat-row"><span class="stat-label">Defensas</span><span class="stat-val blue">2</span></div>
+        <div class="stat-row"><span class="stat-label">Throwaways</span><span class="stat-val warn">5</span></div>
+        <div class="stat-row"><span class="stat-label">Drops</span><span class="stat-val">1</span></div>
+        <div class="stat-row"><span class="stat-label">+/- total · O · D</span><span class="stat-val green">+9 · +5 · +4</span></div>
+        <div class="stat-row"><span class="stat-label">Completion %</span><span class="stat-val purple">95.3%</span></div>
+        <div class="stat-row"><span class="stat-label">Break % (D-line)</span><span class="stat-val green">55.9%</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="sh"><h2>Perfil vs promedio</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="radar-jhonquiroga" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="sh"><h2>Progresión por partido</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="prog-jhonquiroga" height="160"></canvas></div>
+    </div>
+    <div>
+      <div class="sh"><h2>Completion % vs Throwaways</h2><div class="sh-line"></div></div>
+      <div class="card"><canvas id="scatter-jhonquiroga" height="160"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Metodología de evaluación</h2><div class="sh-line"></div></div>
+  <div class="metod-grid">
+    <div class="metod-item"><div class="metod-num">01</div><div class="metod-info"><div class="metod-name">Clásicos</div><div class="metod-desc">Asistencia, evidencias físicas y pagos</div></div></div>
+    <div class="metod-item"><div class="metod-num">02</div><div class="metod-info"><div class="metod-name">Básicos</div><div class="metod-desc">Estado físico, técnica y táctica</div></div></div>
+    <div class="metod-item"><div class="metod-num">03</div><div class="metod-info"><div class="metod-name">Estadísticos</div><div class="metod-desc">Estadísticas del año en competencia</div></div></div>
+    <div class="metod-item"><div class="metod-num">04</div><div class="metod-info"><div class="metod-name">Actitudinales</div><div class="metod-desc">Euforia (Fuerza para resistir) y Espíritu de fuego</div></div></div>
+    <div class="metod-item"><div class="metod-num">05</div><div class="metod-info"><div class="metod-name">Situacionales</div><div class="metod-desc">Proyección / Trayectoria</div></div></div>
+  </div>
+  <div class="sh"><h2>Feedback por aspecto</h2><div class="sh-line"></div></div>
+  <div class="aspect-grid">
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Clásicos</div></div>
+      <div class="aspect-body">Muy juicioso en todos los aspectos: evidencias, pagos y asistencia. Es de los jugadores con más compromiso visible dentro del plantel. Sin alertas en este aspecto — el staff lo destaca como referente en responsabilidad.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Básicos</div></div>
+      <div class="aspect-body">Jugador físicamente diferencial: fuerte, potente, con buen pull y capacidad de marcar a los mejores. Es nuestro jugador para los bichos difíciles. El trabajo defensivo es sobresaliente. La lesión sigue siendo la principal preocupación — debe salir de ella progresivamente, sin sobre esforzarse. Como área de mejora: en la ofensiva defensiva debe ser más dinámico viniendo de frente al disco, no solo estático como reset. Su rol puede evolucionar hacia un perfil híbrido de más impacto.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Estadísticos</div></div>
+      <div class="aspect-body">Con solo 41 PP (limitado por lesión), sus números son sólidos: 7 asistencias, 95.3% de completion, y un break% del 55.9% en D-line que es de los más altos del equipo. El +9 global con +4 en D-line confirma que cuando está en cancha su línea quiebra. Los datos son incompletos para un análisis total, pero la tendencia es muy positiva. Se necesita verlo sano y con más minutos.</div>
+    </div>
+    <div class="aspect">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Actitudinales</div></div>
+      <div class="aspect-body">Pilar energético del equipo. Su energía es extremadamente contagiosa y el staff la valora como activo táctico en los momentos difíciles. Tiene vocación de liderazgo, alienta consistentemente y es luz cuando todo está oscuro. Como punto de mejora: en disputas personales tiende a hacer llamados que no suman — debe gestionar mejor esas situaciones. En general, gran espíritu y compromiso ejemplar.</div>
+    </div>
+    <div class="aspect full">
+      <div class="aspect-hdr"><div class="aspect-hdr-title">Situacionales</div></div>
+      <div class="aspect-body">Está en la maduración de su mejor momento deportivo con años de Ultimate por delante. La prioridad inmediata es engranarse en la D-line con los manejadores nuevos de esa línea — es su responsabilidad más alta para el WUCC 2026. Si llega sano, es clave en la defensa del equipo en Irlanda. El staff quiere verlo igual de prendido que en Australia. Cuidar las lesiones hoy es la inversión más rentable para su carrera.</div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <footer>EUFORIA OPEN &nbsp;·&nbsp; <strong>Feedback WUCC 2026</strong> &nbsp;·&nbsp; Generado por Mike Espinosa</footer>
@@ -2001,6 +2354,68 @@ const PLAYERS = {
       { rival:'USA AllSt', pp:6,  g:0, a:0, d:1, pm:2,  comp:0    },
       { rival:'USA',       pp:3,  g:0, a:0, d:0, pm:-3, comp:100  },
     ]
+  },
+  felipediaz: {
+    total: { pp:67, g:5, a:11, d:5, ta:7, comp:96.4, pm:1 },
+    games: [
+      { rival:'Instinto',  pp:8,  g:1, a:1, d:1, pm:-2, comp:100  },
+      { rival:'Kie',       pp:9,  g:2, a:1, d:0, pm:3,  comp:91.7 },
+      { rival:'Makawa',    pp:10, g:1, a:2, d:2, pm:0,  comp:95.8 },
+      { rival:'Monteria',  pp:9,  g:0, a:2, d:0, pm:1,  comp:95.0 },
+      { rival:'Raza',      pp:6,  g:1, a:2, d:0, pm:4,  comp:100  },
+      { rival:'Red Tide',  pp:9,  g:0, a:1, d:1, pm:-3, comp:92.6 },
+      { rival:'Sabaneros', pp:7,  g:0, a:2, d:1, pm:-1, comp:100  },
+      { rival:'USA',       pp:9,  g:0, a:0, d:0, pm:-1, comp:94.1 },
+    ]
+  },
+  luistapias: {
+    total: { pp:104, g:4, a:14, d:2, ta:11, comp:93.6, pm:40 },
+    games: [
+      { rival:'Comunidad',  pp:6,  g:0, a:1, d:0, pm:4,  comp:100  },
+      { rival:'Discountry', pp:8,  g:1, a:0, d:0, pm:2,  comp:81.8 },
+      { rival:'Evolution',  pp:12, g:1, a:4, d:0, pm:4,  comp:100  },
+      { rival:'Fenix',      pp:6,  g:0, a:3, d:0, pm:6,  comp:100  },
+      { rival:'Instinto',   pp:6,  g:0, a:0, d:1, pm:2,  comp:90.0 },
+      { rival:'Kie',        pp:8,  g:0, a:1, d:0, pm:4,  comp:84.6 },
+      { rival:'Makawa',     pp:8,  g:0, a:1, d:0, pm:-2, comp:75.0 },
+      { rival:'Monteria',   pp:9,  g:1, a:1, d:0, pm:1,  comp:100  },
+      { rival:'Raza',       pp:8,  g:1, a:1, d:1, pm:7,  comp:100  },
+      { rival:'Red Tide',   pp:8,  g:0, a:2, d:0, pm:2,  comp:100  },
+      { rival:'USA AllSt',  pp:7,  g:0, a:0, d:0, pm:1,  comp:90.9 },
+      { rival:'USA',        pp:11, g:0, a:0, d:0, pm:3,  comp:96.2 },
+    ]
+  },
+  federicob: {
+    total: { pp:145, g:2, a:20, d:7, ta:16, comp:95.7, pm:51 },
+    games: [
+      { rival:'Comunidad',  pp:13, g:0, a:1, d:0, pm:7,  comp:100  },
+      { rival:'Disco Stu',  pp:6,  g:1, a:0, d:0, pm:4,  comp:100  },
+      { rival:'Discountry', pp:7,  g:0, a:0, d:1, pm:-1, comp:94.7 },
+      { rival:'Discountry', pp:6,  g:0, a:0, d:1, pm:0,  comp:92.3 },
+      { rival:'Evolution',  pp:11, g:0, a:0, d:0, pm:5,  comp:96.8 },
+      { rival:'Fenix',      pp:7,  g:0, a:2, d:0, pm:3,  comp:90.5 },
+      { rival:'Instinto',   pp:7,  g:0, a:1, d:0, pm:3,  comp:91.2 },
+      { rival:'Kie',        pp:11, g:0, a:2, d:0, pm:3,  comp:100  },
+      { rival:'Makawa',     pp:6,  g:0, a:1, d:1, pm:0,  comp:100  },
+      { rival:'Monteria',   pp:10, g:0, a:1, d:0, pm:4,  comp:96.2 },
+      { rival:'Raza',       pp:8,  g:0, a:4, d:1, pm:6,  comp:93.8 },
+      { rival:'Red Tide',   pp:8,  g:0, a:1, d:1, pm:2,  comp:100  },
+      { rival:'Sabaneros',  pp:7,  g:1, a:1, d:0, pm:-1, comp:95.8 },
+      { rival:'USA AllSt',  pp:7,  g:0, a:1, d:1, pm:3,  comp:100  },
+      { rival:'USA',        pp:14, g:0, a:3, d:0, pm:4,  comp:95.6 },
+    ]
+  },
+  jhonquiroga: {
+    total: { pp:41, g:2, a:7, d:2, ta:5, comp:95.3, pm:9 },
+    games: [
+      { rival:'Discountry', pp:7,  g:0, a:1, d:1, pm:1,  comp:89.5 },
+      { rival:'Fenix',      pp:4,  g:0, a:0, d:0, pm:2,  comp:100  },
+      { rival:'Makawa',     pp:9,  g:0, a:2, d:0, pm:1,  comp:95.1 },
+      { rival:'Monteria',   pp:5,  g:1, a:0, d:1, pm:1,  comp:100  },
+      { rival:'Raza',       pp:8,  g:1, a:3, d:0, pm:4,  comp:100  },
+      { rival:'Sabaneros',  pp:5,  g:0, a:0, d:0, pm:-1, comp:87.5 },
+      { rival:'USA AllSt',  pp:3,  g:0, a:1, d:0, pm:1,  comp:100  },
+    ]
   }
 };
 
@@ -2072,8 +2487,8 @@ function buildProg(id, data) {
 
 function buildScatter(id, currentKey) {
   const ctx = document.getElementById(id); if (!ctx) return;
-  const keys = ['pablo', 'michael', 'diego', 'juan', 'andres', 'german', 'felipe', 'brandon', 'rafa', 'hector', 'sergio', 'esteban', 'oscar', 'feliperojas', 'nicolas', 'juanes', 'daniel'];
-  const names = { pablo:'P. Daza', michael:'M. Humn', diego:'D. Sanabria', juan:'J. Pérez', andres:'A. Higuera', german:'G. Quiroga', felipe:'F. Ramírez', brandon:'B. Bohorquez', rafa:'R. Reyes', hector:'H. Ordoñez', sergio:'S. Castañeda', esteban:'E. García', oscar:'O. Soler', feliperojas:'F. Rojas', nicolas:'N. Camacho', juanes:'J. Montenegro', daniel:'D. Chica' };
+  const keys = ['pablo', 'michael', 'diego', 'juan', 'andres', 'german', 'felipe', 'brandon', 'rafa', 'hector', 'sergio', 'esteban', 'oscar', 'feliperojas', 'nicolas', 'juanes', 'daniel', 'felipediaz', 'luistapias', 'federicob', 'jhonquiroga'];
+  const names = { pablo:'P. Daza', michael:'M. Humn', diego:'D. Sanabria', juan:'J. Pérez', andres:'A. Higuera', german:'G. Quiroga', felipe:'F. Ramírez', brandon:'B. Bohorquez', rafa:'R. Reyes', hector:'H. Ordoñez', sergio:'S. Castañeda', esteban:'E. García', oscar:'O. Soler', feliperojas:'F. Rojas', nicolas:'N. Camacho', juanes:'J. Montenegro', daniel:'D. Chica', felipediaz:'F. Díaz', luistapias:'L. Tapias', federicob:'F. Bautista', jhonquiroga:'J. Quiroga' };
   const allData = keys.map(k => ({
     x: PLAYERS[k].total.comp,
     y: PLAYERS[k].total.ta,
@@ -2124,7 +2539,7 @@ function buildScatter(id, currentKey) {
 
 // ── BUILD ALL CHARTS ON LOAD ──────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  const keys = ['pablo', 'michael', 'diego', 'juan', 'andres', 'german', 'felipe', 'brandon', 'rafa', 'hector', 'sergio', 'esteban', 'oscar', 'feliperojas', 'nicolas', 'juanes', 'daniel'];
+  const keys = ['pablo', 'michael', 'diego', 'juan', 'andres', 'german', 'felipe', 'brandon', 'rafa', 'hector', 'sergio', 'esteban', 'oscar', 'feliperojas', 'nicolas', 'juanes', 'daniel', 'felipediaz', 'luistapias', 'federicob', 'jhonquiroga'];
   keys.forEach(k => {
     buildRadar(`radar-${k}`, PLAYERS[k]);
     buildProg(`prog-${k}`, PLAYERS[k]);
