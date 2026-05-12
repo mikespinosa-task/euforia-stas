@@ -85,7 +85,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .pay-val.paid{color:var(--green)}.pay-val.zero{color:#ff6b6b}.pay-val.na{color:var(--muted)}
 .pdot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58rem;flex-shrink:0}
 .pdot.p{background:rgba(34,160,80,0.2);color:var(--green)}.pdot.d{background:rgba(192,39,45,0.2);color:#ff6b6b}.pdot.n{background:rgba(255,255,255,0.05);color:var(--muted)}
-.ac{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;text-decoration:none;display:flex;align-items:center;padding:14px 16px;gap:13px;position:relative;transition:transform .18s,border-color .2s,box-shadow .2s;margin-bottom:9px}
+.ac{background:var(--card2);border:1px solid var(--border2);border-radius:14px;overflow:hidden;cursor:pointer;text-decoration:none;display:flex;align-items:center;padding:14px 16px;gap:13px;position:relative;transition:transform .18s,border-color .2s,box-shadow .2s;margin-bottom:9px}
 .ac:active{transform:scale(.977)}
 @media(hover:hover){.ac:hover{transform:translateY(-2px);border-color:rgba(192,39,45,0.4);box-shadow:0 8px 28px rgba(192,39,45,0.12)}.ac:hover .ac-arr{transform:translateX(3px)}.ac:hover .ac-glow{opacity:1}}
 .ac-glow{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);opacity:0;transition:opacity .25s}
@@ -196,6 +196,12 @@ footer{text-align:center;padding:24px 20px 12px;font-size:.58rem;color:var(--mut
       <div class="ac-body"><div class="ac-t">Subir Evidencias de Pago</div><div class="ac-d">Adjunta tus comprobantes y soportes de pago</div></div>
       <div class="ac-arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
     </a>
+    <a class="ac" href="https://datastudio.google.com/reporting/6b0ac1e1-4c10-4cb8-8f1b-12181a9c68eb" target="_blank">
+      <div class="ac-glow"></div>
+      <div class="ac-ico e" style="background:rgba(59,130,246,0.15)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke:#60a5fa"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+      <div class="ac-body"><div class="ac-t">Ver Estadísticas del Equipo</div><div class="ac-d">Dashboard completo de rendimiento y análisis del equipo</div></div>
+      <div class="ac-arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+    </a>
   </div>
   <div class="sec" style="animation-delay:.32s">
     <div class="sec-lbl">Presupuesto del Equipo</div>
@@ -239,8 +245,33 @@ async function doRegister(){const pass=document.getElementById('inp-reg-pass').v
 async function doLogin(){const pass=document.getElementById('inp-login-pass').value.trim();const err=document.getElementById('err-login');err.classList.remove('show');if(!pass){showErr(err,'Ingresa tu contraseña');return;}setLoad('login',true);try{const r=await api({action:'login',codigo:CODIGO,password:pass});if(r.ok){SESSION={codigo:r.codigo,nombre:r.nombre};sessionStorage.setItem('euf_s',JSON.stringify(SESSION));await loadPortal(r.nombre);}else showErr(err,r.error);}catch{showErr(err,'Error de conexión.');}setLoad('login',false);}
 function goBack(){show('s-codigo');}
 async function loadPortal(nombre){showLoading();document.getElementById('p-nombre').textContent=nombre.split(' ')[0].toUpperCase();document.getElementById('p-sub').textContent=nombre+' · Euforia 2026';try{const [pr,pres]=await Promise.all([api({action:'getPlayer',nombre}),api({action:'getPresupuesto'})]);renderStats(pr);renderPagos(pr);renderPresupuesto(pres);}catch{renderStats(null);renderPagos(null);renderPresupuesto(null);}show('s-portal');}
-function renderStats(data){const estado=data?.ok?data.estado:'';const total=data?.ok?data.total:null;const sancion=data?.ok?data.sanciones:null;const pagos=data?.ok?data.pagos:null;const pill=document.getElementById('estado-pill');const isMora=estado.toUpperCase().includes('MORA');pill.className='estado-pill '+(isMora?'bad':'ok');pill.textContent=isMora?'✗ EN MORA':'✓ AL DÍA';let paid=0;if(pagos)CATS.forEach(cat=>cat.items.forEach(item=>{const v=pagos[cat.key]?.[item.k];if(v!=null&&v>0)paid++;}));let html='<div class="stat-card"><div class="stat-lbl">Total Pagado</div><div class="stat-val">'+(total!=null?fCOP(total):'—')+'</div><div class="stat-sub">'+paid+' ítem(s) pagado(s)</div></div>';if(sancion&&sancion>0)html+='<div class="stat-card warn"><div class="stat-lbl">⚠️ Sanción Económica</div><div class="stat-val" style="color:var(--orange)">'+fCOP(sancion)+'</div><div class="stat-sub">Monto pendiente por sanción</div></div>';document.getElementById('stat-wrap').innerHTML=html;}
-function renderPagos(data){const sec=document.getElementById('sec-pagos');const pagos=data?.ok?data.pagos:null;sec.innerHTML='<div class="sec-lbl">Mis Pagos</div>';CATS.forEach(cat=>{let gridHTML='';cat.items.forEach((item,idx)=>{const v=pagos?.[cat.key]?.[item.k];const isNA=v===null||v===undefined;const isPaid=!isNA&&v>0;const isOdd=cat.items.length%2!==0;const isFull=isOdd&&idx===cat.items.length-1;const valStr=isNA?'N/A':isPaid?fCOP(v):'$0';const valCls=isNA?'na':isPaid?'paid':'zero';const dotCls=isNA?'n':isPaid?'p':'d';const dotIcon=isNA?'—':isPaid?'✓':'✗';gridHTML+='<div class="pay-item'+(isFull?' full':'')+'"><div class="pay-item-name">'+item.label+'</div><div class="pay-item-row"><div class="pay-val '+valCls+'">'+valStr+'</div><div class="pdot '+dotCls+'">'+dotIcon+'</div></div></div>';});const realPaid=cat.items.filter(item=>{const v=pagos?.[cat.key]?.[item.k];return v!=null&&v>0;}).length;const realApply=cat.items.filter(item=>{const v=pagos?.[cat.key]?.[item.k];return v!=null;}).length;const stCls=realApply===0?'bad':realPaid===realApply?'ok':'bad';const stTxt=realApply===0?'Sin datos':realPaid===realApply?'✓ Al día':(realApply-realPaid)+' pendiente(s)';sec.innerHTML+='<div class="cat-card"><div class="cat-head"><div class="cat-name" style="color:'+cat.color+'">'+cat.label+'</div><div class="cat-st '+stCls+'">'+stTxt+'</div></div><div class="pay-grid">'+gridHTML+'</div></div>';});}
+function renderStats(data){const estado=data?.ok?data.estado:'';const total=data?.ok?data.total:null;const sancion=data?.ok?data.sanciones:null;const pagos=data?.ok?data.pagos:null;const pill=document.getElementById('estado-pill');const isMora=estado.toUpperCase().includes('MORA');pill.className='estado-pill '+(isMora?'bad':'ok');pill.textContent=isMora?'✗ EN MORA':'✓ AL DÍA';let paid=0;if(pagos)Object.values(pagos).forEach(items=>items.forEach(item=>{if(item.valor!=null&&item.valor>0)paid++;}));let html='<div class="stat-card"><div class="stat-lbl">Total Pagado</div><div class="stat-val">'+(total!=null?fCOP(total):'—')+'</div><div class="stat-sub">'+paid+' ítem(s) pagado(s)</div></div>';if(sancion&&sancion>0)html+='<div class="stat-card warn"><div class="stat-lbl">⚠️ Sanción Económica</div><div class="stat-val" style="color:var(--orange)">'+fCOP(sancion)+'</div><div class="stat-sub">Monto pendiente por sanción</div></div>';document.getElementById('stat-wrap').innerHTML=html;}
+function renderPagos(data){
+  const sec=document.getElementById('sec-pagos');
+  const pagos=data?.ok?data.pagos:null;
+  sec.innerHTML='<div class="sec-lbl">Mis Pagos</div>';
+  if(!pagos){sec.innerHTML+='<div style="color:var(--muted);font-size:.8rem;padding:12px 0">Sin datos disponibles</div>';return;}
+  // pagos = { 'MUNDIAL': [{item, valor}, ...], 'MENSUALIDAD': [...], ... }
+  Object.entries(pagos).forEach(([catName, items])=>{
+    // Filter out null (empty cells = N/A)
+    const applicable = items.filter(i => i.valor !== null);
+    if(!applicable.length) return;
+    const paid = applicable.filter(i => i.valor > 0).length;
+    const stCls = paid === applicable.length ? 'ok' : 'bad';
+    const stTxt = paid === applicable.length ? '✓ Al día' : (applicable.length - paid) + ' pendiente(s)';
+    // Cat color
+    const catColors={'MUNDIAL':'#c0272d','MENSUALIDAD':'#1a5276','FEDERACIÓN Y LIGA':'#1e7e34','UNIFORMES':'#7d3c98','TORNEOS':'#b7770d','OTROS':'#555'};
+    const color = catColors[catName.toUpperCase()] || '#888';
+    let gridHTML='';
+    applicable.forEach((item, idx)=>{
+      const isPaid = item.valor > 0;
+      const isOdd = applicable.length % 2 !== 0;
+      const isFull = isOdd && idx === applicable.length - 1;
+      gridHTML+='<div class="pay-item'+(isFull?' full':'')+'"><div class="pay-item-name">'+item.item+'</div><div class="pay-item-row"><div class="pay-val '+(isPaid?'paid':'zero')+'">'+(isPaid?fCOP(item.valor):'$0')+'</div><div class="pdot '+(isPaid?'p':'d')+'">'+(isPaid?'✓':'✗')+'</div></div></div>';
+    });
+    sec.innerHTML+='<div class="cat-card"><div class="cat-head"><div class="cat-name" style="color:'+color+'">'+catName+'</div><div class="cat-st '+stCls+'">'+stTxt+'</div></div><div class="pay-grid">'+gridHTML+'</div></div>';
+  });
+}
 function renderPresupuesto(data){const table=document.getElementById('pres-table');if(!data?.ok||!data.items?.length){table.innerHTML='<div class="pres-row"><div class="pres-row-name" style="color:var(--muted)">Sin datos</div></div>';return;}const catColors={'MUNDIAL':'#c0272d','MENSUALIDAD':'#1a5276','FEDERACIÓN Y LIGA':'#1e7e34','UNIFORMES':'#7d3c98','TORNEOS':'#b7770d','OTROS':'#555'};const grouped={};data.items.forEach(item=>{if(!grouped[item.cat])grouped[item.cat]=[];grouped[item.cat].push(item);});let html='';Object.entries(grouped).forEach(([cat,items])=>{const color=catColors[cat.toUpperCase()]||'#555';html+='<div class="pres-cat" style="background:'+color+'22;border-left:3px solid '+color+'">'+cat+'</div>';items.forEach(item=>{html+='<div class="pres-row"><div class="pres-row-name">'+item.nombre+'</div><div class="pres-row-val">'+fCOP(item.costo)+'</div></div>';});});table.innerHTML=html;}
 function openChangePwd(){document.getElementById('modal-pwd').classList.add('open');}
 function closeChangePwd(){document.getElementById('modal-pwd').classList.remove('open');}
@@ -251,7 +282,7 @@ function show(id){document.getElementById('s-loading').classList.add('hidden');[
 function showLoading(){document.getElementById('s-loading').classList.remove('hidden');['s-codigo','s-register','s-login','s-portal'].forEach(s=>document.getElementById(s).classList.remove('active'));}
 function showErr(el,msg){el.textContent=msg;el.classList.add('show');}
 function setLoad(id,on){document.getElementById('sp-'+id).style.display=on?'block':'none';document.getElementById('txt-'+id).style.display=on?'none':'block';}
-function fCOP(v){const n=typeof v==='number'?v:parseFloat((v||'0').toString().replace(/[^0-9.-]/g,''));if(isNaN(n)||n===0)return'$0';if(n>=1000000)return'$'+(n/1000000).toFixed(1)+'M';if(n>=1000)return'$'+Math.round(n/1000)+'K';return'$'+n.toLocaleString('es-CO');}
+function fCOP(v){const n=typeof v==='number'?v:parseFloat((v||'0').toString().replace(/[^0-9.-]/g,''));if(isNaN(n)||n===0)return'$0';return'$'+Math.round(n).toLocaleString('es-CO');}
 function countdown(){function tick(){const d=new Date('2026-08-16T00:00:00')-new Date();if(d<=0){document.getElementById('wucc-cd').textContent='Primer partido hoy!';return;}const days=Math.floor(d/86400000),h=Math.floor(d%86400000/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);document.getElementById('wucc-cd').textContent='Primer partido en '+days+'d '+h+'h '+m+'m '+s+'s';}tick();setInterval(tick,1000);}
 document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;if(document.getElementById('s-codigo').classList.contains('active'))checkCodigo();if(document.getElementById('s-login').classList.contains('active'))doLogin();if(document.getElementById('s-register').classList.contains('active'))doRegister();});
 window.addEventListener('DOMContentLoaded',init);
