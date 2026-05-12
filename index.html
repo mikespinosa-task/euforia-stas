@@ -7,355 +7,210 @@
 <link rel="icon" type="image/png" href="https://euforiaultimate.com/wp-content/uploads/2024/01/cropped-favicon-euforia-32x32.png">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --red:#c0272d; --red2:#e03035; --red-glow:rgba(192,39,45,0.25);
-  --gold:#c9a84c; --gold2:#e2c070;
-  --black:#0a0a0a; --black2:#111111; --black3:#181818;
-  --card:#1e1e1e; --card2:#252525; --card3:#2a2a2a;
-  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
-  --text:#ffffff; --muted:rgba(255,255,255,0.45); --muted2:rgba(255,255,255,0.18);
-  --green:#22a050; --green-bg:rgba(34,160,80,0.12); --green-border:rgba(34,160,80,0.3);
-  --orange:#d97706; --blue:#3b82f6;
-}
+:root{--red:#c0272d;--red2:#e03035;--black:#0f0f0f;--black2:#161616;--black3:#1a1a1a;--card:#1e1e1e;--card2:#252525;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#fff;--muted:rgba(255,255,255,0.45);--muted2:rgba(255,255,255,0.18);--green:#22a050;--green-bg:rgba(34,160,80,0.12);--green-border:rgba(34,160,80,0.3);--orange:#d97706;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;min-height:100vh;background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(192,39,45,0.14) 0%,transparent 60%);pointer-events:none;z-index:0}
-
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(192,39,45,0.18) 0%,transparent 65%),radial-gradient(ellipse 60% 40% at 100% 100%,rgba(192,39,45,0.08) 0%,transparent 55%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-/* ── SCREENS ── */
-.screen{display:none;position:relative;z-index:10}
-.screen.active{display:block}
-
-/* ── LOADING ── */
-#s-loading{position:fixed;inset:0;z-index:200;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.screen{display:none;position:relative;z-index:10}.screen.active{display:block}
+#s-loading{position:fixed;inset:0;z-index:200;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
 #s-loading.hidden{display:none}
-.spinner{width:32px;height:32px;border:2.5px solid rgba(255,255,255,0.07);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}
+.spinner{width:30px;height:30px;border:2.5px solid rgba(255,255,255,0.07);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}
 .loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
-
-/* ══════════════════════════════
-   AUTH SCREENS
-══════════════════════════════ */
-.auth-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;background:var(--black)}
-.auth-logo{margin-bottom:20px;animation:fadeDown .4s ease both}
-.auth-logo img{height:56px;object-fit:contain}
-.auth-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(192,39,45,0.1);border:1px solid rgba(192,39,45,0.28);border-radius:20px;padding:4px 13px;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:24px;animation:fadeDown .4s .07s ease both}
+.auth-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px}
+.auth-logo{margin-bottom:8px;animation:fadeDown .4s ease both}.auth-logo img{height:52px;object-fit:contain;filter:brightness(1.05)}
+.auth-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(192,39,45,0.12);border:1px solid rgba(192,39,45,0.3);border-radius:20px;padding:4px 13px;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:24px;animation:fadeDown .4s .08s ease both}
 .auth-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 2s infinite}
-.auth-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.2rem,8vw,3rem);font-weight:900;line-height:.9;text-align:center;margin-bottom:5px;animation:fadeDown .4s .1s ease both}
+.auth-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.2rem,8vw,3rem);font-weight:900;line-height:.9;text-align:center;margin-bottom:5px;animation:fadeDown .4s .12s ease both}
 .auth-title span{color:var(--red)}
-.auth-sub{font-size:.72rem;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:30px;animation:fadeDown .4s .14s ease both}
-.auth-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;width:100%;max-width:380px;animation:fadeUp .4s .18s ease both;box-shadow:0 24px 48px rgba(0,0,0,0.4)}
-
+.auth-sub{font-size:.72rem;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:30px;animation:fadeDown .4s .15s ease both}
+.auth-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;width:100%;max-width:380px;animation:fadeUp .4s .18s ease both;box-shadow:0 24px 48px rgba(0,0,0,0.5)}
 .lbl{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;display:block}
 .inp{width:100%;background:rgba(255,255,255,0.04);border:1.5px solid var(--border2);border-radius:10px;padding:12px 15px;font-family:'Barlow',sans-serif;font-size:.95rem;color:var(--text);outline:none;transition:border-color .2s,background .2s,box-shadow .2s;margin-bottom:14px}
 .inp:focus{border-color:rgba(192,39,45,0.5);background:rgba(192,39,45,0.04);box-shadow:0 0 0 3px rgba(192,39,45,0.08)}
 .inp::placeholder{color:var(--muted2)}
-
-.btn{width:100%;background:var(--red);border:none;border-radius:10px;padding:13px;font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;box-shadow:0 4px 16px rgba(192,39,45,0.3)}
-.btn:hover{background:var(--red2);box-shadow:0 6px 24px rgba(192,39,45,0.4)}
-.btn:active{transform:scale(.98)}
-.btn.secondary{background:transparent;border:1.5px solid var(--border2);color:var(--muted);margin-top:8px;box-shadow:none}
-.btn.secondary:hover{border-color:rgba(255,255,255,0.2);color:var(--text);background:rgba(255,255,255,0.04)}
+.btn{width:100%;background:var(--red);border:none;border-radius:10px;padding:13px;font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;box-shadow:0 4px 16px rgba(192,39,45,0.3)}
+.btn:hover{background:var(--red2)}.btn:active{transform:scale(.98)}
+.btn.sec{background:transparent;border:1.5px solid var(--border2);color:var(--muted);margin-top:8px;box-shadow:none}
+.btn.sec:hover{border-color:rgba(255,255,255,0.2);color:var(--text);background:rgba(255,255,255,0.04)}
 .btn-sp{width:16px;height:16px;border:2px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
-
 .err{display:none;background:rgba(192,39,45,0.08);border:1px solid rgba(192,39,45,0.28);border-radius:9px;padding:9px 13px;font-size:.78rem;color:#ff7070;margin-top:11px;text-align:center;line-height:1.4}
 .err.show{display:block;animation:shake .3s ease}
 .auth-hint{font-size:.67rem;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
-
-/* ══════════════════════════════
-   PORTAL
-══════════════════════════════ */
 #s-portal{padding-bottom:56px;max-width:680px;margin:0 auto}
-
-/* Topbar */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0;animation:fadeDown .35s ease both}
-.topbar-logo img{height:32px;object-fit:contain}
+.topbar-logo img{height:28px;object-fit:contain;filter:brightness(1.05)}
 .topbar-right{display:flex;gap:7px}
 .btn-sm{background:rgba(255,255,255,0.05);border:1px solid var(--border2);border-radius:8px;padding:6px 13px;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s}
-.btn-sm:hover{border-color:rgba(192,39,45,0.5);color:var(--red);background:rgba(192,39,45,0.06)}
-.btn-sm.g{border-color:var(--green-border);color:var(--green)}
-.btn-sm.g:hover{background:var(--green-bg)}
-
-/* Hero */
+.btn-sm:hover{border-color:rgba(192,39,45,0.5);color:var(--red)}.btn-sm.g{border-color:var(--green-border);color:var(--green)}
 .hero{padding:18px 20px 0;display:flex;flex-direction:column;align-items:center;animation:fadeDown .35s .07s ease both}
-.hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(192,39,45,0.1);border:1px solid rgba(192,39,45,0.26);border-radius:20px;padding:4px 12px;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:8px}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(192,39,45,0.12);border:1px solid rgba(192,39,45,0.28);border-radius:20px;padding:4px 12px;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:8px}
 .hero-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 2s infinite}
 .hero-name{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,7vw,2.8rem);font-weight:900;line-height:.9;text-align:center;margin-bottom:4px}
 .hero-name span{color:var(--red)}
 .hero-sub{font-size:.68rem;color:var(--muted);letter-spacing:1px;margin-bottom:20px;text-align:center}
-
-/* Estado pill */
-.estado-pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 14px;font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px;animation:fadeDown .35s .14s ease both}
+.estado-wrap{display:flex;justify-content:center;margin-bottom:18px;animation:fadeDown .35s .14s ease both}
+.estado-pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 14px;font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
 .estado-pill::before{content:'';width:7px;height:7px;border-radius:50%}
 .estado-pill.ok{background:var(--green-bg);border:1px solid var(--green-border);color:var(--green)}
 .estado-pill.ok::before{background:var(--green)}
 .estado-pill.bad{background:rgba(192,39,45,0.1);border:1px solid rgba(192,39,45,0.3);color:#ff6b6b}
 .estado-pill.bad::before{background:#ff6b6b;animation:pulse 1.5s infinite}
-
-/* Stat cards row */
-.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px;margin-bottom:16px;animation:fadeDown .35s .12s ease both}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
-.stat-card.full{grid-column:1/-1}
+.stat-wrap{padding:0 16px;margin-bottom:14px;animation:fadeDown .35s .12s ease both;display:flex;flex-direction:column;gap:10px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
 .stat-card.warn{border-color:rgba(215,119,6,0.3);background:rgba(215,119,6,0.06)}
-.stat-card-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-.stat-card-val{font-family:'Barlow Condensed',sans-serif;font-size:1.35rem;font-weight:900;line-height:1}
-.stat-card-val.g{color:var(--green)} .stat-card-val.r{color:var(--red)} .stat-card-val.o{color:var(--orange)} .stat-card-val.w{color:#fff}
-.stat-card-sub{font-size:.62rem;color:var(--muted);margin-top:1px}
-
-/* Section */
+.stat-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.stat-val{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;line-height:1;color:#fff}
+.stat-sub{font-size:.62rem;color:var(--muted);margin-top:3px}
 .sec{padding:0 16px;margin-bottom:14px;animation:fadeUp .4s ease both}
 .sec-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:9px;padding-left:2px;display:flex;align-items:center;gap:8px}
 .sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* Pay category card */
 .cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:10px}
-.cat-card-head{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border);background:var(--card2)}
+.cat-head{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border);background:var(--card2)}
 .cat-name{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase}
-.cat-st{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;padding:3px 9px;border-radius:10px}
+.cat-st{font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:700;padding:3px 9px;border-radius:10px}
 .cat-st.ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
 .cat-st.bad{background:rgba(192,39,45,0.1);color:#ff6b6b;border:1px solid rgba(192,39,45,0.25)}
-.cat-st.na{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)}
-
-/* Pay items grid */
 .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
-.pay-item{background:var(--card);padding:11px 14px;display:flex;flex-direction:column;gap:4px}
+.pay-item{background:var(--card);padding:11px 13px;display:flex;flex-direction:column;gap:5px}
 .pay-item.full{grid-column:1/-1}
 .pay-item-name{font-size:.72rem;font-weight:500;color:rgba(255,255,255,0.8);line-height:1.3}
-.pay-item-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
-.pay-item-val{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800}
-.pay-item-val.paid{color:var(--green)} .pay-item-val.zero{color:#ff6b6b}
-.pay-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58rem;flex-shrink:0}
-.pay-dot.p{background:rgba(34,160,80,0.2);color:var(--green)}
-.pay-dot.d{background:rgba(192,39,45,0.2);color:#ff6b6b}
-
-/* Action cards */
+.pay-item-row{display:flex;align-items:center;justify-content:space-between}
+.pay-val{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800}
+.pay-val.paid{color:var(--green)}.pay-val.zero{color:#ff6b6b}.pay-val.na{color:var(--muted)}
+.pdot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58rem;flex-shrink:0}
+.pdot.p{background:rgba(34,160,80,0.2);color:var(--green)}.pdot.d{background:rgba(192,39,45,0.2);color:#ff6b6b}.pdot.n{background:rgba(255,255,255,0.05);color:var(--muted)}
 .ac{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;text-decoration:none;display:flex;align-items:center;padding:14px 16px;gap:13px;position:relative;transition:transform .18s,border-color .2s,box-shadow .2s;margin-bottom:9px}
 .ac:active{transform:scale(.977)}
-@media(hover:hover){
-  .ac:hover{transform:translateY(-2px);border-color:rgba(192,39,45,0.4);box-shadow:0 8px 28px rgba(192,39,45,0.12)}
-  .ac:hover .ac-arr{transform:translateX(3px)}
-  .ac:hover .ac-glow{opacity:1}
-}
+@media(hover:hover){.ac:hover{transform:translateY(-2px);border-color:rgba(192,39,45,0.4);box-shadow:0 8px 28px rgba(192,39,45,0.12)}.ac:hover .ac-arr{transform:translateX(3px)}.ac:hover .ac-glow{opacity:1}}
 .ac-glow{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);opacity:0;transition:opacity .25s}
 .ac-ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ac-ico.s{background:rgba(192,39,45,0.15)} .ac-ico.u{background:rgba(34,160,80,0.15)} .ac-ico.e{background:rgba(59,130,246,0.15)}
+.ac-ico.s{background:rgba(192,39,45,0.15)}.ac-ico.u{background:rgba(34,160,80,0.15)}
 .ac-ico svg{width:18px;height:18px}
-.ac-ico.s svg{stroke:var(--red)} .ac-ico.u svg{stroke:var(--green)} .ac-ico.e svg{stroke:var(--blue)}
-.ac-body{flex:1}
-.ac-t{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:#fff;letter-spacing:.3px;margin-bottom:2px}
-.ac-d{font-size:.68rem;color:var(--muted);line-height:1.35}
-.ac-arr{color:rgba(255,255,255,0.3);flex-shrink:0;transition:transform .18s}
-.ac-arr svg{width:16px;height:16px;stroke:currentColor}
-
-/* Presupuesto table */
+.ac-ico.s svg{stroke:var(--red)}.ac-ico.u svg{stroke:var(--green)}
+.ac-body{flex:1}.ac-t{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:#fff;letter-spacing:.3px;margin-bottom:3px}
+.ac-d{font-size:.68rem;color:rgba(255,255,255,0.6);line-height:1.35}
+.ac-arr{color:rgba(255,255,255,0.35);flex-shrink:0;transition:transform .18s}.ac-arr svg{width:16px;height:16px;stroke:currentColor}
 .pres-table{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.pres-cat-head{padding:9px 15px;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff;border-bottom:1px solid var(--border)}
+.pres-cat{padding:9px 15px;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff;border-bottom:1px solid var(--border)}
 .pres-row{display:flex;align-items:center;justify-content:space-between;padding:9px 15px;border-bottom:1px solid rgba(255,255,255,0.04)}
 .pres-row:last-child{border-bottom:none}
 .pres-row-name{font-size:.77rem;color:rgba(255,255,255,0.8)}
-.pres-row-val{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;color:var(--gold)}
-
-/* WUCC */
+.pres-row-val{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;color:rgba(255,255,255,0.7)}
 .wucc{margin:0 16px;background:rgba(192,39,45,0.06);border:1px solid rgba(192,39,45,0.15);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;animation:fadeUp .4s .45s ease both}
-.wucc-flag{font-size:1.5rem}
-.wucc-t{font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.wucc-flag{font-size:1.5rem}.wucc-t{font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
 .wucc-cd{font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:800;color:var(--red)}
-
 footer{text-align:center;padding:24px 20px 12px;font-size:.58rem;color:var(--muted2);letter-spacing:1px;position:relative;z-index:10}
-
-/* Modal */
 .modal-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
 .modal-bg.open{display:flex}
-.modal{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:24px 20px;width:100%;max-width:360px;box-shadow:0 32px 64px rgba(0,0,0,0.5)}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:24px 20px;width:100%;max-width:360px}
 .modal-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
-.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px;transition:color .2s}
-.modal-close:hover{color:#fff}
+.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem}
 </style>
 </head>
 <body>
+<div id="s-loading"><div class="spinner"></div><div class="loading-txt">Cargando portal...</div></div>
 
-<!-- LOADING -->
-<div id="s-loading">
-  <div class="spinner"></div>
-  <div class="loading-txt">Cargando portal...</div>
-</div>
-
-<!-- PASO 1: CÓDIGO -->
 <div id="s-codigo" class="screen">
-  <div class="auth-wrap">
-    <div class="auth-logo">
-      <img src="https://euforiaultimate.com/wp-content/uploads/2024/01/euforia-logo.png"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
-           alt="Euforia">
-      <span style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:3px">EUFORIA</span>
-    </div>
-    <div class="auth-badge">WUCC 2026 · Irlanda</div>
-    <div class="auth-title">PORTAL<br><span>DEL JUGADOR</span></div>
-    <div class="auth-sub">Ingresa tu número de camiseta</div>
-    <div class="auth-card">
-      <label class="lbl">Número de camiseta</label>
-      <input class="inp" id="inp-codigo" type="text" placeholder="Ej: 17" autocomplete="off" inputmode="numeric">
-      <button class="btn" onclick="checkCodigo()">
-        <div class="btn-sp" id="sp-codigo"></div>
-        <span id="txt-codigo">CONTINUAR →</span>
-      </button>
-      <div class="err" id="err-codigo"></div>
-    </div>
+<div class="auth-wrap">
+  <div class="auth-logo"><img src="data:image/webp;base64,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" alt="Euforia"></div>
+  <div class="auth-badge">WUCC 2026 · Irlanda</div>
+  <div class="auth-title">PORTAL<br><span>DEL JUGADOR</span></div>
+  <div class="auth-sub">Ingresa tu número de camiseta</div>
+  <div class="auth-card">
+    <label class="lbl">Número de camiseta</label>
+    <input class="inp" id="inp-codigo" type="text" placeholder="Ej: E10" autocomplete="off">
+    <button class="btn" onclick="checkCodigo()"><div class="btn-sp" id="sp-codigo"></div><span id="txt-codigo">CONTINUAR →</span></button>
+    <div class="err" id="err-codigo"></div>
   </div>
 </div>
+</div>
 
-<!-- PASO 2A: REGISTRO -->
 <div id="s-register" class="screen">
-  <div class="auth-wrap">
-    <div class="auth-logo">
-      <img src="https://euforiaultimate.com/wp-content/uploads/2024/01/euforia-logo.png"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
-           alt="Euforia">
-      <span style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:3px">EUFORIA</span>
-    </div>
-    <div class="auth-badge">Primera vez</div>
-    <div class="auth-title">BIENVENIDO<br><span id="reg-nombre">JUGADOR</span></div>
-    <div class="auth-sub">Crea tu contraseña para acceder al portal</div>
-    <div class="auth-card">
-      <label class="lbl">Nueva contraseña</label>
-      <input class="inp" id="inp-reg-pass" type="password" placeholder="Mínimo 6 caracteres">
-      <label class="lbl">Confirmar contraseña</label>
-      <input class="inp" id="inp-reg-confirm" type="password" placeholder="Repite tu contraseña">
-      <button class="btn" onclick="doRegister()">
-        <div class="btn-sp" id="sp-register"></div>
-        <span id="txt-register">CREAR CUENTA</span>
-      </button>
-      <button class="btn secondary" onclick="goBack()">← Cambiar número</button>
-      <div class="err" id="err-register"></div>
-      <p class="auth-hint">Tu contraseña se almacena de forma segura.<br>No la compartas con nadie.</p>
-    </div>
+<div class="auth-wrap">
+  <div class="auth-logo"><img src="data:image/webp;base64,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" alt="Euforia"></div>
+  <div class="auth-badge">Primera vez</div>
+  <div class="auth-title">BIENVENIDO<br><span id="reg-nombre">JUGADOR</span></div>
+  <div class="auth-sub">Crea tu contraseña para acceder al portal</div>
+  <div class="auth-card">
+    <label class="lbl">Nueva contraseña</label>
+    <input class="inp" id="inp-reg-pass" type="password" placeholder="Mínimo 6 caracteres">
+    <label class="lbl">Confirmar contraseña</label>
+    <input class="inp" id="inp-reg-confirm" type="password" placeholder="Repite tu contraseña">
+    <button class="btn" onclick="doRegister()"><div class="btn-sp" id="sp-register"></div><span id="txt-register">CREAR CUENTA</span></button>
+    <button class="btn sec" onclick="goBack()">← Cambiar número</button>
+    <div class="err" id="err-register"></div>
+    <p class="auth-hint">Tu contraseña se almacena de forma segura.<br>No la compartas con nadie.</p>
   </div>
 </div>
+</div>
 
-<!-- PASO 2B: LOGIN -->
 <div id="s-login" class="screen">
-  <div class="auth-wrap">
-    <div class="auth-logo">
-      <img src="https://euforiaultimate.com/wp-content/uploads/2024/01/euforia-logo.png"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
-           alt="Euforia">
-      <span style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:3px">EUFORIA</span>
-    </div>
-    <div class="auth-badge">WUCC 2026 · Irlanda</div>
-    <div class="auth-title">PORTAL<br><span>DEL JUGADOR</span></div>
-    <div class="auth-sub" id="login-sub">Ingresa tu contraseña</div>
-    <div class="auth-card">
-      <label class="lbl">Contraseña</label>
-      <input class="inp" id="inp-login-pass" type="password" placeholder="Tu contraseña" autocomplete="current-password">
-      <button class="btn" onclick="doLogin()">
-        <div class="btn-sp" id="sp-login"></div>
-        <span id="txt-login">ENTRAR</span>
-      </button>
-      <button class="btn secondary" onclick="goBack()">← Cambiar número</button>
-      <div class="err" id="err-login"></div>
-    </div>
+<div class="auth-wrap">
+  <div class="auth-logo"><img src="data:image/webp;base64,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" alt="Euforia"></div>
+  <div class="auth-badge">WUCC 2026 · Irlanda</div>
+  <div class="auth-title">PORTAL<br><span>DEL JUGADOR</span></div>
+  <div class="auth-sub" id="login-sub">Ingresa tu contraseña</div>
+  <div class="auth-card">
+    <label class="lbl">Contraseña</label>
+    <input class="inp" id="inp-login-pass" type="password" placeholder="Tu contraseña" autocomplete="current-password">
+    <button class="btn" onclick="doLogin()"><div class="btn-sp" id="sp-login"></div><span id="txt-login">ENTRAR</span></button>
+    <button class="btn sec" onclick="goBack()">← Cambiar número</button>
+    <div class="err" id="err-login"></div>
   </div>
 </div>
+</div>
 
-<!-- PORTAL DASHBOARD -->
 <div id="s-portal" class="screen">
   <div class="topbar">
-    <div class="topbar-logo">
-      <img src="https://euforiaultimate.com/wp-content/uploads/2024/01/euforia-logo.png"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
-           style="height:30px;object-fit:contain" alt="Euforia">
-      <span style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;color:var(--gold);letter-spacing:2px">EUFORIA</span>
-    </div>
+    <div class="topbar-logo"><img src="data:image/webp;base64,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" alt="Euforia"></div>
     <div class="topbar-right">
       <button class="btn-sm g" onclick="openChangePwd()">🔑 Contraseña</button>
       <button class="btn-sm" onclick="doLogout()">Salir</button>
     </div>
   </div>
-
   <div class="hero">
     <div class="hero-badge">WUCC 2026 · Irlanda</div>
     <div class="hero-name">PORTAL<br><span id="p-nombre">JUGADOR</span></div>
     <div class="hero-sub" id="p-sub">Euforia Open · Bogotá 2026</div>
   </div>
-
-  <div class="estado-pill ok" id="estado-pill">AL DÍA</div>
-
-  <!-- Stats -->
-  <div class="stat-row" id="stat-row">
-    <div class="stat-card full">
-      <div class="stat-card-lbl">Total Pagado</div>
-      <div class="stat-card-val w" id="s-total">—</div>
-      <div class="stat-card-sub" id="s-items-sub">— ítems pagados</div>
-    </div>
-  </div>
-
-  <!-- Pagos -->
+  <div class="estado-wrap"><div class="estado-pill ok" id="estado-pill">AL DÍA</div></div>
+  <div class="stat-wrap" id="stat-wrap"></div>
   <div class="sec" id="sec-pagos" style="animation-delay:.16s"></div>
-
-  <!-- Acciones -->
   <div class="sec" style="animation-delay:.24s">
     <div class="sec-lbl">Acciones</div>
     <a class="ac" href="https://mikespinosa-task.github.io/euforia/dashboard-estadisticas" target="_blank">
       <div class="ac-glow"></div>
-      <div class="ac-ico s">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
-          <line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/>
-        </svg>
-      </div>
-      <div class="ac-body">
-        <div class="ac-t">Dashboard de Estadísticas</div>
-        <div class="ac-d">Rendimiento individual, rankings y análisis por partido</div>
-      </div>
+      <div class="ac-ico s"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
+      <div class="ac-body"><div class="ac-t">Dashboard de Estadísticas</div><div class="ac-d">Rendimiento individual, rankings y análisis por partido</div></div>
       <div class="ac-arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
     </a>
     <a class="ac" href="https://forms.gle/iZm4FDhRETrxR3Bt9" target="_blank">
       <div class="ac-glow"></div>
-      <div class="ac-ico u">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-      </div>
-      <div class="ac-body">
-        <div class="ac-t">Subir Evidencias de Pago</div>
-        <div class="ac-d">Adjunta tus comprobantes y soportes de pago</div>
-      </div>
+      <div class="ac-ico u"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div class="ac-body"><div class="ac-t">Subir Evidencias de Pago</div><div class="ac-d">Adjunta tus comprobantes y soportes de pago</div></div>
       <div class="ac-arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
     </a>
   </div>
-
-  <!-- Presupuesto -->
-  <div class="sec" id="sec-presupuesto" style="animation-delay:.32s">
+  <div class="sec" style="animation-delay:.32s">
     <div class="sec-lbl">Presupuesto del Equipo</div>
     <div class="pres-table" id="pres-table"></div>
   </div>
-
-  <!-- WUCC Countdown -->
   <div class="wucc">
     <div class="wucc-flag">🇮🇪</div>
-    <div>
-      <div class="wucc-t">WUCC 2026 — Irlanda</div>
-      <div class="wucc-cd" id="wucc-cd">Calculando...</div>
-    </div>
+    <div><div class="wucc-t">WUCC 2026 — Irlanda</div><div class="wucc-cd" id="wucc-cd">Calculando...</div></div>
   </div>
-
-  <footer><strong style="color:var(--gold)">Euforia Open</strong> &nbsp;·&nbsp; Bogotá 2026 &nbsp;·&nbsp; Portal del Jugador</footer>
+  <footer><strong>Euforia Open</strong> &nbsp;·&nbsp; Bogotá 2026 &nbsp;·&nbsp; Portal del Jugador</footer>
 </div>
 
-<!-- MODAL CAMBIAR CONTRASEÑA -->
 <div class="modal-bg" id="modal-pwd">
   <div class="modal">
-    <div class="modal-title">
-      Cambiar Contraseña
-      <button class="modal-close" onclick="closeChangePwd()">✕</button>
-    </div>
+    <div class="modal-title">Cambiar Contraseña <button class="modal-close" onclick="closeChangePwd()">✕</button></div>
     <label class="lbl">Contraseña actual</label>
     <input class="inp" id="pwd-old" type="password" placeholder="Contraseña actual">
     <label class="lbl">Nueva contraseña</label>
@@ -368,311 +223,38 @@ footer{text-align:center;padding:24px 20px 12px;font-size:.58rem;color:var(--mut
 </div>
 
 <script>
-// ══════════════════════════════════════════
-// CONFIG — actualiza con tu nueva URL
-// ══════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbw3kivqpomVO-OmyZd2Wf3Jj1AftzwE2qtQMOMLe6u4sLewEgdbXtX9mVIebMdXbmb0/exec';
-
-const CATS = [
-  { key:'mundial',     label:'Mundial',           color:'#c0272d', items:[
-    {k:'gastosFijos',label:'Gastos Fijos (Póliza+Cuenta+WEB)'},
-    {k:'teamFee',    label:'WUCC 2026 Team Fee'},
-    {k:'playerFee',  label:'WUCC Player Fee'},
-    {k:'coach',      label:'Coach Estadía + Pasajes'},
-  ]},
-  { key:'mensualidad', label:'Mensualidad',        color:'#1a5276', items:[
-    {k:'febrero',label:'Feb'},{k:'marzo',label:'Mar'},{k:'abril',label:'Abr'},
-    {k:'mayo',label:'May'},{k:'junio',label:'Jun'},{k:'julio',label:'Jul'},
-    {k:'agosto',label:'Ago'},{k:'septiembre',label:'Sep'},
-    {k:'octubre',label:'Oct'},{k:'noviembre',label:'Nov'},
-  ]},
-  { key:'federacion',  label:'Federación y Liga',  color:'#1e7e34', items:[
-    {k:'lbdv',label:'Sostenimiento LBDV'},{k:'web',label:'WEB'},{k:'seguro',label:'Seguro Atletas'},
-  ]},
-  { key:'uniformes',   label:'Uniformes',          color:'#7d3c98', items:[
-    {k:'uniformes',label:'Uniformes'},
-  ]},
-  { key:'torneos',     label:'Torneos',            color:'#b7770d', items:[
-    {k:'tep',label:'TEP'},{k:'fdp',label:'FDP'},{k:'upx',label:'UPX'},
-    {k:'distritales',label:'Distritales'},{k:'nacionales',label:'Nacionales'},{k:'dv2600',label:'DV2600'},
-  ]},
+const API='https://script.google.com/macros/s/AKfycbwsvYcTja4Eoxxp9Kne6lLbvp-1USDhXdkdjIqHMXCgxJ1ea4t0rptbWR4B75NbYViU/exec';
+const CATS=[
+  {key:'mundial',label:'Mundial',color:'#c0272d',items:[{k:'gastosFijos',label:'Gastos Fijos'},{k:'teamFee',label:'WUCC Team Fee'},{k:'playerFee',label:'WUCC Player Fee'},{k:'coach',label:'Coach Estadía+Pasajes'}]},
+  {key:'mensualidad',label:'Mensualidad',color:'#1a5276',items:[{k:'febrero',label:'Febrero'},{k:'marzo',label:'Marzo'},{k:'abril',label:'Abril'},{k:'mayo',label:'Mayo'},{k:'junio',label:'Junio'},{k:'julio',label:'Julio'},{k:'agosto',label:'Agosto'},{k:'septiembre',label:'Septiembre'},{k:'octubre',label:'Octubre'},{k:'noviembre',label:'Noviembre'}]},
+  {key:'federacion',label:'Federación y Liga',color:'#1e7e34',items:[{k:'lbdv',label:'Sostenimiento LBDV'},{k:'web',label:'WEB'},{k:'seguro',label:'Seguro Atletas'}]},
+  {key:'uniformes',label:'Uniformes',color:'#7d3c98',items:[{k:'uniformes',label:'Uniformes'}]},
+  {key:'torneos',label:'Torneos',color:'#b7770d',items:[{k:'tep',label:'TEP'},{k:'fdp',label:'FDP'},{k:'upx',label:'UPX'},{k:'distritales',label:'Distritales'},{k:'nacionales',label:'Nacionales'},{k:'dv2600',label:'DV2600'}]},
 ];
-
-let SESSION = JSON.parse(sessionStorage.getItem('euf_s') || 'null');
-let CODIGO  = '';
-
-// ══════════════════════════════════════════
-async function init() {
-  if (SESSION?.nombre) { await loadPortal(SESSION.nombre); }
-  else show('s-codigo');
-  countdown();
-}
-
-// ── VERIFICAR CÓDIGO ──
-async function checkCodigo() {
-  const cod = document.getElementById('inp-codigo').value.trim();
-  const err = document.getElementById('err-codigo');
-  err.classList.remove('show');
-  if (!cod) { showErr(err,'Ingresa tu número de camiseta'); return; }
-  setLoad('codigo',true);
-  try {
-    const r = await api({action:'isFirstTime', codigo:cod});
-    if (r.ok) {
-      CODIGO = cod;
-      if (r.firstTime) {
-        document.getElementById('reg-nombre').textContent = r.nombre.split(' ')[0].toUpperCase();
-        show('s-register');
-      } else {
-        document.getElementById('login-sub').textContent = 'Hola ' + r.nombre.split(' ')[0] + ', ingresa tu contraseña';
-        show('s-login');
-      }
-    } else showErr(err, r.error);
-  } catch { showErr(err,'Error de conexión. Intenta de nuevo.'); }
-  setLoad('codigo',false);
-}
-
-// ── REGISTRO ──
-async function doRegister() {
-  const pass = document.getElementById('inp-reg-pass').value.trim();
-  const conf = document.getElementById('inp-reg-confirm').value.trim();
-  const err  = document.getElementById('err-register');
-  err.classList.remove('show');
-  if (!pass||!conf)  { showErr(err,'Completa ambos campos'); return; }
-  if (pass!==conf)   { showErr(err,'Las contraseñas no coinciden'); return; }
-  if (pass.length<6) { showErr(err,'Mínimo 6 caracteres'); return; }
-  setLoad('register',true);
-  try {
-    const r = await api({action:'register', codigo:CODIGO, password:pass});
-    if (r.ok) { SESSION={codigo:CODIGO,nombre:r.nombre}; sessionStorage.setItem('euf_s',JSON.stringify(SESSION)); await loadPortal(r.nombre); }
-    else showErr(err, r.error);
-  } catch { showErr(err,'Error de conexión.'); }
-  setLoad('register',false);
-}
-
-// ── LOGIN ──
-async function doLogin() {
-  const pass = document.getElementById('inp-login-pass').value.trim();
-  const err  = document.getElementById('err-login');
-  err.classList.remove('show');
-  if (!pass) { showErr(err,'Ingresa tu contraseña'); return; }
-  setLoad('login',true);
-  try {
-    const r = await api({action:'login', codigo:CODIGO, password:pass});
-    if (r.ok) { SESSION={codigo:r.codigo,nombre:r.nombre}; sessionStorage.setItem('euf_s',JSON.stringify(SESSION)); await loadPortal(r.nombre); }
-    else showErr(err, r.error);
-  } catch { showErr(err,'Error de conexión.'); }
-  setLoad('login',false);
-}
-
-function goBack() { show('s-codigo'); }
-
-// ── CARGAR PORTAL ──
-async function loadPortal(nombre) {
-  showLoading();
-  document.getElementById('p-nombre').textContent = nombre.split(' ')[0].toUpperCase();
-  document.getElementById('p-sub').textContent    = nombre + ' · Euforia 2026';
-  try {
-    const [pr, pres] = await Promise.all([
-      api({action:'getPlayer', nombre}),
-      api({action:'getPresupuesto'})
-    ]);
-    renderStats(pr);
-    renderPagos(pr);
-    renderPresupuesto(pres);
-  } catch { renderStats(null); renderPagos(null); renderPresupuesto(null); }
-  show('s-portal');
-}
-
-// ── RENDER STATS ──
-function renderStats(data) {
-  const estado   = data?.ok ? data.estado    : '';
-  const total    = data?.ok ? data.total     : null;
-  const sancion  = data?.ok ? data.sanciones : null;
-  const pagos    = data?.ok ? data.pagos     : null;
-
-  // Estado pill
-  const pill = document.getElementById('estado-pill');
-  const isMora = estado.toUpperCase().includes('MORA');
-  pill.className = 'estado-pill ' + (isMora ? 'bad' : 'ok');
-  pill.textContent = isMora ? '✗ EN MORA' : '✓ AL DÍA';
-
-  // Contar ítems
-  let paid = 0;
-  if (pagos) CATS.forEach(cat => cat.items.forEach(item => {
-    const v = pagos[cat.key]?.[item.k];
-    if (v != null && v > 0) paid++;
-  }));
-
-  // Stat row
-  const row = document.getElementById('stat-row');
-  let html = '';
-
-  // Total pagado
-  html += `<div class="stat-card ${sancion && sancion > 0 ? '' : 'full'}">
-    <div class="stat-card-lbl">Total Pagado</div>
-    <div class="stat-card-val w" id="s-total">${total != null ? fCOP(total) : '—'}</div>
-    <div class="stat-card-sub">${paid} ítem(s) pagado(s)</div>
-  </div>`;
-
-  // Sanción (solo si tiene)
-  if (sancion && sancion > 0) {
-    html += `<div class="stat-card warn">
-      <div class="stat-card-lbl">⚠️ Sanción Económica</div>
-      <div class="stat-card-val o">${fCOP(sancion)}</div>
-      <div class="stat-card-sub">Monto pendiente por sanción</div>
-    </div>`;
-  }
-
-  row.innerHTML = html;
-}
-
-// ── RENDER PAGOS ──
-function renderPagos(data) {
-  const sec  = document.getElementById('sec-pagos');
-  const pagos = data?.ok ? data.pagos : null;
-  sec.innerHTML = '<div class="sec-lbl">Mis Pagos</div>';
-
-  CATS.forEach(cat => {
-    let catPaid=0, catTotal=0, gridHTML='';
-    const isOdd = cat.items.length % 2 !== 0;
-
-    cat.items.forEach((item, idx) => {
-      const v      = pagos?.[cat.key]?.[item.k];
-      const isNA   = v === null || v === undefined;
-      if (isNA) return;
-      catTotal++;
-      const isPaid = v > 0;
-      if (isPaid) catPaid++;
-      const isLast = idx === cat.items.length - 1;
-      const isFull = isOdd && isLast;
-
-      gridHTML += `<div class="pay-item${isFull?' full':''}">
-        <div class="pay-item-name">${item.label}</div>
-        <div class="pay-item-bottom">
-          <div class="pay-item-val ${isPaid?'paid':'zero'}">${isPaid ? fCOP(v) : '$0'}</div>
-          <div class="pay-dot ${isPaid?'p':'d'}">${isPaid?'✓':'✗'}</div>
-        </div>
-      </div>`;
-    });
-
-    if (!gridHTML) return;
-
-    const stClass = catPaid===catTotal ? 'ok' : catTotal===0 ? 'na' : 'bad';
-    const stText  = catPaid===catTotal ? '✓ Al día' : `${catTotal-catPaid} pendiente(s)`;
-
-    sec.innerHTML += `<div class="cat-card">
-      <div class="cat-card-head">
-        <div class="cat-name" style="color:${cat.color}">${cat.label}</div>
-        <div class="cat-st ${stClass}">${stText}</div>
-      </div>
-      <div class="pay-grid">${gridHTML}</div>
-    </div>`;
-  });
-}
-
-// ── RENDER PRESUPUESTO ──
-function renderPresupuesto(data) {
-  const table = document.getElementById('pres-table');
-  if (!data?.ok || !data.items?.length) { table.innerHTML = '<div class="pres-row"><div class="pres-row-name" style="color:var(--muted)">Sin datos disponibles</div></div>'; return; }
-
-  const catColors = {
-    'MUNDIAL':'#c0272d','MENSUALIDAD':'#1a5276','FEDERACIÓN Y LIGA':'#1e7e34',
-    'UNIFORMES':'#7d3c98','TORNEOS':'#b7770d','OTROS':'#555'
-  };
-
-  // Agrupar por categoría
-  const grouped = {};
-  data.items.forEach(item => {
-    if (!grouped[item.cat]) grouped[item.cat] = [];
-    grouped[item.cat].push(item);
-  });
-
-  let html = '';
-  Object.entries(grouped).forEach(([cat, items]) => {
-    const color = catColors[cat.toUpperCase()] || '#555';
-    html += `<div class="pres-cat-head" style="background:${color}22;border-left:3px solid ${color}">${cat}</div>`;
-    items.forEach(item => {
-      html += `<div class="pres-row">
-        <div class="pres-row-name">${item.nombre}</div>
-        <div class="pres-row-val">${fCOP(item.costo)}</div>
-      </div>`;
-    });
-  });
-
-  table.innerHTML = html;
-}
-
-// ── CAMBIAR CONTRASEÑA ──
-function openChangePwd()  { document.getElementById('modal-pwd').classList.add('open'); }
-function closeChangePwd() { document.getElementById('modal-pwd').classList.remove('open'); }
-async function doChangePwd() {
-  const old  = document.getElementById('pwd-old').value.trim();
-  const nw   = document.getElementById('pwd-new').value.trim();
-  const conf = document.getElementById('pwd-confirm').value.trim();
-  const err  = document.getElementById('err-pwd');
-  err.classList.remove('show');
-  if (!old||!nw||!conf) { showErr(err,'Completa todos los campos'); return; }
-  if (nw!==conf)        { showErr(err,'Las contraseñas no coinciden'); return; }
-  if (nw.length<6)      { showErr(err,'Mínimo 6 caracteres'); return; }
-  try {
-    const r = await api({action:'changePassword', codigo:SESSION.codigo, oldPass:old, newPass:nw});
-    if (r.ok) { closeChangePwd(); alert('✓ Contraseña actualizada correctamente'); }
-    else showErr(err, r.error);
-  } catch { showErr(err,'Error de conexión'); }
-}
-
-// ── LOGOUT ──
-function doLogout() {
-  sessionStorage.removeItem('euf_s');
-  SESSION=null; CODIGO='';
-  document.getElementById('inp-codigo').value='';
-  show('s-codigo');
-}
-
-// ── UTILS ──
-async function api(params) {
-  const qs = Object.entries(params).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&');
-  const r  = await fetch(`${API}?${qs}`);
-  return r.json();
-}
-function show(id) {
-  document.getElementById('s-loading').classList.add('hidden');
-  ['s-codigo','s-register','s-login','s-portal'].forEach(s => document.getElementById(s).classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-function showLoading() {
-  document.getElementById('s-loading').classList.remove('hidden');
-  ['s-codigo','s-register','s-login','s-portal'].forEach(s => document.getElementById(s).classList.remove('active'));
-}
-function showErr(el,msg) { el.textContent=msg; el.classList.add('show'); }
-function setLoad(id,on) {
-  document.getElementById('sp-'+id).style.display = on?'block':'none';
-  document.getElementById('txt-'+id).style.display = on?'none':'block';
-}
-function fCOP(v) {
-  const n = typeof v==='number'?v:parseFloat((v||'0').toString().replace(/[^0-9.-]/g,''));
-  if (isNaN(n)||n===0) return '$0';
-  if (n>=1000000) return '$'+(n/1000000).toFixed(1)+'M';
-  if (n>=1000)    return '$'+Math.round(n/1000)+'K';
-  return '$'+n.toLocaleString('es-CO');
-}
-function countdown() {
-  function tick(){
-    const d=new Date('2026-08-16T00:00:00')-new Date();
-    if(d<=0){document.getElementById('wucc-cd').textContent='¡Primer partido hoy! 🔥';return;}
-    const days=Math.floor(d/86400000),h=Math.floor(d%86400000/3600000),
-          m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);
-    document.getElementById('wucc-cd').textContent=`Primer partido en ${days}d ${h}h ${m}m ${s}s`;
-  }
-  tick(); setInterval(tick,1000);
-}
-document.addEventListener('keydown', e => {
-  if (e.key!=='Enter') return;
-  if (document.getElementById('s-codigo').classList.contains('active'))   checkCodigo();
-  if (document.getElementById('s-login').classList.contains('active'))    doLogin();
-  if (document.getElementById('s-register').classList.contains('active')) doRegister();
-});
-window.addEventListener('DOMContentLoaded', init);
+let SESSION=JSON.parse(sessionStorage.getItem('euf_s')||'null');
+let CODIGO='';
+async function init(){if(SESSION?.nombre){await loadPortal(SESSION.nombre);}else show('s-codigo');countdown();}
+async function checkCodigo(){const cod=document.getElementById('inp-codigo').value.trim();const err=document.getElementById('err-codigo');err.classList.remove('show');if(!cod){showErr(err,'Ingresa tu número de camiseta');return;}setLoad('codigo',true);try{const r=await api({action:'isFirstTime',codigo:cod});if(r.ok){CODIGO=cod;if(r.firstTime){document.getElementById('reg-nombre').textContent=r.nombre.split(' ')[0].toUpperCase();show('s-register');}else{document.getElementById('login-sub').textContent='Hola '+r.nombre.split(' ')[0]+', ingresa tu contraseña';show('s-login');}}else showErr(err,r.error);}catch{showErr(err,'Error de conexión.');}setLoad('codigo',false);}
+async function doRegister(){const pass=document.getElementById('inp-reg-pass').value.trim();const conf=document.getElementById('inp-reg-confirm').value.trim();const err=document.getElementById('err-register');err.classList.remove('show');if(!pass||!conf){showErr(err,'Completa ambos campos');return;}if(pass!==conf){showErr(err,'Las contraseñas no coinciden');return;}if(pass.length<6){showErr(err,'Mínimo 6 caracteres');return;}setLoad('register',true);try{const r=await api({action:'register',codigo:CODIGO,password:pass});if(r.ok){SESSION={codigo:CODIGO,nombre:r.nombre};sessionStorage.setItem('euf_s',JSON.stringify(SESSION));await loadPortal(r.nombre);}else showErr(err,r.error);}catch{showErr(err,'Error de conexión.');}setLoad('register',false);}
+async function doLogin(){const pass=document.getElementById('inp-login-pass').value.trim();const err=document.getElementById('err-login');err.classList.remove('show');if(!pass){showErr(err,'Ingresa tu contraseña');return;}setLoad('login',true);try{const r=await api({action:'login',codigo:CODIGO,password:pass});if(r.ok){SESSION={codigo:r.codigo,nombre:r.nombre};sessionStorage.setItem('euf_s',JSON.stringify(SESSION));await loadPortal(r.nombre);}else showErr(err,r.error);}catch{showErr(err,'Error de conexión.');}setLoad('login',false);}
+function goBack(){show('s-codigo');}
+async function loadPortal(nombre){showLoading();document.getElementById('p-nombre').textContent=nombre.split(' ')[0].toUpperCase();document.getElementById('p-sub').textContent=nombre+' · Euforia 2026';try{const [pr,pres]=await Promise.all([api({action:'getPlayer',nombre}),api({action:'getPresupuesto'})]);renderStats(pr);renderPagos(pr);renderPresupuesto(pres);}catch{renderStats(null);renderPagos(null);renderPresupuesto(null);}show('s-portal');}
+function renderStats(data){const estado=data?.ok?data.estado:'';const total=data?.ok?data.total:null;const sancion=data?.ok?data.sanciones:null;const pagos=data?.ok?data.pagos:null;const pill=document.getElementById('estado-pill');const isMora=estado.toUpperCase().includes('MORA');pill.className='estado-pill '+(isMora?'bad':'ok');pill.textContent=isMora?'✗ EN MORA':'✓ AL DÍA';let paid=0;if(pagos)CATS.forEach(cat=>cat.items.forEach(item=>{const v=pagos[cat.key]?.[item.k];if(v!=null&&v>0)paid++;}));let html='<div class="stat-card"><div class="stat-lbl">Total Pagado</div><div class="stat-val">'+(total!=null?fCOP(total):'—')+'</div><div class="stat-sub">'+paid+' ítem(s) pagado(s)</div></div>';if(sancion&&sancion>0)html+='<div class="stat-card warn"><div class="stat-lbl">⚠️ Sanción Económica</div><div class="stat-val" style="color:var(--orange)">'+fCOP(sancion)+'</div><div class="stat-sub">Monto pendiente por sanción</div></div>';document.getElementById('stat-wrap').innerHTML=html;}
+function renderPagos(data){const sec=document.getElementById('sec-pagos');const pagos=data?.ok?data.pagos:null;sec.innerHTML='<div class="sec-lbl">Mis Pagos</div>';CATS.forEach(cat=>{let gridHTML='';cat.items.forEach((item,idx)=>{const v=pagos?.[cat.key]?.[item.k];const isNA=v===null||v===undefined;const isPaid=!isNA&&v>0;const isOdd=cat.items.length%2!==0;const isFull=isOdd&&idx===cat.items.length-1;const valStr=isNA?'N/A':isPaid?fCOP(v):'$0';const valCls=isNA?'na':isPaid?'paid':'zero';const dotCls=isNA?'n':isPaid?'p':'d';const dotIcon=isNA?'—':isPaid?'✓':'✗';gridHTML+='<div class="pay-item'+(isFull?' full':'')+'"><div class="pay-item-name">'+item.label+'</div><div class="pay-item-row"><div class="pay-val '+valCls+'">'+valStr+'</div><div class="pdot '+dotCls+'">'+dotIcon+'</div></div></div>';});const realPaid=cat.items.filter(item=>{const v=pagos?.[cat.key]?.[item.k];return v!=null&&v>0;}).length;const realApply=cat.items.filter(item=>{const v=pagos?.[cat.key]?.[item.k];return v!=null;}).length;const stCls=realApply===0?'bad':realPaid===realApply?'ok':'bad';const stTxt=realApply===0?'Sin datos':realPaid===realApply?'✓ Al día':(realApply-realPaid)+' pendiente(s)';sec.innerHTML+='<div class="cat-card"><div class="cat-head"><div class="cat-name" style="color:'+cat.color+'">'+cat.label+'</div><div class="cat-st '+stCls+'">'+stTxt+'</div></div><div class="pay-grid">'+gridHTML+'</div></div>';});}
+function renderPresupuesto(data){const table=document.getElementById('pres-table');if(!data?.ok||!data.items?.length){table.innerHTML='<div class="pres-row"><div class="pres-row-name" style="color:var(--muted)">Sin datos</div></div>';return;}const catColors={'MUNDIAL':'#c0272d','MENSUALIDAD':'#1a5276','FEDERACIÓN Y LIGA':'#1e7e34','UNIFORMES':'#7d3c98','TORNEOS':'#b7770d','OTROS':'#555'};const grouped={};data.items.forEach(item=>{if(!grouped[item.cat])grouped[item.cat]=[];grouped[item.cat].push(item);});let html='';Object.entries(grouped).forEach(([cat,items])=>{const color=catColors[cat.toUpperCase()]||'#555';html+='<div class="pres-cat" style="background:'+color+'22;border-left:3px solid '+color+'">'+cat+'</div>';items.forEach(item=>{html+='<div class="pres-row"><div class="pres-row-name">'+item.nombre+'</div><div class="pres-row-val">'+fCOP(item.costo)+'</div></div>';});});table.innerHTML=html;}
+function openChangePwd(){document.getElementById('modal-pwd').classList.add('open');}
+function closeChangePwd(){document.getElementById('modal-pwd').classList.remove('open');}
+async function doChangePwd(){const old=document.getElementById('pwd-old').value.trim();const nw=document.getElementById('pwd-new').value.trim();const conf=document.getElementById('pwd-confirm').value.trim();const err=document.getElementById('err-pwd');err.classList.remove('show');if(!old||!nw||!conf){showErr(err,'Completa todos los campos');return;}if(nw!==conf){showErr(err,'Las contraseñas no coinciden');return;}if(nw.length<6){showErr(err,'Mínimo 6 caracteres');return;}try{const r=await api({action:'changePassword',codigo:SESSION.codigo,oldPass:old,newPass:nw});if(r.ok){closeChangePwd();alert('Contrasena actualizada correctamente');}else showErr(err,r.error);}catch{showErr(err,'Error de conexión');}}
+function doLogout(){sessionStorage.removeItem('euf_s');SESSION=null;CODIGO='';document.getElementById('inp-codigo').value='';show('s-codigo');}
+async function api(params){const qs=Object.entries(params).map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');const r=await fetch(API+'?'+qs);return r.json();}
+function show(id){document.getElementById('s-loading').classList.add('hidden');['s-codigo','s-register','s-login','s-portal'].forEach(s=>document.getElementById(s).classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showLoading(){document.getElementById('s-loading').classList.remove('hidden');['s-codigo','s-register','s-login','s-portal'].forEach(s=>document.getElementById(s).classList.remove('active'));}
+function showErr(el,msg){el.textContent=msg;el.classList.add('show');}
+function setLoad(id,on){document.getElementById('sp-'+id).style.display=on?'block':'none';document.getElementById('txt-'+id).style.display=on?'none':'block';}
+function fCOP(v){const n=typeof v==='number'?v:parseFloat((v||'0').toString().replace(/[^0-9.-]/g,''));if(isNaN(n)||n===0)return'$0';if(n>=1000000)return'$'+(n/1000000).toFixed(1)+'M';if(n>=1000)return'$'+Math.round(n/1000)+'K';return'$'+n.toLocaleString('es-CO');}
+function countdown(){function tick(){const d=new Date('2026-08-16T00:00:00')-new Date();if(d<=0){document.getElementById('wucc-cd').textContent='Primer partido hoy!';return;}const days=Math.floor(d/86400000),h=Math.floor(d%86400000/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);document.getElementById('wucc-cd').textContent='Primer partido en '+days+'d '+h+'h '+m+'m '+s+'s';}tick();setInterval(tick,1000);}
+document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;if(document.getElementById('s-codigo').classList.contains('active'))checkCodigo();if(document.getElementById('s-login').classList.contains('active'))doLogin();if(document.getElementById('s-register').classList.contains('active'))doRegister();});
+window.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
