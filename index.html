@@ -4,161 +4,178 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Euforia — Portal del Jugador</title>
+<link rel="icon" type="image/png" href="https://euforiaultimate.com/wp-content/uploads/2024/01/cropped-favicon-euforia-32x32.png">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --red:#c0272d; --red2:#e03035;
-  --black:#0f0f0f; --black3:#1a1a1a;
-  --card:#222222; --card2:#2a2a2a;
-  --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.13);
-  --text:#fff; --muted:rgba(255,255,255,0.45); --muted2:rgba(255,255,255,0.18);
-  --green:#22a050; --orange:#d97706;
+  --red:#c0272d; --red2:#e03035; --red-glow:rgba(192,39,45,0.25);
+  --gold:#c9a84c; --gold2:#e2c070;
+  --black:#0a0a0a; --black2:#111111; --black3:#181818;
+  --card:#1e1e1e; --card2:#252525; --card3:#2a2a2a;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+  --text:#ffffff; --muted:rgba(255,255,255,0.45); --muted2:rgba(255,255,255,0.18);
+  --green:#22a050; --green-bg:rgba(34,160,80,0.12); --green-border:rgba(34,160,80,0.3);
+  --orange:#d97706; --blue:#3b82f6;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;min-height:100vh;background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(192,39,45,0.16) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 100% 100%,rgba(192,39,45,0.06) 0%,transparent 55%);pointer-events:none;z-index:0}
-body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(192,39,45,0.14) 0%,transparent 60%);pointer-events:none;z-index:0}
+
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 /* ── SCREENS ── */
 .screen{display:none;position:relative;z-index:10}
 .screen.active{display:block}
 
 /* ── LOADING ── */
-#s-loading{position:fixed;inset:0;z-index:200;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+#s-loading{position:fixed;inset:0;z-index:200;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
 #s-loading.hidden{display:none}
-.spinner{width:30px;height:30px;border:2.5px solid rgba(255,255,255,0.07);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}
+.spinner{width:32px;height:32px;border:2.5px solid rgba(255,255,255,0.07);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}
 .loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
 
-/* ── LOGIN / REGISTER ── */
-.auth-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px}
-.auth-logo{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--red);letter-spacing:3px;margin-bottom:6px;animation:fadeDown .4s ease both}
-.auth-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(192,39,45,0.12);border:1px solid rgba(192,39,45,0.3);border-radius:20px;padding:3px 12px;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:24px;animation:fadeDown .4s .08s ease both}
+/* ══════════════════════════════
+   AUTH SCREENS
+══════════════════════════════ */
+.auth-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;background:var(--black)}
+.auth-logo{margin-bottom:20px;animation:fadeDown .4s ease both}
+.auth-logo img{height:56px;object-fit:contain}
+.auth-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(192,39,45,0.1);border:1px solid rgba(192,39,45,0.28);border-radius:20px;padding:4px 13px;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:24px;animation:fadeDown .4s .07s ease both}
 .auth-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 2s infinite}
-.auth-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,8vw,2.8rem);font-weight:900;line-height:.92;text-align:center;margin-bottom:4px;animation:fadeDown .4s .12s ease both}
+.auth-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.2rem,8vw,3rem);font-weight:900;line-height:.9;text-align:center;margin-bottom:5px;animation:fadeDown .4s .1s ease both}
 .auth-title span{color:var(--red)}
-.auth-sub{font-size:.7rem;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:28px;animation:fadeDown .4s .16s ease both}
-.auth-card{background:var(--black3);border:1px solid var(--border2);border-radius:16px;padding:24px 20px;width:100%;max-width:360px;animation:fadeUp .4s .2s ease both}
-.lbl{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block}
-.inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;padding:11px 14px;font-family:'Barlow',sans-serif;font-size:.92rem;color:var(--text);outline:none;transition:border-color .2s,background .2s;margin-bottom:13px}
-.inp:focus{border-color:rgba(192,39,45,0.6);background:rgba(192,39,45,0.05)}
+.auth-sub{font-size:.72rem;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:30px;animation:fadeDown .4s .14s ease both}
+.auth-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;width:100%;max-width:380px;animation:fadeUp .4s .18s ease both;box-shadow:0 24px 48px rgba(0,0,0,0.4)}
+
+.lbl{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;display:block}
+.inp{width:100%;background:rgba(255,255,255,0.04);border:1.5px solid var(--border2);border-radius:10px;padding:12px 15px;font-family:'Barlow',sans-serif;font-size:.95rem;color:var(--text);outline:none;transition:border-color .2s,background .2s,box-shadow .2s;margin-bottom:14px}
+.inp:focus{border-color:rgba(192,39,45,0.5);background:rgba(192,39,45,0.04);box-shadow:0 0 0 3px rgba(192,39,45,0.08)}
 .inp::placeholder{color:var(--muted2)}
-.btn{width:100%;background:var(--red);border:none;border-radius:9px;padding:12px;font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px}
-.btn:hover{background:var(--red2)} .btn:active{transform:scale(.98)}
-.btn.secondary{background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:var(--muted);margin-top:8px}
-.btn.secondary:hover{background:rgba(255,255,255,0.1);color:var(--text)}
-.btn-sp{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
-.err{display:none;background:rgba(192,39,45,0.1);border:1px solid rgba(192,39,45,0.3);border-radius:7px;padding:8px 12px;font-size:.78rem;color:#ff7070;margin-top:10px;text-align:center}
+
+.btn{width:100%;background:var(--red);border:none;border-radius:10px;padding:13px;font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;box-shadow:0 4px 16px rgba(192,39,45,0.3)}
+.btn:hover{background:var(--red2);box-shadow:0 6px 24px rgba(192,39,45,0.4)}
+.btn:active{transform:scale(.98)}
+.btn.secondary{background:transparent;border:1.5px solid var(--border2);color:var(--muted);margin-top:8px;box-shadow:none}
+.btn.secondary:hover{border-color:rgba(255,255,255,0.2);color:var(--text);background:rgba(255,255,255,0.04)}
+.btn-sp{width:16px;height:16px;border:2px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
+
+.err{display:none;background:rgba(192,39,45,0.08);border:1px solid rgba(192,39,45,0.28);border-radius:9px;padding:9px 13px;font-size:.78rem;color:#ff7070;margin-top:11px;text-align:center;line-height:1.4}
 .err.show{display:block;animation:shake .3s ease}
-.auth-hint{font-size:.68rem;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
+.auth-hint{font-size:.67rem;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
 
-/* ── PORTAL ── */
-#s-portal{padding-bottom:48px}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 0;animation:fadeDown .35s ease both}
-.topbar-logo{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;color:var(--red);letter-spacing:2px}
-.topbar-right{display:flex;gap:6px}
-.btn-sm{background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:7px;padding:5px 11px;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s}
-.btn-sm:hover{border-color:rgba(192,39,45,0.5);color:var(--red)}
-.btn-sm.green{border-color:rgba(34,160,80,0.3);color:var(--green)}
-.btn-sm.green:hover{border-color:rgba(34,160,80,0.6)}
+/* ══════════════════════════════
+   PORTAL
+══════════════════════════════ */
+#s-portal{padding-bottom:56px;max-width:680px;margin:0 auto}
 
-.hero{padding:14px 18px 0;display:flex;flex-direction:column;align-items:center;animation:fadeDown .35s .07s ease both}
-.hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(192,39,45,0.11);border:1px solid rgba(192,39,45,0.28);border-radius:20px;padding:3px 11px;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:7px}
+/* Topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0;animation:fadeDown .35s ease both}
+.topbar-logo img{height:32px;object-fit:contain}
+.topbar-right{display:flex;gap:7px}
+.btn-sm{background:rgba(255,255,255,0.05);border:1px solid var(--border2);border-radius:8px;padding:6px 13px;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s}
+.btn-sm:hover{border-color:rgba(192,39,45,0.5);color:var(--red);background:rgba(192,39,45,0.06)}
+.btn-sm.g{border-color:var(--green-border);color:var(--green)}
+.btn-sm.g:hover{background:var(--green-bg)}
+
+/* Hero */
+.hero{padding:18px 20px 0;display:flex;flex-direction:column;align-items:center;animation:fadeDown .35s .07s ease both}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(192,39,45,0.1);border:1px solid rgba(192,39,45,0.26);border-radius:20px;padding:4px 12px;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:8px}
 .hero-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 2s infinite}
-.hero-name{font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.8rem,6vw,2.5rem);font-weight:900;line-height:.92;text-align:center;margin-bottom:3px}
+.hero-name{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,7vw,2.8rem);font-weight:900;line-height:.9;text-align:center;margin-bottom:4px}
 .hero-name span{color:var(--red)}
-.hero-sub{font-size:.67rem;color:var(--muted);letter-spacing:1px;margin-bottom:16px;text-align:center}
+.hero-sub{font-size:.68rem;color:var(--muted);letter-spacing:1px;margin-bottom:20px;text-align:center}
 
-.statbar{margin:0 18px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:11px;padding:11px 14px;display:flex;align-items:center;animation:fadeDown .35s .12s ease both}
-.stat{flex:1;display:flex;flex-direction:column;align-items:center}
-.sv{font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:900;line-height:1}
-.sv.r{color:var(--red)} .sv.g{color:var(--green)} .sv.o{color:var(--orange)}
-.sl{font-size:.44rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:2px;white-space:nowrap}
-.sdiv{width:1px;height:26px;background:var(--border)}
+/* Estado pill */
+.estado-pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 14px;font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px;animation:fadeDown .35s .14s ease both}
+.estado-pill::before{content:'';width:7px;height:7px;border-radius:50%}
+.estado-pill.ok{background:var(--green-bg);border:1px solid var(--green-border);color:var(--green)}
+.estado-pill.ok::before{background:var(--green)}
+.estado-pill.bad{background:rgba(192,39,45,0.1);border:1px solid rgba(192,39,45,0.3);color:#ff6b6b}
+.estado-pill.bad::before{background:#ff6b6b;animation:pulse 1.5s infinite}
 
-.estado-pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 12px;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin:0 18px 14px;animation:fadeDown .35s .16s ease both}
-.estado-pill.ok{background:rgba(34,160,80,0.11);border:1px solid rgba(34,160,80,0.32);color:var(--green)}
-.estado-pill.bad{background:rgba(192,39,45,0.11);border:1px solid rgba(192,39,45,0.32);color:#ff6b6b}
+/* Stat cards row */
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px;margin-bottom:16px;animation:fadeDown .35s .12s ease both}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.stat-card.full{grid-column:1/-1}
+.stat-card.warn{border-color:rgba(215,119,6,0.3);background:rgba(215,119,6,0.06)}
+.stat-card-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.stat-card-val{font-family:'Barlow Condensed',sans-serif;font-size:1.35rem;font-weight:900;line-height:1}
+.stat-card-val.g{color:var(--green)} .stat-card-val.r{color:var(--red)} .stat-card-val.o{color:var(--orange)} .stat-card-val.w{color:#fff}
+.stat-card-sub{font-size:.62rem;color:var(--muted);margin-top:1px}
 
-.sec{padding:0 14px;margin-bottom:14px;animation:fadeUp .38s ease both}
-.sec-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;padding-left:2px}
+/* Section */
+.sec{padding:0 16px;margin-bottom:14px;animation:fadeUp .4s ease both}
+.sec-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:9px;padding-left:2px;display:flex;align-items:center;gap:8px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* pay cards */
-.pcard{background:var(--card);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-bottom:7px}
-.pcard-h{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--card2)}
-.pcat{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase}
-.pst{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700}
-.pst.ok{color:var(--green)} .pst.bad{color:#ff6b6b} .pst.na{color:var(--muted)}
-.prow{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04)}
-.prow:last-child{border-bottom:none}
-.prow-l{display:flex;flex-direction:column;gap:1px}
-.prow-name{font-size:.77rem;font-weight:500}
-.prow-r{display:flex;align-items:center;gap:7px}
-.pval{font-family:'Barlow Condensed',sans-serif;font-size:.84rem;font-weight:700}
-.pdot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0}
-.pdot.p{background:rgba(34,160,80,0.18);color:var(--green)}
-.pdot.d{background:rgba(192,39,45,0.18);color:#ff6b6b}
-.pdot.na{background:rgba(255,255,255,0.05);color:var(--muted)}
+/* Pay category card */
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:10px}
+.cat-card-head{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border);background:var(--card2)}
+.cat-name{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase}
+.cat-st{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;padding:3px 9px;border-radius:10px}
+.cat-st.ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.cat-st.bad{background:rgba(192,39,45,0.1);color:#ff6b6b;border:1px solid rgba(192,39,45,0.25)}
+.cat-st.na{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)}
 
-/* sanction card */
-.sanction-card{background:rgba(215,119,6,0.08);border:1px solid rgba(215,119,6,0.25);border-radius:11px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px}
-.sanction-icon{font-size:1.3rem}
-.sanction-txt{flex:1}
-.sanction-label{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:2px}
-.sanction-val{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;color:var(--orange)}
+/* Pay items grid */
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.pay-item{background:var(--card);padding:11px 14px;display:flex;flex-direction:column;gap:4px}
+.pay-item.full{grid-column:1/-1}
+.pay-item-name{font-size:.72rem;font-weight:500;color:rgba(255,255,255,0.8);line-height:1.3}
+.pay-item-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+.pay-item-val{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800}
+.pay-item-val.paid{color:var(--green)} .pay-item-val.zero{color:#ff6b6b}
+.pay-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58rem;flex-shrink:0}
+.pay-dot.p{background:rgba(34,160,80,0.2);color:var(--green)}
+.pay-dot.d{background:rgba(192,39,45,0.2);color:#ff6b6b}
 
-/* action cards */
-.ac{background:var(--card);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;text-decoration:none;display:block;position:relative;transition:transform .18s,border-color .18s,box-shadow .18s;margin-bottom:7px}
+/* Action cards */
+.ac{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;text-decoration:none;display:flex;align-items:center;padding:14px 16px;gap:13px;position:relative;transition:transform .18s,border-color .2s,box-shadow .2s;margin-bottom:9px}
 .ac:active{transform:scale(.977)}
 @media(hover:hover){
-  .ac:hover{transform:translateY(-2px);border-color:rgba(192,39,45,0.4);box-shadow:0 6px 24px rgba(192,39,45,0.1)}
+  .ac:hover{transform:translateY(-2px);border-color:rgba(192,39,45,0.4);box-shadow:0 8px 28px rgba(192,39,45,0.12)}
   .ac:hover .ac-arr{transform:translateX(3px)}
   .ac:hover .ac-glow{opacity:1}
 }
 .ac-glow{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);opacity:0;transition:opacity .25s}
-.ac-in{padding:12px 14px;display:flex;align-items:center;gap:10px}
-.ac-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ac-ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ac-ico.s{background:rgba(192,39,45,0.15)} .ac-ico.u{background:rgba(34,160,80,0.15)} .ac-ico.e{background:rgba(59,130,246,0.15)}
-.ac-ico svg{width:16px;height:16px}
-.ac-ico.s svg{stroke:var(--red)} .ac-ico.u svg{stroke:var(--green)} .ac-ico.e svg{stroke:#60a5fa}
+.ac-ico svg{width:18px;height:18px}
+.ac-ico.s svg{stroke:var(--red)} .ac-ico.u svg{stroke:var(--green)} .ac-ico.e svg{stroke:var(--blue)}
 .ac-body{flex:1}
-.ac-t{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:.3px;margin-bottom:1px}
-.ac-d{font-size:.65rem;color:var(--muted);line-height:1.3}
-.ac-arr{color:var(--muted2);flex-shrink:0;transition:transform .18s}
-.ac-arr svg{width:14px;height:14px}
+.ac-t{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:#fff;letter-spacing:.3px;margin-bottom:2px}
+.ac-d{font-size:.68rem;color:var(--muted);line-height:1.35}
+.ac-arr{color:rgba(255,255,255,0.3);flex-shrink:0;transition:transform .18s}
+.ac-arr svg{width:16px;height:16px;stroke:currentColor}
 
-/* budget */
-.budget{background:var(--card);border:1px solid var(--border);border-radius:11px;overflow:hidden}
-.budget-h{padding:11px 13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--card2)}
-.budget-h-l{font-family:'Barlow Condensed',sans-serif;font-size:.57rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-.budget-h-v{font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:900;color:var(--red)}
-.brow{padding:8px 13px;border-bottom:1px solid rgba(255,255,255,0.04)}
-.brow:last-child{border-bottom:none}
-.brow-t{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.brow-n{font-size:.75rem;font-weight:500}
-.brow-p{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:700}
-.bbar{height:3px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden}
-.bbar-f{height:100%;border-radius:2px;background:var(--red);transition:width 1.2s ease}
-.bbar-f.g{background:var(--green)} .bbar-f.o{background:var(--orange)}
+/* Presupuesto table */
+.pres-table{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.pres-cat-head{padding:9px 15px;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff;border-bottom:1px solid var(--border)}
+.pres-row{display:flex;align-items:center;justify-content:space-between;padding:9px 15px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.pres-row:last-child{border-bottom:none}
+.pres-row-name{font-size:.77rem;color:rgba(255,255,255,0.8)}
+.pres-row-val{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;color:var(--gold)}
 
-/* wucc */
-.wucc{margin:0 14px;background:rgba(192,39,45,0.07);border:1px solid rgba(192,39,45,0.16);border-radius:11px;padding:11px 13px;display:flex;align-items:center;gap:10px;animation:fadeUp .38s .42s ease both}
-.wucc-flag{font-size:1.3rem}
-.wucc-t{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
-.wucc-cd{font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:800;color:var(--red)}
+/* WUCC */
+.wucc{margin:0 16px;background:rgba(192,39,45,0.06);border:1px solid rgba(192,39,45,0.15);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;animation:fadeUp .4s .45s ease both}
+.wucc-flag{font-size:1.5rem}
+.wucc-t{font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.wucc-cd{font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:800;color:var(--red)}
 
-footer{text-align:center;padding:22px 18px 12px;font-size:.58rem;color:var(--muted2);letter-spacing:1px;position:relative;z-index:10}
+footer{text-align:center;padding:24px 20px 12px;font-size:.58rem;color:var(--muted2);letter-spacing:1px;position:relative;z-index:10}
 
-/* modal */
-.modal-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;padding:20px}
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
 .modal-bg.open{display:flex}
-.modal{background:var(--black3);border:1px solid var(--border2);border-radius:14px;padding:22px 18px;width:100%;max-width:340px}
-.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
-.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:24px 20px;width:100%;max-width:360px;box-shadow:0 32px 64px rgba(0,0,0,0.5)}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px;transition:color .2s}
+.modal-close:hover{color:#fff}
 </style>
 </head>
 <body>
@@ -169,32 +186,42 @@ footer{text-align:center;padding:22px 18px 12px;font-size:.58rem;color:var(--mut
   <div class="loading-txt">Cargando portal...</div>
 </div>
 
-<!-- PASO 1: INGRESAR CÓDIGO -->
+<!-- PASO 1: CÓDIGO -->
 <div id="s-codigo" class="screen">
   <div class="auth-wrap">
-    <div class="auth-logo">EUFORIA</div>
+    <div class="auth-logo">
+      <img src="https://euforiaultimate.com/wp-content/uploads/2024/01/euforia-logo.png"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+           alt="Euforia">
+      <span style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:3px">EUFORIA</span>
+    </div>
     <div class="auth-badge">WUCC 2026 · Irlanda</div>
     <div class="auth-title">PORTAL<br><span>DEL JUGADOR</span></div>
     <div class="auth-sub">Ingresa tu número de camiseta</div>
     <div class="auth-card">
       <label class="lbl">Número de camiseta</label>
-      <input class="inp" id="inp-codigo" type="text" placeholder="Ej: 17" autocomplete="off">
+      <input class="inp" id="inp-codigo" type="text" placeholder="Ej: 17" autocomplete="off" inputmode="numeric">
       <button class="btn" onclick="checkCodigo()">
         <div class="btn-sp" id="sp-codigo"></div>
-        <span id="txt-codigo">CONTINUAR</span>
+        <span id="txt-codigo">CONTINUAR →</span>
       </button>
       <div class="err" id="err-codigo"></div>
     </div>
   </div>
 </div>
 
-<!-- PASO 2A: CREAR CONTRASEÑA (primera vez) -->
+<!-- PASO 2A: REGISTRO -->
 <div id="s-register" class="screen">
   <div class="auth-wrap">
-    <div class="auth-logo">EUFORIA</div>
-    <div class="auth-badge">WUCC 2026 · Irlanda</div>
+    <div class="auth-logo">
+      <img src="https://euforiaultimate.com/wp-content/uploads/2024/01/euforia-logo.png"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+           alt="Euforia">
+      <span style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:3px">EUFORIA</span>
+    </div>
+    <div class="auth-badge">Primera vez</div>
     <div class="auth-title">BIENVENIDO<br><span id="reg-nombre">JUGADOR</span></div>
-    <div class="auth-sub">Primera vez — crea tu contraseña</div>
+    <div class="auth-sub">Crea tu contraseña para acceder al portal</div>
     <div class="auth-card">
       <label class="lbl">Nueva contraseña</label>
       <input class="inp" id="inp-reg-pass" type="password" placeholder="Mínimo 6 caracteres">
@@ -204,16 +231,22 @@ footer{text-align:center;padding:22px 18px 12px;font-size:.58rem;color:var(--mut
         <div class="btn-sp" id="sp-register"></div>
         <span id="txt-register">CREAR CUENTA</span>
       </button>
+      <button class="btn secondary" onclick="goBack()">← Cambiar número</button>
       <div class="err" id="err-register"></div>
-      <p class="auth-hint">Tu contraseña se guarda de forma segura.<br>No la compartas con nadie.</p>
+      <p class="auth-hint">Tu contraseña se almacena de forma segura.<br>No la compartas con nadie.</p>
     </div>
   </div>
 </div>
 
-<!-- PASO 2B: LOGIN (ya tiene contraseña) -->
+<!-- PASO 2B: LOGIN -->
 <div id="s-login" class="screen">
   <div class="auth-wrap">
-    <div class="auth-logo">EUFORIA</div>
+    <div class="auth-logo">
+      <img src="https://euforiaultimate.com/wp-content/uploads/2024/01/euforia-logo.png"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+           alt="Euforia">
+      <span style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:3px">EUFORIA</span>
+    </div>
     <div class="auth-badge">WUCC 2026 · Irlanda</div>
     <div class="auth-title">PORTAL<br><span>DEL JUGADOR</span></div>
     <div class="auth-sub" id="login-sub">Ingresa tu contraseña</div>
@@ -224,7 +257,7 @@ footer{text-align:center;padding:22px 18px 12px;font-size:.58rem;color:var(--mut
         <div class="btn-sp" id="sp-login"></div>
         <span id="txt-login">ENTRAR</span>
       </button>
-      <button class="btn secondary" onclick="goBack()">← Cambiar código</button>
+      <button class="btn secondary" onclick="goBack()">← Cambiar número</button>
       <div class="err" id="err-login"></div>
     </div>
   </div>
@@ -233,9 +266,14 @@ footer{text-align:center;padding:22px 18px 12px;font-size:.58rem;color:var(--mut
 <!-- PORTAL DASHBOARD -->
 <div id="s-portal" class="screen">
   <div class="topbar">
-    <div class="topbar-logo">EUFORIA</div>
+    <div class="topbar-logo">
+      <img src="https://euforiaultimate.com/wp-content/uploads/2024/01/euforia-logo.png"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+           style="height:30px;object-fit:contain" alt="Euforia">
+      <span style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:900;color:var(--gold);letter-spacing:2px">EUFORIA</span>
+    </div>
     <div class="topbar-right">
-      <button class="btn-sm green" onclick="openChangePwd()">🔑 Contraseña</button>
+      <button class="btn-sm g" onclick="openChangePwd()">🔑 Contraseña</button>
       <button class="btn-sm" onclick="doLogout()">Salir</button>
     </div>
   </div>
@@ -243,67 +281,63 @@ footer{text-align:center;padding:22px 18px 12px;font-size:.58rem;color:var(--mut
   <div class="hero">
     <div class="hero-badge">WUCC 2026 · Irlanda</div>
     <div class="hero-name">PORTAL<br><span id="p-nombre">JUGADOR</span></div>
-    <div class="hero-sub" id="p-sub">Euforia Open — Bogotá 2026</div>
+    <div class="hero-sub" id="p-sub">Euforia Open · Bogotá 2026</div>
   </div>
 
-  <div class="statbar">
-    <div class="stat"><div class="sv o" id="s-total">—</div><div class="sl">Total Pagado</div></div>
-    <div class="sdiv"></div>
-    <div class="stat"><div class="sv r" id="s-sancion">$0</div><div class="sl">Sanciones</div></div>
-    <div class="sdiv"></div>
-    <div class="stat"><div class="sv g" id="s-items">—</div><div class="sl">Ítems Pagados</div></div>
-  </div>
+  <div class="estado-pill ok" id="estado-pill">AL DÍA</div>
 
-  <div class="estado-pill ok" id="estado-pill">✓ AL DÍA</div>
-
-  <!-- Sanciones (solo si tiene) -->
-  <div id="sec-sancion" class="sec" style="display:none;animation-delay:.14s">
-    <div class="sec-lbl">Sanción Económica</div>
-    <div class="sanction-card">
-      <div class="sanction-icon">⚠️</div>
-      <div class="sanction-txt">
-        <div class="sanction-label">Monto de Sanción</div>
-        <div class="sanction-val" id="sancion-val">$0</div>
-      </div>
+  <!-- Stats -->
+  <div class="stat-row" id="stat-row">
+    <div class="stat-card full">
+      <div class="stat-card-lbl">Total Pagado</div>
+      <div class="stat-card-val w" id="s-total">—</div>
+      <div class="stat-card-sub" id="s-items-sub">— ítems pagados</div>
     </div>
   </div>
 
   <!-- Pagos -->
-  <div class="sec" id="sec-pagos" style="animation-delay:.18s"></div>
+  <div class="sec" id="sec-pagos" style="animation-delay:.16s"></div>
 
   <!-- Acciones -->
-  <div class="sec" style="animation-delay:.26s">
+  <div class="sec" style="animation-delay:.24s">
     <div class="sec-lbl">Acciones</div>
     <a class="ac" href="https://mikespinosa-task.github.io/euforia/dashboard-estadisticas" target="_blank">
       <div class="ac-glow"></div>
-      <div class="ac-in">
-        <div class="ac-ico s"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
-        <div class="ac-body"><div class="ac-t">Dashboard de Estadísticas</div><div class="ac-d">Rendimiento individual, rankings y análisis por partido</div></div>
-        <div class="ac-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+      <div class="ac-ico s">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/>
+        </svg>
       </div>
+      <div class="ac-body">
+        <div class="ac-t">Dashboard de Estadísticas</div>
+        <div class="ac-d">Rendimiento individual, rankings y análisis por partido</div>
+      </div>
+      <div class="ac-arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
     </a>
     <a class="ac" href="https://forms.gle/iZm4FDhRETrxR3Bt9" target="_blank">
       <div class="ac-glow"></div>
-      <div class="ac-in">
-        <div class="ac-ico u"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-        <div class="ac-body"><div class="ac-t">Subir Evidencias de Pago</div><div class="ac-d">Sube tus comprobantes de pago aquí</div></div>
-        <div class="ac-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+      <div class="ac-ico u">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
       </div>
+      <div class="ac-body">
+        <div class="ac-t">Subir Evidencias de Pago</div>
+        <div class="ac-d">Adjunta tus comprobantes y soportes de pago</div>
+      </div>
+      <div class="ac-arr"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
     </a>
   </div>
 
   <!-- Presupuesto -->
-  <div class="sec" style="animation-delay:.34s">
+  <div class="sec" id="sec-presupuesto" style="animation-delay:.32s">
     <div class="sec-lbl">Presupuesto del Equipo</div>
-    <div class="budget">
-      <div class="budget-h">
-        <div class="budget-h-l">Recaudado / Meta</div>
-        <div class="budget-h-v" id="budget-total">—</div>
-      </div>
-      <div id="budget-rows"></div>
-    </div>
+    <div class="pres-table" id="pres-table"></div>
   </div>
 
+  <!-- WUCC Countdown -->
   <div class="wucc">
     <div class="wucc-flag">🇮🇪</div>
     <div>
@@ -312,7 +346,7 @@ footer{text-align:center;padding:22px 18px 12px;font-size:.58rem;color:var(--mut
     </div>
   </div>
 
-  <footer><strong>Euforia Open</strong> &nbsp;·&nbsp; Bogotá 2026 &nbsp;·&nbsp; Portal del Jugador</footer>
+  <footer><strong style="color:var(--gold)">Euforia Open</strong> &nbsp;·&nbsp; Bogotá 2026 &nbsp;·&nbsp; Portal del Jugador</footer>
 </div>
 
 <!-- MODAL CAMBIAR CONTRASEÑA -->
@@ -325,271 +359,252 @@ footer{text-align:center;padding:22px 18px 12px;font-size:.58rem;color:var(--mut
     <label class="lbl">Contraseña actual</label>
     <input class="inp" id="pwd-old" type="password" placeholder="Contraseña actual">
     <label class="lbl">Nueva contraseña</label>
-    <input class="inp" id="pwd-new" type="password" placeholder="Nueva contraseña">
-    <label class="lbl">Confirmar contraseña</label>
+    <input class="inp" id="pwd-new" type="password" placeholder="Nueva (mínimo 6 caracteres)">
+    <label class="lbl">Confirmar</label>
     <input class="inp" id="pwd-confirm" type="password" placeholder="Repite la nueva contraseña">
-    <button class="btn" onclick="doChangePwd()">ACTUALIZAR</button>
+    <button class="btn" onclick="doChangePwd()">ACTUALIZAR CONTRASEÑA</button>
     <div class="err" id="err-pwd"></div>
   </div>
 </div>
 
 <script>
 // ══════════════════════════════════════════
-// CONFIG — reemplaza con tu URL de Apps Script
+// CONFIG — actualiza con tu nueva URL
 // ══════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbz5KhZQc5QCahlymVXIdn1a9RRkSaY0VJzWtVf7GYC55u7ebe2wFOm8-FoPhcnFbp8A/exec';
-
-// Estado de sesión
-let SESSION = JSON.parse(sessionStorage.getItem('euf_session') || 'null');
-let CURRENT_CODIGO = '';
+const API = 'NUEVA_URL_APPS_SCRIPT_AQUI';
 
 const CATS = [
-  { key:'mundial',    label:'Mundial',           color:'#c0272d', items:[
+  { key:'mundial',     label:'Mundial',           color:'#c0272d', items:[
     {k:'gastosFijos',label:'Gastos Fijos (Póliza+Cuenta+WEB)'},
     {k:'teamFee',    label:'WUCC 2026 Team Fee'},
     {k:'playerFee',  label:'WUCC Player Fee'},
     {k:'coach',      label:'Coach Estadía + Pasajes'},
   ]},
-  { key:'mensualidad', label:'Mensualidad',       color:'#1a5276', items:[
-    {k:'febrero',label:'Febrero'},{k:'marzo',label:'Marzo'},{k:'abril',label:'Abril'},
-    {k:'mayo',label:'Mayo'},{k:'junio',label:'Junio'},{k:'julio',label:'Julio'},
-    {k:'agosto',label:'Agosto'},{k:'septiembre',label:'Septiembre'},
-    {k:'octubre',label:'Octubre'},{k:'noviembre',label:'Noviembre'},{k:'diciembre',label:'Diciembre'},
+  { key:'mensualidad', label:'Mensualidad',        color:'#1a5276', items:[
+    {k:'febrero',label:'Feb'},{k:'marzo',label:'Mar'},{k:'abril',label:'Abr'},
+    {k:'mayo',label:'May'},{k:'junio',label:'Jun'},{k:'julio',label:'Jul'},
+    {k:'agosto',label:'Ago'},{k:'septiembre',label:'Sep'},
+    {k:'octubre',label:'Oct'},{k:'noviembre',label:'Nov'},
   ]},
-  { key:'federacion',  label:'Federación y Liga', color:'#1e7e34', items:[
+  { key:'federacion',  label:'Federación y Liga',  color:'#1e7e34', items:[
     {k:'lbdv',label:'Sostenimiento LBDV'},{k:'web',label:'WEB'},{k:'seguro',label:'Seguro Atletas'},
   ]},
-  { key:'uniformes',   label:'Uniformes',         color:'#7d3c98', items:[
+  { key:'uniformes',   label:'Uniformes',          color:'#7d3c98', items:[
     {k:'uniformes',label:'Uniformes'},
   ]},
-  { key:'torneos',     label:'Torneos',           color:'#b7770d', items:[
+  { key:'torneos',     label:'Torneos',            color:'#b7770d', items:[
     {k:'tep',label:'TEP'},{k:'fdp',label:'FDP'},{k:'upx',label:'UPX'},
     {k:'distritales',label:'Distritales'},{k:'nacionales',label:'Nacionales'},{k:'dv2600',label:'DV2600'},
   ]},
 ];
 
-// ══════════════════════════════════════════
-// INIT
+let SESSION = JSON.parse(sessionStorage.getItem('euf_s') || 'null');
+let CODIGO  = '';
+
 // ══════════════════════════════════════════
 async function init() {
-  if (SESSION && SESSION.nombre) {
-    await loadPortal(SESSION.nombre);
-  } else {
-    show('s-codigo');
-  }
+  if (SESSION?.nombre) { await loadPortal(SESSION.nombre); }
+  else show('s-codigo');
   countdown();
 }
 
-// ══════════════════════════════════════════
-// PASO 1 — VERIFICAR CÓDIGO
-// ══════════════════════════════════════════
+// ── VERIFICAR CÓDIGO ──
 async function checkCodigo() {
-  const codigo = document.getElementById('inp-codigo').value.trim();
+  const cod = document.getElementById('inp-codigo').value.trim();
   const err = document.getElementById('err-codigo');
   err.classList.remove('show');
-  if (!codigo) { showErr(err, 'Ingresa tu número de camiseta'); return; }
-
-  setLoading('codigo', true);
+  if (!cod) { showErr(err,'Ingresa tu número de camiseta'); return; }
+  setLoad('codigo',true);
   try {
-    const res = await api({ action:'isFirstTime', codigo });
-    if (res.ok) {
-      CURRENT_CODIGO = codigo;
-      if (res.firstTime) {
-        document.getElementById('reg-nombre').textContent = res.nombre.split(' ')[0].toUpperCase();
+    const r = await api({action:'isFirstTime', codigo:cod});
+    if (r.ok) {
+      CODIGO = cod;
+      if (r.firstTime) {
+        document.getElementById('reg-nombre').textContent = r.nombre.split(' ')[0].toUpperCase();
         show('s-register');
       } else {
-        document.getElementById('login-sub').textContent = 'Hola ' + res.nombre.split(' ')[0] + ', ingresa tu contraseña';
+        document.getElementById('login-sub').textContent = 'Hola ' + r.nombre.split(' ')[0] + ', ingresa tu contraseña';
         show('s-login');
       }
-    } else {
-      showErr(err, res.error);
-    }
-  } catch(e) { showErr(err, 'Error de conexión. Intenta de nuevo.'); }
-  setLoading('codigo', false);
+    } else showErr(err, r.error);
+  } catch { showErr(err,'Error de conexión. Intenta de nuevo.'); }
+  setLoad('codigo',false);
 }
 
-// ══════════════════════════════════════════
-// PASO 2A — REGISTRO
-// ══════════════════════════════════════════
+// ── REGISTRO ──
 async function doRegister() {
-  const pass    = document.getElementById('inp-reg-pass').value.trim();
-  const confirm = document.getElementById('inp-reg-confirm').value.trim();
-  const err     = document.getElementById('err-register');
+  const pass = document.getElementById('inp-reg-pass').value.trim();
+  const conf = document.getElementById('inp-reg-confirm').value.trim();
+  const err  = document.getElementById('err-register');
   err.classList.remove('show');
-
-  if (!pass || !confirm)     { showErr(err, 'Completa ambos campos'); return; }
-  if (pass !== confirm)      { showErr(err, 'Las contraseñas no coinciden'); return; }
-  if (pass.length < 6)       { showErr(err, 'Mínimo 6 caracteres'); return; }
-
-  setLoading('register', true);
+  if (!pass||!conf)  { showErr(err,'Completa ambos campos'); return; }
+  if (pass!==conf)   { showErr(err,'Las contraseñas no coinciden'); return; }
+  if (pass.length<6) { showErr(err,'Mínimo 6 caracteres'); return; }
+  setLoad('register',true);
   try {
-    const res = await api({ action:'register', codigo: CURRENT_CODIGO, password: pass });
-    if (res.ok) {
-      SESSION = { codigo: CURRENT_CODIGO, nombre: res.nombre };
-      sessionStorage.setItem('euf_session', JSON.stringify(SESSION));
-      await loadPortal(res.nombre);
-    } else { showErr(err, res.error); }
-  } catch(e) { showErr(err, 'Error de conexión.'); }
-  setLoading('register', false);
+    const r = await api({action:'register', codigo:CODIGO, password:pass});
+    if (r.ok) { SESSION={codigo:CODIGO,nombre:r.nombre}; sessionStorage.setItem('euf_s',JSON.stringify(SESSION)); await loadPortal(r.nombre); }
+    else showErr(err, r.error);
+  } catch { showErr(err,'Error de conexión.'); }
+  setLoad('register',false);
 }
 
-// ══════════════════════════════════════════
-// PASO 2B — LOGIN
-// ══════════════════════════════════════════
+// ── LOGIN ──
 async function doLogin() {
   const pass = document.getElementById('inp-login-pass').value.trim();
   const err  = document.getElementById('err-login');
   err.classList.remove('show');
-  if (!pass) { showErr(err, 'Ingresa tu contraseña'); return; }
-
-  setLoading('login', true);
+  if (!pass) { showErr(err,'Ingresa tu contraseña'); return; }
+  setLoad('login',true);
   try {
-    const res = await api({ action:'login', codigo: CURRENT_CODIGO, password: pass });
-    if (res.ok) {
-      SESSION = { codigo: res.codigo, nombre: res.nombre };
-      sessionStorage.setItem('euf_session', JSON.stringify(SESSION));
-      await loadPortal(res.nombre);
-    } else { showErr(err, res.error); }
-  } catch(e) { showErr(err, 'Error de conexión.'); }
-  setLoading('login', false);
+    const r = await api({action:'login', codigo:CODIGO, password:pass});
+    if (r.ok) { SESSION={codigo:r.codigo,nombre:r.nombre}; sessionStorage.setItem('euf_s',JSON.stringify(SESSION)); await loadPortal(r.nombre); }
+    else showErr(err, r.error);
+  } catch { showErr(err,'Error de conexión.'); }
+  setLoad('login',false);
 }
 
 function goBack() { show('s-codigo'); }
 
-// ══════════════════════════════════════════
-// CARGAR PORTAL
-// ══════════════════════════════════════════
+// ── CARGAR PORTAL ──
 async function loadPortal(nombre) {
   showLoading();
   document.getElementById('p-nombre').textContent = nombre.split(' ')[0].toUpperCase();
-  document.getElementById('p-sub').textContent = nombre + ' · Euforia 2026';
-
+  document.getElementById('p-sub').textContent    = nombre + ' · Euforia 2026';
   try {
-    const [playerRes, presRes] = await Promise.all([
-      api({ action:'getPlayer', nombre }),
-      api({ action:'getPresupuesto' })
+    const [pr, pres] = await Promise.all([
+      api({action:'getPlayer', nombre}),
+      api({action:'getPresupuesto'})
     ]);
-    renderPagos(playerRes);
-    renderPresupuesto(presRes);
-  } catch(e) {
-    renderPagos(null);
-    renderPresupuesto(null);
-  }
+    renderStats(pr);
+    renderPagos(pr);
+    renderPresupuesto(pres);
+  } catch { renderStats(null); renderPagos(null); renderPresupuesto(null); }
   show('s-portal');
 }
 
-// ══════════════════════════════════════════
-// RENDER PAGOS
-// ══════════════════════════════════════════
-function renderPagos(data) {
-  const sec = document.getElementById('sec-pagos');
-  sec.innerHTML = '<div class="sec-lbl">Mis Pagos</div>';
-
-  const pagos  = data && data.ok ? data.pagos  : null;
-  const estado = data && data.ok ? data.estado : 'AL DÍA';
-  const total  = data && data.ok ? data.total  : null;
-  const sancion = data && data.ok ? data.sanciones : null;
+// ── RENDER STATS ──
+function renderStats(data) {
+  const estado   = data?.ok ? data.estado    : '';
+  const total    = data?.ok ? data.total     : null;
+  const sancion  = data?.ok ? data.sanciones : null;
+  const pagos    = data?.ok ? data.pagos     : null;
 
   // Estado pill
   const pill = document.getElementById('estado-pill');
-  if (estado && estado.toUpperCase().includes('MORA')) {
-    pill.className = 'estado-pill bad'; pill.textContent = '✗ EN MORA';
-  } else {
-    pill.className = 'estado-pill ok';  pill.textContent = '✓ AL DÍA';
+  const isMora = estado.toUpperCase().includes('MORA');
+  pill.className = 'estado-pill ' + (isMora ? 'bad' : 'ok');
+  pill.textContent = isMora ? '✗ EN MORA' : '✓ AL DÍA';
+
+  // Contar ítems
+  let paid = 0;
+  if (pagos) CATS.forEach(cat => cat.items.forEach(item => {
+    const v = pagos[cat.key]?.[item.k];
+    if (v != null && v > 0) paid++;
+  }));
+
+  // Stat row
+  const row = document.getElementById('stat-row');
+  let html = '';
+
+  // Total pagado
+  html += `<div class="stat-card ${sancion && sancion > 0 ? '' : 'full'}">
+    <div class="stat-card-lbl">Total Pagado</div>
+    <div class="stat-card-val w" id="s-total">${total != null ? fCOP(total) : '—'}</div>
+    <div class="stat-card-sub">${paid} ítem(s) pagado(s)</div>
+  </div>`;
+
+  // Sanción (solo si tiene)
+  if (sancion && sancion > 0) {
+    html += `<div class="stat-card warn">
+      <div class="stat-card-lbl">⚠️ Sanción Económica</div>
+      <div class="stat-card-val o">${fCOP(sancion)}</div>
+      <div class="stat-card-sub">Monto pendiente por sanción</div>
+    </div>`;
   }
 
-  // Stats
-  document.getElementById('s-total').textContent   = total != null ? fCOP(total) : '—';
-  document.getElementById('s-sancion').textContent = sancion != null && sancion > 0 ? fCOP(sancion) : '$0';
+  row.innerHTML = html;
+}
 
-  // Sanciones
-  if (sancion != null && sancion > 0) {
-    document.getElementById('sec-sancion').style.display = 'block';
-    document.getElementById('sancion-val').textContent = fCOP(sancion);
-  }
+// ── RENDER PAGOS ──
+function renderPagos(data) {
+  const sec  = document.getElementById('sec-pagos');
+  const pagos = data?.ok ? data.pagos : null;
+  sec.innerHTML = '<div class="sec-lbl">Mis Pagos</div>';
 
-  // Contar ítems pagados
-  let itemsPagados = 0;
   CATS.forEach(cat => {
-    cat.items.forEach(item => {
-      if (pagos && pagos[cat.key]) {
-        const v = pagos[cat.key][item.k];
-        if (v != null && v > 0) itemsPagados++;
-      }
-    });
-  });
-  document.getElementById('s-items').textContent = itemsPagados;
+    let catPaid=0, catTotal=0, gridHTML='';
+    const isOdd = cat.items.length % 2 !== 0;
 
-  // Cards por categoría
-  CATS.forEach(cat => {
-    let catPagados = 0, catTotal = 0, rowsHTML = '';
-
-    cat.items.forEach(item => {
-      const v = pagos && pagos[cat.key] ? pagos[cat.key][item.k] : undefined;
-      const isNA = v === null || v === undefined;
+    cat.items.forEach((item, idx) => {
+      const v      = pagos?.[cat.key]?.[item.k];
+      const isNA   = v === null || v === undefined;
       if (isNA) return;
       catTotal++;
       const isPaid = v > 0;
-      if (isPaid) catPagados++;
+      if (isPaid) catPaid++;
+      const isLast = idx === cat.items.length - 1;
+      const isFull = isOdd && isLast;
 
-      rowsHTML += `
-        <div class="prow">
-          <div class="prow-l"><div class="prow-name">${item.label}</div></div>
-          <div class="prow-r">
-            <div class="pval" style="color:${isPaid?'var(--green)':'#ff6b6b'}">${isPaid ? fCOP(v) : '$0'}</div>
-            <div class="pdot ${isPaid?'p':'d'}">${isPaid?'✓':'✗'}</div>
-          </div>
-        </div>`;
+      gridHTML += `<div class="pay-item${isFull?' full':''}">
+        <div class="pay-item-name">${item.label}</div>
+        <div class="pay-item-bottom">
+          <div class="pay-item-val ${isPaid?'paid':'zero'}">${isPaid ? fCOP(v) : '$0'}</div>
+          <div class="pay-dot ${isPaid?'p':'d'}">${isPaid?'✓':'✗'}</div>
+        </div>
+      </div>`;
     });
 
-    if (!rowsHTML) return;
+    if (!gridHTML) return;
 
-    const st = catTotal === 0 ? '<span class="pst na">N/A</span>'
-      : catPagados === catTotal ? '<span class="pst ok">✓ Al día</span>'
-      : `<span class="pst bad">${catTotal-catPagados} pendiente(s)</span>`;
+    const stClass = catPaid===catTotal ? 'ok' : catTotal===0 ? 'na' : 'bad';
+    const stText  = catPaid===catTotal ? '✓ Al día' : `${catTotal-catPaid} pendiente(s)`;
 
-    sec.innerHTML += `
-      <div class="pcard">
-        <div class="pcard-h">
-          <div class="pcat" style="color:${cat.color}">${cat.label}</div>${st}
-        </div>${rowsHTML}
-      </div>`;
+    sec.innerHTML += `<div class="cat-card">
+      <div class="cat-card-head">
+        <div class="cat-name" style="color:${cat.color}">${cat.label}</div>
+        <div class="cat-st ${stClass}">${stText}</div>
+      </div>
+      <div class="pay-grid">${gridHTML}</div>
+    </div>`;
   });
 }
 
-// ══════════════════════════════════════════
-// RENDER PRESUPUESTO
-// ══════════════════════════════════════════
+// ── RENDER PRESUPUESTO ──
 function renderPresupuesto(data) {
-  const cont = document.getElementById('budget-rows');
-  const items = data && data.ok ? data.items : [];
-  const tC = data && data.ok ? data.totalCosto : 0;
-  const tR = data && data.ok ? data.totalRecaudado : 0;
+  const table = document.getElementById('pres-table');
+  if (!data?.ok || !data.items?.length) { table.innerHTML = '<div class="pres-row"><div class="pres-row-name" style="color:var(--muted)">Sin datos disponibles</div></div>'; return; }
 
-  cont.innerHTML = items.map(item => {
-    const pct = item.costo > 0 ? Math.min(100, Math.round(item.recaudado/item.costo*100)) : 0;
-    const bc  = pct>=75?'g':pct>=40?'':'o';
-    const pc  = pct>=75?'var(--green)':pct>=40?'var(--red)':'var(--orange)';
-    return `
-      <div class="brow">
-        <div class="brow-t">
-          <div class="brow-n">${item.nombre}</div>
-          <div class="brow-p" style="color:${pc}">${pct}%</div>
-        </div>
-        <div class="bbar"><div class="bbar-f ${bc}" style="width:${pct}%"></div></div>
+  const catColors = {
+    'MUNDIAL':'#c0272d','MENSUALIDAD':'#1a5276','FEDERACIÓN Y LIGA':'#1e7e34',
+    'UNIFORMES':'#7d3c98','TORNEOS':'#b7770d','OTROS':'#555'
+  };
+
+  // Agrupar por categoría
+  const grouped = {};
+  data.items.forEach(item => {
+    if (!grouped[item.cat]) grouped[item.cat] = [];
+    grouped[item.cat].push(item);
+  });
+
+  let html = '';
+  Object.entries(grouped).forEach(([cat, items]) => {
+    const color = catColors[cat.toUpperCase()] || '#555';
+    html += `<div class="pres-cat-head" style="background:${color}22;border-left:3px solid ${color}">${cat}</div>`;
+    items.forEach(item => {
+      html += `<div class="pres-row">
+        <div class="pres-row-name">${item.nombre}</div>
+        <div class="pres-row-val">${fCOP(item.costo)}</div>
       </div>`;
-  }).join('');
+    });
+  });
 
-  const pT = tC > 0 ? Math.round(tR/tC*100) : 0;
-  document.getElementById('budget-total').textContent = `${fCOP(tR)} / ${fCOP(tC)} · ${pT}%`;
+  table.innerHTML = html;
 }
 
-// ══════════════════════════════════════════
-// CAMBIAR CONTRASEÑA
-// ══════════════════════════════════════════
+// ── CAMBIAR CONTRASEÑA ──
 function openChangePwd()  { document.getElementById('modal-pwd').classList.add('open'); }
 function closeChangePwd() { document.getElementById('modal-pwd').classList.remove('open'); }
-
 async function doChangePwd() {
   const old  = document.getElementById('pwd-old').value.trim();
   const nw   = document.getElementById('pwd-new').value.trim();
@@ -597,62 +612,43 @@ async function doChangePwd() {
   const err  = document.getElementById('err-pwd');
   err.classList.remove('show');
   if (!old||!nw||!conf) { showErr(err,'Completa todos los campos'); return; }
-  if (nw !== conf)       { showErr(err,'Las contraseñas no coinciden'); return; }
-  if (nw.length < 6)     { showErr(err,'Mínimo 6 caracteres'); return; }
-
+  if (nw!==conf)        { showErr(err,'Las contraseñas no coinciden'); return; }
+  if (nw.length<6)      { showErr(err,'Mínimo 6 caracteres'); return; }
   try {
-    // Para cambiar: verificamos login con la vieja y luego registramos la nueva
-    const check = await api({ action:'login', codigo: SESSION.codigo, password: old });
-    if (!check.ok) { showErr(err, 'Contraseña actual incorrecta'); return; }
-    // Forzar nueva contraseña: necesita endpoint especial — por ahora usamos register con reset
-    const res = await api({ action:'changePassword', codigo: SESSION.codigo, oldPass: old, newPass: nw });
-    if (res.ok) { closeChangePwd(); alert('✓ Contraseña actualizada'); }
-    else showErr(err, res.error || 'Error al actualizar');
-  } catch(e) { showErr(err,'Error de conexión'); }
+    const r = await api({action:'changePassword', codigo:SESSION.codigo, oldPass:old, newPass:nw});
+    if (r.ok) { closeChangePwd(); alert('✓ Contraseña actualizada correctamente'); }
+    else showErr(err, r.error);
+  } catch { showErr(err,'Error de conexión'); }
 }
 
-// ══════════════════════════════════════════
-// LOGOUT
-// ══════════════════════════════════════════
+// ── LOGOUT ──
 function doLogout() {
-  sessionStorage.removeItem('euf_session');
-  SESSION = null;
-  CURRENT_CODIGO = '';
-  document.getElementById('inp-codigo').value = '';
+  sessionStorage.removeItem('euf_s');
+  SESSION=null; CODIGO='';
+  document.getElementById('inp-codigo').value='';
   show('s-codigo');
 }
 
-// ══════════════════════════════════════════
-// UTILS
-// ══════════════════════════════════════════
+// ── UTILS ──
 async function api(params) {
   const qs = Object.entries(params).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&');
-  const res = await fetch(`${API}?${qs}`);
-  return res.json();
+  const r  = await fetch(`${API}?${qs}`);
+  return r.json();
 }
-
 function show(id) {
   document.getElementById('s-loading').classList.add('hidden');
-  ['s-codigo','s-register','s-login','s-portal'].forEach(s => {
-    document.getElementById(s).classList.remove('active');
-  });
+  ['s-codigo','s-register','s-login','s-portal'].forEach(s => document.getElementById(s).classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-
 function showLoading() {
   document.getElementById('s-loading').classList.remove('hidden');
-  ['s-codigo','s-register','s-login','s-portal'].forEach(s => {
-    document.getElementById(s).classList.remove('active');
-  });
+  ['s-codigo','s-register','s-login','s-portal'].forEach(s => document.getElementById(s).classList.remove('active'));
 }
-
-function showErr(el, msg) { el.textContent = msg; el.classList.add('show'); }
-
-function setLoading(id, on) {
-  document.getElementById('sp-'+id).style.display = on ? 'block' : 'none';
-  document.getElementById('txt-'+id).style.display = on ? 'none' : 'block';
+function showErr(el,msg) { el.textContent=msg; el.classList.add('show'); }
+function setLoad(id,on) {
+  document.getElementById('sp-'+id).style.display = on?'block':'none';
+  document.getElementById('txt-'+id).style.display = on?'none':'block';
 }
-
 function fCOP(v) {
   const n = typeof v==='number'?v:parseFloat((v||'0').toString().replace(/[^0-9.-]/g,''));
   if (isNaN(n)||n===0) return '$0';
@@ -660,7 +656,6 @@ function fCOP(v) {
   if (n>=1000)    return '$'+Math.round(n/1000)+'K';
   return '$'+n.toLocaleString('es-CO');
 }
-
 function countdown() {
   function tick(){
     const d=new Date('2026-08-16T00:00:00')-new Date();
@@ -671,15 +666,12 @@ function countdown() {
   }
   tick(); setInterval(tick,1000);
 }
-
-// Enter keys
 document.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
+  if (e.key!=='Enter') return;
   if (document.getElementById('s-codigo').classList.contains('active'))   checkCodigo();
   if (document.getElementById('s-login').classList.contains('active'))    doLogin();
   if (document.getElementById('s-register').classList.contains('active')) doRegister();
 });
-
 window.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
