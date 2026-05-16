@@ -331,8 +331,9 @@ function renderResumen(){
   const sumREC=statsS.reduce((s,x)=>s+n(x.catches),0);
   const sumPM=statsS.reduce((s,x)=>s+pm(x),0);
   const sumPP=statsS.reduce((s,x)=>s+n(x.puntos_jugados),0);
-  const withComp=statsS.filter(s=>n(s.completion_pct)>0);
-  const avgComp=withComp.length?(withComp.reduce((s,x)=>s+n(x.completion_pct),0)/withComp.length).toFixed(1):'—';
+  const totalCompletados=statsS.reduce((s,x)=>s+n(x.completados),0);
+  const totalLanzamientos=statsS.reduce((s,x)=>s+n(x.lanzamientos),0);
+  const avgComp=totalLanzamientos>0?(totalCompletados/totalLanzamientos*100).toFixed(1):'—';
 
   const statsRows=statsS.map(s=>{
     const pp=n(s.puntos_jugados);
@@ -509,8 +510,9 @@ function renderGameDetail(){
   const sG=topStats.reduce((s,x)=>s+n(x.goles),0), sA=topStats.reduce((s,x)=>s+n(x.asistencias),0);
   const sD=topStats.reduce((s,x)=>s+n(x.defensas),0), sTA=topStats.reduce((s,x)=>s+n(x.throwaways),0);
   const sPM=topStats.reduce((s,x)=>s+pm(x),0), sPP=topStats.reduce((s,x)=>s+n(x.puntos_jugados),0);
-  const wC=topStats.filter(s=>n(s.completion_pct)>0);
-  const avgC=wC.length?(wC.reduce((s,x)=>s+n(x.completion_pct),0)/wC.length).toFixed(1):'—';
+  const totalCompP=topStats.reduce((s,x)=>s+n(x.completados),0);
+  const totalLanzP=topStats.reduce((s,x)=>s+n(x.lanzamientos),0);
+  const avgC=totalLanzP>0?(totalCompP/totalLanzP*100).toFixed(1):'—';
 
   document.getElementById('game-content').innerHTML=`
     <div class="ghdr">
@@ -726,8 +728,9 @@ function renderPlayerProfile(){
   const sD=byGame.reduce((s,x)=>s+n(x.defensas),0), sREC=byGame.reduce((s,x)=>s+n(x.catches),0);
   const sTA=byGame.reduce((s,x)=>s+n(x.throwaways),0), sDR=byGame.reduce((s,x)=>s+n(x.drops),0);
   const sPMval=byGame.reduce((s,x)=>s+pm(x),0), sPP=byGame.reduce((s,x)=>s+n(x.puntos_jugados),0);
-  const wC=byGame.filter(s=>n(s.completion_pct)>0);
-  const avgC=wC.length?(wC.reduce((s,x)=>s+n(x.completion_pct),0)/wC.length).toFixed(1):'—';
+  const totalCompJ=byGame.reduce((s,x)=>s+n(x.completados),0);
+  const totalLanzJ=byGame.reduce((s,x)=>s+n(x.lanzamientos),0);
+  const avgC=totalLanzJ>0?(totalCompJ/totalLanzJ*100).toFixed(1):'—';
 
   // O/D split metrics
   const tPmO=n(total.pm_O), tPmD=n(total.pm_D);
